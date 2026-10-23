@@ -49,7 +49,7 @@
     <!-- URL Config Google Apps Script -->
     <script>
         // Masukkan Web App URL dari Google Apps Script di bawah ini
-        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID_HERE/exec';
+        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwU9-BdCFd474JfehZ6olhw9tI9zlCtFQW0D6bR8vtiX-NO-nC4e6WRAXCGNV9rOZCu/exec';
     </script>
 
     <!-- Top Navigation Bar & Multi-Account Role Switcher -->
