@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RaKorBae - Aplikasi Agenda & Disposisi Pejabat</title>
+    <title>RaKorBae - Portal Agenda & Disposisi Digital Pejabat</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -38,255 +38,182 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         @media print {
-            header, #role-status-bar, #mobile-view-wrapper, .no-print { display: none !important; }
-            #browser-view-wrapper { border: none !important; box-shadow: none !important; }
-            body { background: white !important; }
+            header, #role-status-bar, .no-print, nav, button { display: none !important; }
+            #main-content { padding: 0 !important; }
+            body { background: white !important; color: black !important; }
+            .card-agenda { break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; }
         }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 min-h-screen antialiased selection:bg-sky-500 selection:text-white">
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen antialiased selection:bg-sky-500 selection:text-white flex flex-col justify-between">
 
     <!-- URL Config Google Apps Script -->
     <script>
         // Masukkan Web App URL dari Google Apps Script di bawah ini
-        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwU9-BdCFd474JfehZ6olhw9tI9zlCtFQW0D6bR8vtiX-NO-nC4e6WRAXCGNV9rOZCu/exec';
+        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID_HERE/exec';
     </script>
 
-    <!-- Top Navigation Bar & Multi-Account Role Switcher -->
-    <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800 px-4 py-2.5 shadow-md">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center font-black text-white text-sm shadow">
-                    RkB
-                </div>
-                <div>
-                    <h1 class="font-bold text-sm leading-none flex items-center gap-2">
-                        <span>RaKorBae</span>
-                        <span class="bg-amber-400 text-slate-950 text-[10px] font-extrabold px-1.5 py-0.5 rounded">DKI JAKARTA</span>
-                    </h1>
-                    <p class="text-[10px] text-slate-400">Rapat & Koordinasi Agenda Pejabat, Disposisi Digital & Google Sync</p>
-                </div>
-            </div>
-
-            <div class="flex flex-wrap items-center gap-2">
-                <!-- Account Role Selector (Admin / Superadmin / Pejabat) -->
-                <div class="bg-slate-800 p-1 rounded-xl flex items-center space-x-1 border border-slate-700 text-xs">
-                    <span class="text-[10px] text-slate-400 px-2 font-bold uppercase"><i class="fa-solid fa-user-shield text-amber-400 mr-1"></i>Akses:</span>
-                    <button onclick="switchRole('superadmin')" id="btn-role-superadmin" class="px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition bg-amber-500 text-slate-950 shadow">
-                        Superadmin
-                    </button>
-                    <button onclick="switchRole('admin')" id="btn-role-admin" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition text-slate-300 hover:text-white">
-                        Admin Protokol
-                    </button>
-                    <button onclick="switchRole('pejabat')" id="btn-role-pejabat" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition text-slate-300 hover:text-white">
-                        Pejabat / Pimpinan
-                    </button>
+    <!-- Top Navigation Web Portal Header -->
+    <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo & Title -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-sky-400 flex items-center justify-center font-black text-white text-lg shadow-lg">
+                        RkB
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-base sm:text-lg leading-none flex items-center gap-2">
+                            <span>RaKorBae</span>
+                            <span class="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">PORTAL WEB</span>
+                        </h1>
+                        <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Sistem Rapat & Koordinasi Agenda Pejabat, Disposisi Digital & Google Sync</p>
+                    </div>
                 </div>
 
-                <!-- View Mode Switcher -->
-                <div class="flex items-center space-x-1 bg-slate-800 p-1 rounded-xl text-xs font-bold">
-                    <button onclick="setViewMode('browser')" id="btn-view-browser" class="px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 text-slate-300 hover:text-white">
-                        <i class="fa-solid fa-desktop"></i>
-                        <span class="hidden sm:inline">Desktop Browser</span>
-                    </button>
-                    <button onclick="setViewMode('mobile')" id="btn-view-mobile" class="px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 bg-sky-600 text-white shadow">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                        <span>Tampilan HP (Mobile)</span>
+                <!-- Right Action Bar & Role Selector -->
+                <div class="flex items-center space-x-3">
+                    <!-- Account Role Selector (Superadmin / Admin / Pejabat) -->
+                    <div class="bg-slate-800 p-1 rounded-2xl flex items-center border border-slate-700 text-xs">
+                        <span class="text-[10px] text-slate-400 px-2 font-bold uppercase hidden md:inline"><i class="fa-solid fa-user-shield text-amber-400 mr-1"></i>Akses:</span>
+                        <button onclick="switchRole('superadmin')" id="btn-role-superadmin" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-amber-500 text-slate-950 shadow">
+                            Superadmin
+                        </button>
+                        <button onclick="switchRole('admin')" id="btn-role-admin" class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition text-slate-300 hover:text-white">
+                            Admin Protokol
+                        </button>
+                        <button onclick="switchRole('pejabat')" id="btn-role-pejabat" class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition text-slate-300 hover:text-white">
+                            Pejabat / Pimpinan
+                        </button>
+                    </div>
+
+                    <!-- Quick Add Agenda Button (Mobile/Desktop) -->
+                    <button id="d-btn-add-agenda" onclick="openFormModal()" class="bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow-md flex items-center space-x-1.5 transition">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                        <span class="hidden md:inline">Tambah Agenda</span>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Role Status Banner -->
-    <div id="role-status-bar" class="bg-amber-500/10 border-b border-amber-500/20 text-amber-900 text-xs px-4 py-1.5 font-bold text-center flex items-center justify-center space-x-2">
-        <i class="fa-solid fa-circle-info text-amber-600"></i>
-        <span id="role-status-text">Mode Akses: <strong>SUPERADMIN (Hak Akses Penuh Kelola Agenda & Disposisi)</strong></span>
+    <!-- Role Status & Welcome Banner -->
+    <div id="role-status-bar" class="bg-amber-500/10 border-b border-amber-500/20 text-amber-900 text-xs px-4 py-2 font-bold text-center flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-circle-info text-amber-600 text-sm"></i>
+        <span id="role-status-text">Mode Akses Terhubung: <strong>SUPERADMIN (Hak Akses Penuh Kelola Agenda & Disposisi)</strong></span>
     </div>
 
-    <main class="max-w-7xl mx-auto p-2 sm:p-4 md:p-6">
+    <!-- MAIN WEBSITE CONTENT CONTAINER -->
+    <main id="main-content" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
 
-        <!-- CONTAINER VIEW: MOBILE SIMULATOR & DESKTOP BROWSER -->
-        <div id="main-view-container" class="flex justify-center items-start gap-8 transition-all">
-
-            <!-- 1. MOBILE SMARTPHONE VIEW FRAME -->
-            <div id="mobile-view-wrapper" class="w-full max-w-[390px] bg-slate-950 p-3 rounded-[40px] shadow-2xl border-4 border-slate-800 relative transition-all">
-                <div class="w-32 h-4 bg-slate-800 rounded-b-xl mx-auto mb-2 flex items-center justify-center">
-                    <div class="w-12 h-1 bg-slate-700 rounded-full"></div>
+        <!-- Top Overview & Filter Toolbar -->
+        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200 space-y-4">
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                        <span>Portal Agenda Kegiatan Pejabat</span>
+                        <span id="d-today-badge" class="bg-sky-100 text-sky-800 font-extrabold text-xs px-3 py-1 rounded-full border border-sky-200">
+                            Hari Ini
+                        </span>
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Pantau jadwal rapat koordinasi, disposisi pimpinan, dan kalender kegiatan daerah secara terpadu.</p>
                 </div>
 
-                <div class="bg-slate-50 rounded-[28px] overflow-hidden min-h-[720px] max-h-[780px] flex flex-col justify-between border border-slate-200 relative text-xs">
-                    
-                    <!-- Mobile Header Bar -->
-                    <div class="bg-jb-dark text-white p-4 pt-3 shadow-md space-y-2">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-2">
-                                <div class="w-7 h-7 bg-sky-500 rounded-lg flex items-center justify-center font-extrabold text-white text-xs">
-                                    RkB
-                                </div>
-                                <div>
-                                    <h2 class="font-extrabold text-xs">RaKorBae</h2>
-                                    <p class="text-[9px] text-sky-200 uppercase font-semibold">AGENDA & DISPOSISI PEJABAT</p>
-                                </div>
-                            </div>
-                            <button onclick="resetDataDemo()" class="text-[10px] bg-sky-800/80 hover:bg-sky-700 px-2 py-1 rounded-lg text-sky-100 font-bold flex items-center gap-1">
-                                <i class="fa-solid fa-rotate-right"></i> Reset
-                            </button>
-                        </div>
-
-                        <div class="pt-1 flex items-center justify-between">
-                            <div>
-                                <p class="text-[10px] text-sky-200 font-medium">Selamat Datang,</p>
-                                <h3 id="m-user-greeting" class="font-extrabold text-sm text-white truncate max-w-[200px]">H. FERDY MEIROFA, S.STP</h3>
-                            </div>
-                            <span id="m-role-badge" class="bg-amber-400 text-slate-950 font-black text-[9px] px-2 py-0.5 rounded-full uppercase">SUPERADMIN</span>
-                        </div>
-                    </div>
-
-                    <!-- Mobile Search Box -->
-                    <div class="bg-sky-900 p-2 px-3 border-b border-sky-800">
-                        <div class="relative">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400"></i>
-                            <input type="text" id="m-search-input" oninput="handleSearch(this.value)" placeholder="Cari acara, tempat, atau penyelenggara..." class="w-full pl-8 pr-3 py-1.5 bg-slate-800 text-white placeholder-slate-400 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-amber-400">
-                        </div>
-                    </div>
-
-                    <!-- Mobile Calendar Strip -->
-                    <div class="bg-white p-3 border-b border-slate-200 space-y-2">
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center space-x-1.5">
-                                <i class="fa-regular fa-calendar-days text-sky-600 font-bold"></i>
-                                <span id="m-month-title" class="font-extrabold text-slate-800 text-xs">Bulan Ini</span>
-                            </div>
-                            <button onclick="selectToday()" class="bg-amber-100 text-amber-800 font-extrabold text-[10px] px-2.5 py-1 rounded-full border border-amber-300 hover:bg-amber-200">
-                                <i class="fa-solid fa-crosshairs mr-1"></i>HARI INI
-                            </button>
-                        </div>
-
-                        <!-- Date Scroll Strip -->
-                        <div id="m-date-strip" class="flex space-x-2 overflow-x-auto hide-scrollbar py-1"></div>
-                    </div>
-
-                    <!-- Mobile Tab Filters -->
-                    <div class="bg-slate-100 px-3 py-2 border-b border-slate-200">
-                        <div class="grid grid-cols-4 gap-1 text-[10px] font-extrabold text-center">
-                            <button onclick="setTabFilter('terjadwal')" id="m-tab-terjadwal" class="py-1.5 rounded-xl bg-sky-600 text-white shadow">Terjadwal</button>
-                            <button onclick="setTabFilter('disetujui')" id="m-tab-disetujui" class="py-1.5 rounded-xl bg-white text-slate-600 hover:bg-slate-200">Disetujui</button>
-                            <button onclick="setTabFilter('diproses')" id="m-tab-diproses" class="py-1.5 rounded-xl bg-white text-slate-600 hover:bg-slate-200">Diproses</button>
-                            <button onclick="setTabFilter('ditolak')" id="m-tab-ditolak" class="py-1.5 rounded-xl bg-white text-slate-600 hover:bg-slate-200">Disposisi</button>
-                        </div>
-                    </div>
-
-                    <!-- Mobile Agenda Card Scroll View -->
-                    <div id="m-agenda-list" class="flex-1 overflow-y-auto p-3 space-y-3 custom-scrollbar"></div>
-
-                    <!-- Mobile Bottom Floating Action Bar -->
-                    <div id="m-bottom-action-bar" class="bg-white p-2.5 border-t border-slate-200 flex justify-between items-center px-4">
-                        <button onclick="openFormModal()" class="flex-1 bg-jb-dark hover:bg-sky-900 text-white py-2.5 px-4 rounded-2xl font-extrabold text-xs flex items-center justify-center space-x-2 shadow-lg transition">
-                            <i class="fa-solid fa-plus-circle text-amber-400 text-sm"></i>
-                            <span>Tambah Agenda Baru</span>
-                        </button>
-                    </div>
+                <!-- Export & Print Action Buttons -->
+                <div class="flex items-center space-x-2 no-print">
+                    <button onclick="exportToCSV()" title="Ekspor Rekap CSV/Excel" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition shadow">
+                        <i class="fa-solid fa-file-excel text-sm"></i>
+                        <span>Ekspor Excel</span>
+                    </button>
+                    <button onclick="window.print()" title="Cetak Rekap Laporan PDF" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-2 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition shadow">
+                        <i class="fa-solid fa-print text-sm"></i>
+                        <span>Cetak Laporan</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- 2. DESKTOP BROWSER VIEW -->
-            <div id="browser-view-wrapper" class="w-full flex-1 bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col min-h-[750px]">
+            <!-- Filters & Real-Time Date Picker Row -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
                 
-                <!-- Desktop Header -->
-                <div class="bg-jb-dark text-white p-6 shadow-md flex justify-between items-center">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-12 h-12 bg-sky-500 rounded-2xl flex items-center justify-center font-black text-white text-xl shadow-lg">
-                            RkB
-                        </div>
-                        <div>
-                            <div class="flex items-center space-x-2">
-                                <h2 class="font-extrabold text-xl text-white">RaKorBae Portal Agenda</h2>
-                                <span class="bg-sky-500/30 text-sky-200 text-xs px-2.5 py-0.5 rounded-full border border-sky-400/30 font-semibold">Superadmin & Portal Pejabat</span>
-                            </div>
-                            <p class="text-xs text-sky-200">Sistem Rapat & Koordinasi Agenda Pimpinan, Disposisi Digital & Google Calendar</p>
-                        </div>
-                    </div>
-
-                    <!-- Pejabat Level Selector Filter & Admin Action -->
-                    <div class="flex items-center space-x-3 no-print">
-                        <div class="bg-sky-900/60 p-2 rounded-2xl border border-sky-700/50 flex items-center space-x-2">
-                            <i class="fa-solid fa-user-tie text-amber-400"></i>
-                            <span class="text-xs font-bold text-sky-100">Filter Pejabat:</span>
-                            <select id="d-pejabat-filter" onchange="handlePejabatFilterChange(this.value)" class="bg-sky-950 text-white text-xs font-bold rounded-xl px-2.5 py-1.5 border border-sky-600 focus:outline-none">
-                                <option value="semua">Semua Tingkat Pejabat</option>
-                                <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban)</option>
-                                <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekdis / Sekban</option>
-                                <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
-                                <option value="Camat / Sekcam">Camat / Sekcam</option>
-                            </select>
-                        </div>
-                        <button id="d-btn-add-agenda" onclick="openFormModal()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-2xl shadow-lg flex items-center space-x-2 transition">
-                            <i class="fa-solid fa-calendar-plus text-sm"></i>
-                            <span>Tambah Agenda</span>
-                        </button>
-                    </div>
+                <!-- Filter Tingkat Pejabat -->
+                <div class="md:col-span-4 bg-slate-50 p-2 rounded-2xl border border-slate-200 flex items-center space-x-2">
+                    <i class="fa-solid fa-user-tie text-amber-500 pl-2"></i>
+                    <span class="text-xs font-bold text-slate-600 whitespace-nowrap">Pejabat:</span>
+                    <select id="d-pejabat-filter" onchange="handlePejabatFilterChange(this.value)" class="bg-white text-slate-800 text-xs font-bold rounded-xl px-2.5 py-1.5 border border-slate-300 w-full focus:outline-none focus:ring-2 focus:ring-sky-500">
+                        <option value="semua">Semua Tingkat Pejabat</option>
+                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban)</option>
+                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekdis / Sekban</option>
+                        <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
+                        <option value="Camat / Sekcam">Camat / Sekcam</option>
+                    </select>
                 </div>
 
-                <!-- Desktop Toolbar & Search Bar -->
-                <div class="bg-slate-50 border-b border-slate-200 p-4 px-6 flex flex-col md:flex-row gap-3 justify-between items-center">
-                    <div class="flex items-center space-x-3 w-full md:w-auto">
-                        <span id="d-today-badge" class="bg-amber-100 text-amber-900 font-extrabold text-xs px-3.5 py-1.5 rounded-full border border-amber-300 flex items-center">
-                            <i class="fa-solid fa-clock mr-2 text-amber-600"></i>Memuat tanggal...
-                        </span>
-                        <h3 id="d-month-heading" class="font-extrabold text-slate-800 text-sm">Bulan Ini</h3>
-                    </div>
-
-                    <!-- Search Box & Export Tools -->
-                    <div class="flex items-center space-x-2 w-full md:w-auto no-print">
-                        <div class="relative flex-1 md:w-64">
-                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400"></i>
-                            <input type="text" id="d-search-input" oninput="handleSearch(this.value)" placeholder="Cari acara/penyelenggara..." class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-300 text-slate-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-500">
-                        </div>
-                        <button onclick="exportToCSV()" title="Ekspor Rekap CSV/Excel" class="bg-emerald-600 hover:bg-emerald-700 text-white p-2 px-3 rounded-xl font-bold text-xs flex items-center space-x-1 transition shadow">
-                            <i class="fa-solid fa-file-excel text-sm"></i>
-                            <span class="hidden sm:inline">CSV</span>
-                        </button>
-                        <button onclick="window.print()" title="Cetak Rekap Laporan PDF" class="bg-slate-700 hover:bg-slate-800 text-white p-2 px-3 rounded-xl font-bold text-xs flex items-center space-x-1 transition shadow">
-                            <i class="fa-solid fa-print text-sm"></i>
-                            <span class="hidden sm:inline">Cetak</span>
-                        </button>
-                    </div>
-
-                    <!-- Desktop Tab Pills -->
-                    <div class="flex space-x-2 bg-slate-200 p-1 rounded-2xl text-xs font-bold no-print">
-                        <button onclick="setTabFilter('terjadwal')" id="d-tab-terjadwal" class="px-4 py-1.5 rounded-xl bg-sky-600 text-white shadow">Terjadwal</button>
-                        <button onclick="setTabFilter('disetujui')" id="d-tab-disetujui" class="px-4 py-1.5 rounded-xl text-slate-700 hover:bg-slate-300">Disetujui</button>
-                        <button onclick="setTabFilter('diproses')" id="d-tab-diproses" class="px-4 py-1.5 rounded-xl text-slate-700 hover:bg-slate-300">Diproses</button>
-                        <button onclick="setTabFilter('ditolak')" id="d-tab-ditolak" class="px-4 py-1.5 rounded-xl text-slate-700 hover:bg-slate-300">Ditolak / Disposisi</button>
-                    </div>
+                <!-- Live Search Box -->
+                <div class="md:col-span-4 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400"></i>
+                    <input type="text" id="d-search-input" oninput="handleSearch(this.value)" placeholder="Cari acara, tempat, atau instansi..." class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-500">
                 </div>
 
-                <!-- Desktop Agenda Main Grid -->
-                <div class="flex-1 p-6 overflow-y-auto custom-scrollbar">
-                    <div id="d-agenda-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                <!-- Filter Tabs (Terjadwal, Disetujui, Diproses, Disposisi) -->
+                <div class="md:col-span-4 flex space-x-1 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold no-print overflow-x-auto custom-scrollbar">
+                    <button onclick="setTabFilter('terjadwal')" id="d-tab-terjadwal" class="flex-1 py-1.5 px-3 rounded-xl bg-sky-600 text-white shadow text-center">Terjadwal</button>
+                    <button onclick="setTabFilter('disetujui')" id="d-tab-disetujui" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Disetujui</button>
+                    <button onclick="setTabFilter('diproses')" id="d-tab-diproses" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Diproses</button>
+                    <button onclick="setTabFilter('ditolak')" id="d-tab-ditolak" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Disposisi</button>
                 </div>
 
-                <!-- Desktop Footer Status -->
-                <div class="bg-slate-100 border-t border-slate-200 px-6 py-3 text-xs text-slate-500 flex justify-between items-center">
-                    <span>RaKorBae - Sistem Informasi Agenda & Disposisi Pejabat</span>
-                    <span class="font-bold text-sky-700 flex items-center space-x-1">
-                        <i class="fa-solid fa-cloud-arrow-up text-sky-500"></i>
-                        <span>Terintegrasi Google Calendar, Paraf Digital & WhatsApp Direct</span>
+            </div>
+
+            <!-- Real-Time Date Picker Horizontal Carousel Strip -->
+            <div class="pt-2 border-t border-slate-100">
+                <div class="flex justify-between items-center mb-2">
+                    <span id="d-month-heading" class="font-extrabold text-slate-800 text-xs flex items-center gap-1.5">
+                        <i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender Bulan Ini
                     </span>
+                    <button onclick="selectToday()" class="bg-amber-100 text-amber-900 font-extrabold text-[11px] px-3 py-1 rounded-full border border-amber-300 hover:bg-amber-200 transition">
+                        <i class="fa-solid fa-crosshairs mr-1"></i>HARI INI
+                    </button>
                 </div>
+                <!-- Date Scroll Bar -->
+                <div id="m-date-strip" class="flex space-x-2 overflow-x-auto custom-scrollbar py-1"></div>
             </div>
 
         </div>
+
+        <!-- MAIN AGENDA GRID VIEW -->
+        <div id="d-agenda-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+
     </main>
+
+    <!-- WEBSITE FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-4 px-6 text-xs text-slate-500 mt-8 no-print">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 bg-sky-600 rounded-lg flex items-center justify-center font-bold text-white text-[10px]">RkB</div>
+                <span class="font-bold text-slate-700">RaKorBae © 2026 - Sistem Informasi Agenda & Disposisi Pejabat</span>
+            </div>
+            <div class="flex items-center space-x-4 text-sky-700 font-semibold">
+                <span class="flex items-center space-x-1">
+                    <i class="fa-solid fa-cloud-arrow-up text-sky-500"></i>
+                    <span>Google Sync Active</span>
+                </span>
+                <span>•</span>
+                <span class="flex items-center space-x-1">
+                    <i class="fa-brands fa-whatsapp text-emerald-500"></i>
+                    <span>WhatsApp Direct Link</span>
+                </span>
+            </div>
+        </div>
+    </footer>
 
     <!-- MODAL POPUP DETAIL AGENDA -->
     <div id="modal-detail-agenda" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl border border-slate-200 relative max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-3xl w-full max-w-lg p-6 space-y-4 shadow-2xl border border-slate-200 relative max-h-[90vh] flex flex-col overflow-hidden">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div class="flex items-center space-x-2 text-jb-dark font-extrabold text-sm">
                     <i class="fa-solid fa-calendar-day text-sky-600"></i>
-                    <span>Rincian Detail Agenda</span>
+                    <span>Rincian Detail Agenda Kegiatan</span>
                 </div>
                 <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">&times;</button>
             </div>
@@ -544,8 +471,6 @@
         let searchQuery = '';
         let selectedAgendaId = null;
         let selectedDateStr = null;
-        let attachedPDFBase64 = null;
-        let attachedPDFName = 'Surat_Undangan.pdf';
 
         // Initial Mock Database
         let agendas = [
@@ -634,31 +559,23 @@
             const btnAdmin = document.getElementById('btn-role-admin');
             const btnPejabat = document.getElementById('btn-role-pejabat');
             const statusText = document.getElementById('role-status-text');
-            const mGreeting = document.getElementById('m-user-greeting');
-            const mBadge = document.getElementById('m-role-badge');
             const dBtnAdd = document.getElementById('d-btn-add-agenda');
 
             [btnSuper, btnAdmin, btnPejabat].forEach(b => {
-                b.className = "px-2.5 py-1 rounded-lg text-[11px] font-bold transition text-slate-300 hover:text-white";
+                b.className = "px-3 py-1.5 rounded-xl text-[11px] font-bold transition text-slate-300 hover:text-white";
             });
 
             if (role === 'superadmin') {
-                btnSuper.className = "px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition bg-amber-500 text-slate-950 shadow";
-                statusText.innerHTML = "Mode Akses: <strong>SUPERADMIN (Hak Akses Penuh Kelola Agenda & Disposisi)</strong>";
-                mGreeting.innerText = "H. FERDY MEIROFA, S.STP";
-                mBadge.innerText = "SUPERADMIN";
+                btnSuper.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-amber-500 text-slate-950 shadow";
+                statusText.innerHTML = "Mode Akses Terhubung: <strong>SUPERADMIN (Hak Akses Penuh Kelola Agenda & Disposisi)</strong>";
                 if(dBtnAdd) dBtnAdd.style.display = "flex";
             } else if (role === 'admin') {
-                btnAdmin.className = "px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition bg-sky-500 text-white shadow";
-                statusText.innerHTML = "Mode Akses: <strong>ADMIN PROTOKOL (Pengelola Input & Kalender)</strong>";
-                mGreeting.innerText = "ADMIN PROTOKOL KABUPATEN";
-                mBadge.innerText = "ADMIN PROTOKOL";
+                btnAdmin.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-sky-500 text-white shadow";
+                statusText.innerHTML = "Mode Akses Terhubung: <strong>ADMIN PROTOKOL (Pengelola Input & Kalender Kegiatan)</strong>";
                 if(dBtnAdd) dBtnAdd.style.display = "flex";
             } else {
-                btnPejabat.className = "px-2.5 py-1 rounded-lg text-[11px] font-extrabold transition bg-emerald-500 text-white shadow";
-                statusText.innerHTML = "Mode Akses: <strong>PEJABAT / PIMPINAN (Akses Pantau Agenda & Disposisi Pendelegasian)</strong>";
-                mGreeting.innerText = "DRS. BUDI SANTOSO, M.AP";
-                mBadge.innerText = "PEJABAT";
+                btnPejabat.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-emerald-500 text-white shadow";
+                statusText.innerHTML = "Mode Akses Terhubung: <strong>PEJABAT / PIMPINAN (Akses Pantau Agenda & Disposisi Delegasi)</strong>";
                 if(dBtnAdd) dBtnAdd.style.display = "none";
             }
 
@@ -672,9 +589,8 @@
             const monthName = monthNames[now.getMonth()];
             const yearNum = now.getFullYear();
 
-            document.getElementById('d-today-badge').innerHTML = `<i class="fa-solid fa-clock mr-2 text-amber-600"></i>HARI INI: ${dayName}, ${dateNum} ${monthName} ${yearNum}`;
-            document.getElementById('d-month-heading').innerText = `${monthName} ${yearNum}`;
-            document.getElementById('m-month-title').innerText = `${monthName} ${yearNum}`;
+            document.getElementById('d-today-badge').innerHTML = `<i class="fa-solid fa-clock mr-1 text-sky-600"></i>HARI INI: ${dayName}, ${dateNum} ${monthName} ${yearNum}`;
+            document.getElementById('d-month-heading').innerHTML = `<i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender ${monthName} ${yearNum}`;
 
             renderDateStrip(now);
         }
@@ -698,7 +614,7 @@
                 const isToday = (i === currentDateObj.getDate());
                 const isSelected = (dateVal === selectedDateStr);
 
-                let bgClass = "bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200";
+                let bgClass = "bg-slate-50 text-slate-700 hover:bg-slate-200 border-slate-200";
                 if (isSelected) {
                     bgClass = "bg-sky-600 text-white font-extrabold border-sky-600 shadow";
                 } else if (isToday) {
@@ -706,7 +622,7 @@
                 }
 
                 dateStrip.innerHTML += `
-                    <button onclick="selectDatePill('${dateVal}')" class="flex-shrink-0 px-3 py-1.5 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[50px] ${bgClass}">
+                    <button onclick="selectDatePill('${dateVal}')" class="flex-shrink-0 px-3 py-1.5 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[55px] ${bgClass}">
                         <span class="text-[9px] uppercase font-bold tracking-wider">${dayAbbr}</span>
                         <span class="text-xs font-black">${i}</span>
                         ${isToday ? '<span class="text-[7px] bg-amber-400 text-slate-950 font-black px-1 rounded-full uppercase mt-0.5">INI</span>' : ''}
@@ -739,14 +655,11 @@
         function setTabFilter(tab) {
             currentTabFilter = tab;
             ['terjadwal', 'disetujui', 'diproses', 'ditolak'].forEach(t => {
-                const mBtn = document.getElementById(`m-tab-${t}`);
                 const dBtn = document.getElementById(`d-tab-${t}`);
                 if (t === tab) {
-                    if(mBtn) mBtn.className = "py-1.5 rounded-xl bg-sky-600 text-white shadow";
-                    if(dBtn) dBtn.className = "px-4 py-1.5 rounded-xl bg-sky-600 text-white shadow";
+                    if(dBtn) dBtn.className = "flex-1 py-1.5 px-3 rounded-xl bg-sky-600 text-white shadow text-center";
                 } else {
-                    if(mBtn) mBtn.className = "py-1.5 rounded-xl bg-white text-slate-600 hover:bg-slate-200";
-                    if(dBtn) dBtn.className = "px-4 py-1.5 rounded-xl text-slate-700 hover:bg-slate-300";
+                    if(dBtn) dBtn.className = "flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center";
                 }
             });
             renderAgendas();
@@ -775,22 +688,18 @@
 
         function renderAgendas() {
             const filtered = filterData();
-            const mList = document.getElementById('m-agenda-list');
             const dGrid = document.getElementById('d-agenda-grid');
 
-            mList.innerHTML = '';
             dGrid.innerHTML = '';
 
             if (filtered.length === 0) {
-                const emptyHTML = `
-                    <div class="col-span-full py-12 text-center text-slate-400 space-y-3">
-                        <i class="fa-regular fa-calendar-xmark text-4xl text-slate-300"></i>
-                        <p class="font-bold text-xs">Tidak ada agenda kegiatan ditemukan pada tanggal / filter ini.</p>
+                dGrid.innerHTML = `
+                    <div class="col-span-full py-16 bg-white rounded-3xl border border-slate-200 text-center text-slate-400 space-y-3 shadow-sm">
+                        <i class="fa-regular fa-calendar-xmark text-5xl text-slate-300"></i>
+                        <p class="font-bold text-sm">Tidak ada agenda kegiatan ditemukan pada tanggal / filter ini.</p>
                         ${currentRole !== 'pejabat' ? '<button onclick="openFormModal()" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-xl text-xs hover:bg-sky-700 shadow">+ Tambah Agenda Baru</button>' : ''}
                     </div>
                 `;
-                mList.innerHTML = emptyHTML;
-                dGrid.innerHTML = emptyHTML;
                 return;
             }
 
@@ -813,29 +722,9 @@
                     statusLabel = "DISPOSISI";
                 }
 
-                // Mobile Card HTML
-                mList.innerHTML += `
-                    <div onclick="openDetailModal('${item.id}')" class="bg-white p-3.5 rounded-2xl border-l-4 ${borderLeft} border-t border-r border-b border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer space-y-2">
-                        <div class="flex justify-between items-center">
-                            <span class="font-extrabold text-sky-900 text-xs flex items-center gap-1">
-                                <i class="fa-regular fa-clock text-sky-600"></i> ${item.waktu} WIB
-                            </span>
-                            <span class="${badgeColor} text-[9px] font-extrabold px-2 py-0.5 rounded-full border uppercase tracking-wider">
-                                ${statusLabel}
-                            </span>
-                        </div>
-                        <h4 class="font-extrabold text-slate-900 text-xs leading-snug line-clamp-2">${item.judul}</h4>
-                        <div class="space-y-1 text-[11px] text-slate-500">
-                            <p class="flex items-center gap-1.5 truncate"><i class="fa-solid fa-location-dot text-rose-500 w-3"></i> <span>${item.tempat}</span></p>
-                            <p class="flex items-center gap-1.5 truncate"><i class="fa-solid fa-user-tie text-amber-500 w-3"></i> <span>${item.pejabat}</span></p>
-                        </div>
-                        ${item.disposisi ? `<div class="bg-amber-50 p-2 rounded-xl text-[10px] text-amber-900 font-semibold border border-amber-200 flex items-center gap-1"><i class="fa-solid fa-share-nodes text-amber-600"></i> Disposisi: ${item.disposisi.penerima}</div>` : ''}
-                    </div>
-                `;
-
-                // Desktop Card HTML
+                // Web Card HTML
                 dGrid.innerHTML += `
-                    <div onclick="openDetailModal('${item.id}')" class="bg-white p-5 rounded-3xl border-l-4 ${borderLeft} border-t border-r border-b border-slate-200 shadow-sm hover:shadow-xl transition cursor-pointer flex flex-col justify-between space-y-4">
+                    <div onclick="openDetailModal('${item.id}')" class="card-agenda bg-white p-5 rounded-3xl border-l-4 ${borderLeft} border-t border-r border-b border-slate-200 shadow-sm hover:shadow-xl transition cursor-pointer flex flex-col justify-between space-y-4">
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
                                 <span class="bg-sky-50 text-sky-900 font-black px-3 py-1 rounded-xl text-xs flex items-center gap-1.5 border border-sky-200">
@@ -1009,7 +898,7 @@
                 text += `💬 *Instruksi:* "${item.disposisi.catatan}"\n`;
             }
 
-            text += `\n_Dikirim via Sistem Informasi RaKorBae_`;
+            text += `\n_Dikirim via Portal Website RaKorBae_`;
 
             const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
             window.open(url, '_blank');
@@ -1139,29 +1028,6 @@
                     }
                 })
                 .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
-        }
-
-        function setViewMode(mode) {
-            const mobileWrapper = document.getElementById('mobile-view-wrapper');
-            const browserWrapper = document.getElementById('browser-view-wrapper');
-            const btnMobile = document.getElementById('btn-view-mobile');
-            const btnBrowser = document.getElementById('btn-view-browser');
-
-            if (mode === 'mobile') {
-                mobileWrapper.classList.remove('hidden');
-                browserWrapper.classList.add('hidden');
-                btnMobile.className = "px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 bg-sky-600 text-white shadow";
-                btnBrowser.className = "px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 text-slate-300 hover:text-white";
-            } else {
-                mobileWrapper.classList.add('hidden');
-                browserWrapper.classList.remove('hidden');
-                btnBrowser.className = "px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 bg-sky-600 text-white shadow";
-                btnMobile.className = "px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 text-slate-300 hover:text-white";
-            }
-        }
-
-        function resetDataDemo() {
-            location.reload();
         }
     </script>
 </body>
