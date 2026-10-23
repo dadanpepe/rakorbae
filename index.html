@@ -642,11 +642,68 @@
             title: 'Superadmin & Protokol'
         };
 
+        const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
         let currentTabFilter = 'terjadwal';
         let currentPejabatFilter = 'semua';
         let searchQuery = '';
         let selectedAgendaId = null;
         let selectedDateStr = null;
+
+        // Sample Agendas Data
+        let agendas = [
+            {
+                id: 'RKB-1001',
+                judul: 'Rapat Koordinasi Evaluasi Program Kerja Triwulan III',
+                tanggal: '2026-10-23',
+                waktu: '09:00',
+                tempat: 'Ruang Rapat Utama Lt. 2',
+                email: 'kaban.renbang@depok.go.id',
+                pakaian: 'Batik Harian',
+                kontak: '081234567890',
+                pejabat: 'Kepala Badan / Dinas (Kaban/Kadin)',
+                sector: 'BAPPLITBANGDA',
+                status: 'terjadwal',
+                disposisi: null,
+                pdfName: 'Undangan_Rakor_Evaluasi_TW3.pdf'
+            },
+            {
+                id: 'RKB-1002',
+                judul: 'Sosialisasi Integrasi Sistem Informasi Pelayanan Publik',
+                tanggal: '2026-10-23',
+                waktu: '13:30',
+                tempat: 'Aula Kecamatan Cinere',
+                email: 'sekdis.kominfo@depok.go.id',
+                pakaian: 'PDH Harian',
+                kontak: '085711223344',
+                pejabat: 'Sekretaris Dinas / Badan (Sekdis/Sekban)',
+                sector: 'DISHUBKOMINFO',
+                status: 'diproses',
+                disposisi: null,
+                pdfName: 'Surat_Undangan_Sosialisasi_Integrasi.pdf'
+            },
+            {
+                id: 'RKB-1003',
+                judul: 'Audiensi Bersama Tokoh Masyarakat & Pemuda Kecamatan Cinere',
+                tanggal: '2026-10-23',
+                waktu: '15:30',
+                tempat: 'Pendopo Kecamatan Cinere',
+                email: 'camat.cinere@depok.go.id',
+                pakaian: 'Batik Bebas Rapi',
+                kontak: '081399887766',
+                pejabat: 'Camat / Sekcam',
+                sector: 'KECAMATAN CINERE',
+                status: 'ditolak',
+                disposisi: {
+                    penerima: 'Siti Rahma, S.Sos (Sekcam)',
+                    email: 'sekcam.cinere@depok.go.id',
+                    catatan: 'Mohon diwakilkan oleh Sekcam karena Camat mendampingi Walikota dalam kunjungan lapangan.',
+                    paraf: null
+                },
+                pdfName: 'Surat_Audiensi_Masyarakat.pdf'
+            }
+        ];
 
         function togglePasswordVisibility() {
             const passFld = document.getElementById('login-password');
@@ -662,6 +719,135 @@
                 icon.classList.remove('fa-eye-slash');
                 icon.classList.add('fa-eye');
             }
+        }
+
+        function switchRole(role) {
+            currentRole = role;
+            const statusText = document.getElementById('role-status-text');
+            const btnSuper = document.getElementById('btn-role-superadmin');
+            const btnAdmin = document.getElementById('btn-role-admin');
+            const btnPejabat = document.getElementById('btn-role-pejabat');
+            const btnAdd = document.getElementById('d-btn-add-agenda');
+
+            // Reset button styles
+            [btnSuper, btnAdmin, btnPejabat].forEach(b => {
+                if(b) b.className = "px-3 py-1.5 rounded-xl text-[11px] font-bold transition text-slate-300 hover:text-white";
+            });
+
+            if (role === 'superadmin') {
+                if(btnSuper) btnSuper.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-amber-500 text-slate-950 shadow";
+                if(statusText) statusText.innerHTML = 'Mode Akses Terhubung: <strong>SUPERADMIN (Hak Akses Penuh Kelola Agenda & Disposisi)</strong>';
+                if(btnAdd) btnAdd.classList.remove('hidden');
+            } else if (role === 'admin') {
+                if(btnAdmin) btnAdmin.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-sky-500 text-white shadow";
+                if(statusText) statusText.innerHTML = 'Mode Akses Terhubung: <strong>ADMIN PROTOKOL (Entri Data & Input Agenda Baru)</strong>';
+                if(btnAdd) btnAdd.classList.remove('hidden');
+            } else {
+                if(btnPejabat) btnPejabat.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-emerald-500 text-white shadow";
+                if(statusText) statusText.innerHTML = 'Mode Akses Terhubung: <strong>PEJABAT / PIMPINAN (Akses Baca Agenda & Disposisi Bawahan)</strong>';
+                if(btnAdd) btnAdd.classList.add('hidden');
+            }
+
+            renderAgendas();
+        }
+
+        function logoutPortal() {
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function initCalendarAndHeader() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            
+            // Auto fill today date string if empty
+            if (!selectedDateStr) {
+                selectedDateStr = `${yyyy}-${mm}-${dd}`;
+            }
+
+            // Set Month & Year Heading Real-Time
+            const monthHeading = document.getElementById('d-month-heading');
+            if (monthHeading) {
+                monthHeading.innerHTML = `<i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender ${monthNames[today.getMonth()]} ${yyyy}`;
+            }
+
+            // Set Today Badge Text
+            const todayBadge = document.getElementById('d-today-badge');
+            if (todayBadge) {
+                todayBadge.innerHTML = `<i class="fa-solid fa-clock text-sky-600"></i> ${dayNames[today.getDay()]}, ${today.getDate()} ${monthNames[today.getMonth()]} ${yyyy}`;
+            }
+        }
+
+        function renderDateStrip(currentDateObj) {
+            const dateStrip = document.getElementById('m-date-strip');
+            if (!dateStrip) return;
+
+            dateStrip.innerHTML = '';
+
+            const currentYear = currentDateObj.getFullYear();
+            const currentMonth = currentDateObj.getMonth();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const loopDate = new Date(currentYear, currentMonth, i);
+                const dayAbbr = dayNames[loopDate.getDay()].substring(0, 3);
+                const yyyy = currentYear;
+                const mm = String(currentMonth + 1).padStart(2, '0');
+                const dd = String(i).padStart(2, '0');
+                const dateVal = `${yyyy}-${mm}-${dd}`;
+
+                const isToday = (i === currentDateObj.getDate() && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear());
+                const isSelected = (dateVal === selectedDateStr);
+
+                let bgClass = "bg-slate-50 text-slate-700 hover:bg-slate-200 border-slate-200";
+                if (isSelected) {
+                    bgClass = "bg-sky-600 text-white font-extrabold border-sky-600 shadow-md ring-2 ring-sky-300";
+                } else if (isToday) {
+                    bgClass = "bg-amber-100 text-amber-900 border-amber-300 font-extrabold";
+                }
+
+                dateStrip.innerHTML += `
+                    <button id="date-btn-${dateVal}" onclick="selectDatePill('${dateVal}')" class="flex-shrink-0 px-3.5 py-2 rounded-2xl border text-center transition transform active:scale-95 flex flex-col items-center justify-center min-w-[58px] ${bgClass}">
+                        <span class="text-[9px] uppercase font-bold tracking-wider opacity-80">${dayAbbr}</span>
+                        <span class="text-sm font-black leading-none my-0.5">${i}</span>
+                        ${isToday ? '<span class="text-[7px] bg-amber-400 text-slate-950 font-black px-1 rounded-full uppercase mt-0.5">INI</span>' : ''}
+                    </button>
+                `;
+            }
+
+            // Auto scroll to selected pill
+            setTimeout(() => {
+                const activePill = document.getElementById(`date-btn-${selectedDateStr}`);
+                if (activePill && dateStrip) {
+                    const scrollLeft = activePill.offsetLeft - (dateStrip.clientWidth / 2) + (activePill.clientWidth / 2);
+                    dateStrip.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+                }
+            }, 100);
+        }
+
+        function selectDatePill(dateStr) {
+            selectedDateStr = dateStr;
+            const now = new Date(dateStr);
+            renderDateStrip(now);
+            renderAgendas();
+        }
+
+        function selectToday() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            selectedDateStr = `${yyyy}-${mm}-${dd}`;
+            
+            // Reset search filter
+            searchQuery = '';
+            const searchInput = document.getElementById('d-search-input');
+            if (searchInput) searchInput.value = '';
+
+            initCalendarAndHeader();
+            renderDateStrip(today);
+            renderAgendas();
         }
 
         function openRegisterModal() {
@@ -751,74 +937,13 @@
 
             document.getElementById('login-screen').classList.add('hidden');
             
-            // Ensure Role Selector is hidden on main screen for clean UI
+            // Sembunyikan selector role setelah login agar tampilan bersih
             const roleContainer = document.getElementById('role-selector-container');
             if (roleContainer) roleContainer.classList.add('hidden');
 
             switchRole(currentRole);
             selectToday(); // Auto-select and scroll to Today after login
-        }
-
-        function renderDateStrip(currentDateObj) {
-            const dateStrip = document.getElementById('m-date-strip');
-            dateStrip.innerHTML = '';
-
-            const currentYear = currentDateObj.getFullYear();
-            const currentMonth = currentDateObj.getMonth();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            for (let i = 1; i <= daysInMonth; i++) {
-                const loopDate = new Date(currentYear, currentMonth, i);
-                const dayAbbr = dayNames[loopDate.getDay()].substring(0, 3);
-                const yyyy = currentYear;
-                const mm = String(currentMonth + 1).padStart(2, '0');
-                const dd = String(i).padStart(2, '0');
-                const dateVal = `${yyyy}-${mm}-${dd}`;
-
-                const isToday = (i === currentDateObj.getDate());
-                const isSelected = (dateVal === selectedDateStr);
-
-                let bgClass = "bg-slate-50 text-slate-700 hover:bg-slate-200 border-slate-200";
-                if (isSelected) {
-                    bgClass = "bg-sky-600 text-white font-extrabold border-sky-600 shadow";
-                } else if (isToday) {
-                    bgClass = "bg-amber-100 text-amber-900 border-amber-300 font-extrabold";
-                }
-
-                dateStrip.innerHTML += `
-                    <button id="date-btn-${dateVal}" onclick="selectDatePill('${dateVal}')" class="flex-shrink-0 px-3 py-1.5 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[55px] ${bgClass}">
-                        <span class="text-[9px] uppercase font-bold tracking-wider">${dayAbbr}</span>
-                        <span class="text-xs font-black">${i}</span>
-                        ${isToday ? '<span class="text-[7px] bg-amber-400 text-slate-950 font-black px-1 rounded-full uppercase mt-0.5">INI</span>' : ''}
-                    </button>
-                `;
-            }
-
-            // Auto scroll to selected pill
-            setTimeout(() => {
-                const activePill = document.getElementById(`date-btn-${selectedDateStr}`);
-                if (activePill && dateStrip) {
-                    const scrollLeft = activePill.offsetLeft - (dateStrip.clientWidth / 2) + (activePill.clientWidth / 2);
-                    dateStrip.scrollTo({ left: scrollLeft, behavior: 'smooth' });
-                }
-            }, 100);
-        }
-
-        function selectToday() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            selectedDateStr = `${yyyy}-${mm}-${dd}`;
-            
-            // Reset filters if necessary
-            searchQuery = '';
-            const searchInput = document.getElementById('d-search-input');
-            if (searchInput) searchInput.value = '';
-
-            initCalendarAndHeader();
-            renderDateStrip(today);
-            renderAgendas();
+            initSignaturePad();
         }
 
         function handleSearch(val) {
@@ -864,6 +989,7 @@
             const filtered = filterData();
             const dGrid = document.getElementById('d-agenda-grid');
 
+            if (!dGrid) return;
             dGrid.innerHTML = '';
 
             if (filtered.length === 0) {
@@ -945,8 +1071,8 @@
             function getPos(e) {
                 const rect = canvas.getBoundingClientRect();
                 return {
-                    x: (e.clientX || e.touches[0].clientX) - rect.left,
-                    y: (e.clientY || e.touches[0].clientY) - rect.top
+                    x: (e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0)) - rect.left,
+                    y: (e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0)) - rect.top
                 };
             }
 
@@ -1203,6 +1329,13 @@
                 })
                 .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
         }
+
+        // On Load Initializer
+        window.onload = function() {
+            initCalendarAndHeader();
+            selectToday();
+            loadAgendasFromGoogleSheets();
+        };
     </script>
 </body>
 </html>
