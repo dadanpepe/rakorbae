@@ -282,11 +282,11 @@
     <main id="main-content" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
 
         <!-- Top Overview & Filter Toolbar -->
-        <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-4">
             
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                 <div>
-                    <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                    <h2 class="text-lg sm:text-xl font-extrabold text-slate-900 flex flex-wrap items-center gap-2">
                         <span>Portal Agenda Kegiatan Pejabat</span>
                         <button onclick="selectToday()" id="d-today-badge" class="bg-sky-100 hover:bg-sky-200 text-sky-800 font-extrabold text-xs px-3 py-1 rounded-full border border-sky-200 transition flex items-center gap-1">
                             <i class="fa-solid fa-clock text-sky-600"></i> Hari Ini
@@ -332,10 +332,10 @@
 
                 <!-- Filter Tabs (Terjadwal, Disetujui, Diproses, Disposisi) -->
                 <div class="md:col-span-4 flex space-x-1 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold no-print overflow-x-auto custom-scrollbar">
-                    <button onclick="setTabFilter('terjadwal')" id="d-tab-terjadwal" class="flex-1 py-1.5 px-3 rounded-xl bg-sky-600 text-white shadow text-center">Terjadwal</button>
-                    <button onclick="setTabFilter('disetujui')" id="d-tab-disetujui" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Disetujui</button>
-                    <button onclick="setTabFilter('diproses')" id="d-tab-diproses" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Diproses</button>
-                    <button onclick="setTabFilter('ditolak')" id="d-tab-ditolak" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Disposisi</button>
+                    <button onclick="setTabFilter('terjadwal')" id="d-tab-terjadwal" class="flex-1 py-1.5 px-3 rounded-xl bg-sky-600 text-white shadow text-center min-w-[70px]">Terjadwal</button>
+                    <button onclick="setTabFilter('disetujui')" id="d-tab-disetujui" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center min-w-[70px]">Disetujui</button>
+                    <button onclick="setTabFilter('diproses')" id="d-tab-diproses" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center min-w-[70px]">Diproses</button>
+                    <button onclick="setTabFilter('ditolak')" id="d-tab-ditolak" class="flex-1 py-1.5 px-3 rounded-xl text-slate-600 hover:bg-slate-200 text-center min-w-[70px]">Disposisi</button>
                 </div>
 
             </div>
@@ -385,7 +385,7 @@
 
     <!-- MODAL POPUP DETAIL AGENDA -->
     <div id="modal-detail-agenda" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-lg p-6 space-y-4 shadow-2xl border border-slate-200 relative max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-3xl w-full max-w-lg p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200 relative max-h-[90vh] flex flex-col overflow-hidden">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div class="flex items-center space-x-2 text-jb-dark font-extrabold text-sm">
                     <i class="fa-solid fa-calendar-day text-sky-600"></i>
@@ -491,7 +491,7 @@
 
     <!-- MODAL FORM DISPOSISI / DELEGASI WITH PARAF CANVAS -->
     <div id="modal-disposisi" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md p-6 space-y-4 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-3xl w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div class="flex items-center space-x-2 text-amber-600 font-extrabold text-sm">
                     <i class="fa-solid fa-share-nodes"></i>
@@ -543,7 +543,7 @@
 
     <!-- MODAL FORM TAMBAH AGENDA BARU -->
     <div id="modal-form-agenda" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-lg p-6 space-y-4 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-3xl w-full max-w-lg p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
             <div class="flex justify-between items-center border-b border-slate-100 pb-3">
                 <div class="flex items-center space-x-2 text-jb-dark font-extrabold text-sm">
                     <i class="fa-solid fa-calendar-plus text-sky-600"></i>
