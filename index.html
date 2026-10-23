@@ -236,8 +236,8 @@
 
                 <!-- Right Action Bar & Role Selector -->
                 <div class="flex items-center space-x-3">
-                    <!-- Account Role Selector (Superadmin / Admin / Pejabat) -->
-                    <div class="bg-slate-800 p-1 rounded-2xl flex items-center border border-slate-700 text-xs">
+                    <!-- Account Role Selector (Hidden after login, accessible during session if needed or shown via badge) -->
+                    <div id="role-selector-container" class="hidden bg-slate-800 p-1 rounded-2xl items-center border border-slate-700 text-xs">
                         <span class="text-[10px] text-slate-400 px-2 font-bold uppercase hidden md:inline"><i class="fa-solid fa-user-shield text-amber-400 mr-1"></i>Akses:</span>
                         <button onclick="switchRole('superadmin')" id="btn-role-superadmin" class="px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-amber-500 text-slate-950 shadow">
                             Superadmin
@@ -248,6 +248,12 @@
                         <button onclick="switchRole('pejabat')" id="btn-role-pejabat" class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition text-slate-300 hover:text-white">
                             Pejabat / Pimpinan
                         </button>
+                    </div>
+
+                    <!-- User Info Badge (Tampil setelah login) -->
+                    <div id="user-info-badge" class="bg-slate-800 px-3 py-1.5 rounded-2xl border border-slate-700 text-xs flex items-center space-x-2">
+                        <i class="fa-solid fa-circle-user text-sky-400 text-base"></i>
+                        <span id="user-display-name" class="font-extrabold text-white text-[11px]">H. FERDY MEIROFA, S.STP</span>
                     </div>
 
                     <!-- Logout Button -->
@@ -282,9 +288,9 @@
                 <div>
                     <h2 class="text-xl font-extrabold text-slate-900 flex items-center gap-2">
                         <span>Portal Agenda Kegiatan Pejabat</span>
-                        <span id="d-today-badge" class="bg-sky-100 text-sky-800 font-extrabold text-xs px-3 py-1 rounded-full border border-sky-200">
-                            Hari Ini
-                        </span>
+                        <button onclick="selectToday()" id="d-today-badge" class="bg-sky-100 hover:bg-sky-200 text-sky-800 font-extrabold text-xs px-3 py-1 rounded-full border border-sky-200 transition flex items-center gap-1">
+                            <i class="fa-solid fa-clock text-sky-600"></i> Hari Ini
+                        </button>
                     </h2>
                     <p class="text-xs text-slate-500 mt-1">Pantau jadwal rapat koordinasi, disposisi pimpinan, dan kalender kegiatan daerah secara terpadu.</p>
                 </div>
@@ -340,12 +346,13 @@
                     <span id="d-month-heading" class="font-extrabold text-slate-800 text-xs flex items-center gap-1.5">
                         <i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender Bulan Ini
                     </span>
-                    <button onclick="selectToday()" class="bg-amber-100 text-amber-900 font-extrabold text-[11px] px-3 py-1 rounded-full border border-amber-300 hover:bg-amber-200 transition">
-                        <i class="fa-solid fa-crosshairs mr-1"></i>HARI INI
+                    <button onclick="selectToday()" class="bg-amber-100 text-amber-900 font-extrabold text-[11px] px-3 py-1 rounded-full border border-amber-300 hover:bg-amber-200 transition shadow-sm active:scale-95 flex items-center space-x-1">
+                        <i class="fa-solid fa-crosshairs text-amber-600"></i>
+                        <span>HARI INI</span>
                     </button>
                 </div>
                 <!-- Date Scroll Bar -->
-                <div id="m-date-strip" class="flex space-x-2 overflow-x-auto custom-scrollbar py-1"></div>
+                <div id="m-date-strip" class="flex space-x-2 overflow-x-auto custom-scrollbar py-1 scroll-smooth"></div>
             </div>
 
         </div>
@@ -733,135 +740,23 @@
 
         function handleLoginSubmit(e) {
             e.preventDefault();
+            const usernameInput = document.getElementById('login-username').value;
+            
+            // Set user display name based on username if entered
+            if (usernameInput) {
+                currentUser.name = usernameInput.toUpperCase();
+                const dispNameEl = document.getElementById('user-display-name');
+                if (dispNameEl) dispNameEl.innerText = currentUser.name;
+            }
+
             document.getElementById('login-screen').classList.add('hidden');
+            
+            // Ensure Role Selector is hidden on main screen for clean UI
+            const roleContainer = document.getElementById('role-selector-container');
+            if (roleContainer) roleContainer.classList.add('hidden');
+
             switchRole(currentRole);
-        }
-
-        function logoutPortal() {
-            document.getElementById('login-screen').classList.remove('hidden');
-        }
-
-        // Initial Mock Database
-        let agendas = [
-            {
-                id: 'RKB-001',
-                judul: 'Rapat Paripurna DPRD Penyampaian Raperda APBD',
-                tanggal: '',
-                waktu: '09:00',
-                tempat: 'Ruang Rapat Paripurna DPRD',
-                email: 'kaban.bappeda@gmail.com',
-                pakaian: 'Pakaian Sipil Lengkap (PSL)',
-                kontak: '081277889900',
-                pejabat: 'Kepala Badan / Dinas (Kaban/Kadin)',
-                sector: 'SEKRETARIAT DPRD',
-                status: 'terjadwal',
-                disposisi: null,
-                pdfData: null,
-                pdfName: 'Surat_Paripurna_DPRD.pdf'
-            },
-            {
-                id: 'RKB-002',
-                judul: 'Sosialisasi & Evaluasi Sistem Pemerintahan Berbasis Elektronik (SPBE)',
-                tanggal: '',
-                waktu: '13:30',
-                tempat: 'Auditorium Utama Lantai 3',
-                email: 'sekdis.kominfo@gmail.com',
-                pakaian: 'Batik Harian Motif Daerah',
-                kontak: '083144115169',
-                pejabat: 'Sekretaris Dinas / Badan (Sekdis/Sekban)',
-                sector: 'DISKOMINFO',
-                status: 'diproses',
-                disposisi: null,
-                pdfData: null,
-                pdfName: 'Undangan_SPBE_2026.pdf'
-            },
-            {
-                id: 'RKB-003',
-                judul: 'Audiensi Dewan Pendidikan & Forum Komite Sekolah',
-                tanggal: '',
-                waktu: '10:00',
-                tempat: 'Ruang Rapat Pimpinan',
-                email: 'budi.santoso@gmail.com',
-                pakaian: 'Bebas Rapi / PDH',
-                kontak: '081399887766',
-                pejabat: 'Sekretaris Dinas / Badan (Sekdis/Sekban)',
-                sector: 'DINAS PENDIDIKAN',
-                status: 'ditolak',
-                disposisi: {
-                    penerima: 'Drs. Budi Santoso, M.AP (Sekdis)',
-                    email: 'budi.santoso@gmail.com',
-                    catatan: 'Didelegasikan ke Sekdis karena pimpinan menghadiri rapat koordinasi dengan Kementerian di Jakarta.',
-                    paraf: null
-                },
-                pdfData: null,
-                pdfName: 'Audiensi_Dewan_Pendidikan.pdf'
-            }
-        ];
-
-        const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const monthNames = [
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-        ];
-
-        window.onload = function() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const todayStr = `${yyyy}-${mm}-${dd}`;
-
-            selectedDateStr = todayStr;
-            agendas[0].tanggal = todayStr;
-            agendas[1].tanggal = todayStr;
-            agendas[2].tanggal = todayStr;
-
-            initCalendarAndHeader();
-            initSignaturePad();
-            renderAgendas();
-            loadAgendasFromGoogleSheets();
-        };
-
-        function switchRole(role) {
-            currentRole = role;
-            const btnSuper = document.getElementById('btn-role-superadmin');
-            const btnAdmin = document.getElementById('btn-role-admin');
-            const btnPejabat = document.getElementById('btn-role-pejabat');
-            const statusText = document.getElementById('role-status-text');
-            const dBtnAdd = document.getElementById('d-btn-add-agenda');
-
-            [btnSuper, btnAdmin, btnPejabat].forEach(b => {
-                b.className = "px-3 py-1.5 rounded-xl text-[11px] font-bold transition text-slate-300 hover:text-white";
-            });
-
-            if (role === 'superadmin') {
-                btnSuper.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-amber-500 text-slate-950 shadow";
-                statusText.innerHTML = "Mode Akses Terhubung: <strong>SUPERADMIN (Hak Akses Penuh Kelola Agenda & Disposisi)</strong>";
-                if(dBtnAdd) dBtnAdd.style.display = "flex";
-            } else if (role === 'admin') {
-                btnAdmin.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-sky-500 text-white shadow";
-                statusText.innerHTML = "Mode Akses Terhubung: <strong>ADMIN PROTOKOL (Pengelola Input & Kalender Kegiatan)</strong>";
-                if(dBtnAdd) dBtnAdd.style.display = "flex";
-            } else {
-                btnPejabat.className = "px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition bg-emerald-500 text-white shadow";
-                statusText.innerHTML = "Mode Akses Terhubung: <strong>PEJABAT / PIMPINAN (Akses Pantau Agenda & Disposisi Delegasi)</strong>";
-                if(dBtnAdd) dBtnAdd.style.display = "none";
-            }
-
-            renderAgendas();
-        }
-
-        function initCalendarAndHeader() {
-            const now = new Date();
-            const dayName = dayNames[now.getDay()];
-            const dateNum = now.getDate();
-            const monthName = monthNames[now.getMonth()];
-            const yearNum = now.getFullYear();
-
-            document.getElementById('d-today-badge').innerHTML = `<i class="fa-solid fa-clock mr-1 text-sky-600"></i>HARI INI: ${dayName}, ${dateNum} ${monthName} ${yearNum}`;
-            document.getElementById('d-month-heading').innerHTML = `<i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender ${monthName} ${yearNum}`;
-
-            renderDateStrip(now);
+            selectToday(); // Auto-select and scroll to Today after login
         }
 
         function renderDateStrip(currentDateObj) {
@@ -891,19 +786,22 @@
                 }
 
                 dateStrip.innerHTML += `
-                    <button onclick="selectDatePill('${dateVal}')" class="flex-shrink-0 px-3 py-1.5 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[55px] ${bgClass}">
+                    <button id="date-btn-${dateVal}" onclick="selectDatePill('${dateVal}')" class="flex-shrink-0 px-3 py-1.5 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[55px] ${bgClass}">
                         <span class="text-[9px] uppercase font-bold tracking-wider">${dayAbbr}</span>
                         <span class="text-xs font-black">${i}</span>
                         ${isToday ? '<span class="text-[7px] bg-amber-400 text-slate-950 font-black px-1 rounded-full uppercase mt-0.5">INI</span>' : ''}
                     </button>
                 `;
             }
-        }
 
-        function selectDatePill(dateVal) {
-            selectedDateStr = dateVal;
-            renderDateStrip(new Date());
-            renderAgendas();
+            // Auto scroll to selected pill
+            setTimeout(() => {
+                const activePill = document.getElementById(`date-btn-${selectedDateStr}`);
+                if (activePill && dateStrip) {
+                    const scrollLeft = activePill.offsetLeft - (dateStrip.clientWidth / 2) + (activePill.clientWidth / 2);
+                    dateStrip.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+                }
+            }, 100);
         }
 
         function selectToday() {
@@ -912,6 +810,13 @@
             const mm = String(today.getMonth() + 1).padStart(2, '0');
             const dd = String(today.getDate()).padStart(2, '0');
             selectedDateStr = `${yyyy}-${mm}-${dd}`;
+            
+            // Reset filters if necessary
+            searchQuery = '';
+            const searchInput = document.getElementById('d-search-input');
+            if (searchInput) searchInput.value = '';
+
+            initCalendarAndHeader();
             renderDateStrip(today);
             renderAgendas();
         }
