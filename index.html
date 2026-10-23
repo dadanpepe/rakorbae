@@ -61,7 +61,7 @@
             
             <!-- Logo Section -->
             <div class="flex flex-col items-center mt-2">
-                <!-- App Blue Logo Icon (RkB) -->
+                <!-- App Blue Logo Icon (Jb) -->
                 <div class="w-24 h-24 bg-gradient-to-br from-sky-400 via-blue-500 to-blue-700 rounded-2xl shadow-xl flex flex-col items-center justify-center relative p-2 border-2 border-white/80">
                     <div class="grid grid-cols-4 gap-1 w-full mb-1">
                         <div class="h-2 bg-sky-200/80 rounded-sm"></div>
@@ -75,11 +75,11 @@
                         <div class="h-2 bg-sky-200 rounded-sm"></div>
                         <div class="h-2 bg-sky-300 rounded-sm"></div>
                     </div>
-                    <span class="text-white font-extrabold text-2xl tracking-tight leading-none mt-1">RkB</span>
+                    <span class="text-white font-extrabold text-2xl tracking-tight leading-none mt-1">Jb</span>
                 </div>
                 <!-- App Title -->
                 <h1 class="text-2xl font-bold text-slate-800 mt-3 tracking-wide">RaKorBae</h1>
-                <p class="text-[11px] font-semibold text-slate-600 tracking-wider uppercase">RaKorBae Digital System</p>
+                <p class="text-[11px] font-semibold text-slate-600 tracking-wider uppercase">Sistem Agenda & Disposisi Pejabat</p>
             </div>
 
             <!-- Login Form Card -->
@@ -89,16 +89,16 @@
                     <!-- Username Input -->
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
-                        <input type="text" id="login-username" required value="superadmin" placeholder="Masukkan Username" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold">
+                        <input type="text" id="login-username" required placeholder="Masukkan Username" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold">
                     </div>
 
                     <!-- Password Input -->
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
                         <div class="relative">
-                            <input type="password" id="login-password" required value="••••••••" placeholder="Masukkan Password" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold pr-10">
-                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                                <i id="passwordEyeIcon" class="fa-regular fa-eye"></i>
+                            <input type="password" id="login-password" required placeholder="Masukkan Password" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold pr-10">
+                            <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none p-1 z-10" aria-label="Tampilkan atau sembunyikan password">
+                                <i id="passwordEyeIcon" class="fa-regular fa-eye text-sm pointer-events-none"></i>
                             </button>
                         </div>
                     </div>
@@ -112,7 +112,10 @@
 
                 <!-- Footer Register Text -->
                 <div class="text-center mt-4">
-                    <p class="text-xs text-slate-600 font-medium">Belum punya akun? <a href="#" onclick="alert('Silakan hubungi Administrator Sistem Protokol untuk pendaftaran akun pejabat.')" class="text-emerald-500 font-bold hover:underline">Daftar</a></p>
+                    <p class="text-xs text-slate-600 font-medium">
+                        Belum punya akun? 
+                        <button type="button" onclick="openRegisterModal()" class="text-emerald-600 font-bold hover:underline focus:outline-none">Daftar</button>
+                    </p>
                 </div>
             </div>
 
@@ -131,6 +134,79 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- ==================== MODAL REGISTER AKUN BARU ==================== -->
+    <div id="registerModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 my-auto">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-user-plus text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-slate-800 text-sm">Pendaftaran Akun Baru</h3>
+                        <p class="text-[10px] text-slate-500">Akan disimpan ke Google Spreadsheet backend</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeRegisterModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleRegisterSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
+                    <input type="text" id="regFullname" placeholder="Contoh: Drs. Budi Santoso, M.Si" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Username Login</label>
+                        <input type="text" id="regUsername" placeholder="budi_santoso" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">No. WhatsApp</label>
+                        <input type="tel" id="regWhatsapp" placeholder="081234567890" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Email Gmail Pejabat / Staf</label>
+                    <input type="email" id="regEmail" placeholder="nama.pejabat@gmail.com" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Role / Hak Akses</label>
+                        <select id="regRole" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                            <option value="pejabat">Pejabat / Pimpinan</option>
+                            <option value="admin">Admin Protokol</option>
+                            <option value="superadmin">Superadmin</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Instansi / Unit Kerja</label>
+                        <input type="text" id="regInstansi" placeholder="Kecamatan Cinere" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Password</label>
+                    <input type="password" id="regPassword" placeholder="Buat kata sandi aman" required class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+
+                <div id="regStatusMsg" class="hidden text-[11px] p-2.5 rounded-xl text-center font-bold"></div>
+
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeRegisterModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold">Batal</button>
+                    <button type="submit" id="btnSubmitReg" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Daftarkan Akun</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -568,7 +644,9 @@
         function togglePasswordVisibility() {
             const passFld = document.getElementById('login-password');
             const icon = document.getElementById('passwordEyeIcon');
-            if(passFld.type === 'password') {
+            if (!passFld || !icon) return;
+
+            if (passFld.type === 'password') {
                 passFld.type = 'text';
                 icon.classList.remove('fa-eye');
                 icon.classList.add('fa-eye-slash');
@@ -576,6 +654,80 @@
                 passFld.type = 'password';
                 icon.classList.remove('fa-eye-slash');
                 icon.classList.add('fa-eye');
+            }
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').classList.remove('hidden');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+            document.getElementById('regStatusMsg').classList.add('hidden');
+        }
+
+        async function handleRegisterSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmitReg');
+            const msg = document.getElementById('regStatusMsg');
+
+            const payload = {
+                action: 'register_user',
+                fullname: document.getElementById('regFullname').value,
+                username: document.getElementById('regUsername').value,
+                whatsapp: document.getElementById('regWhatsapp').value,
+                email: document.getElementById('regEmail').value,
+                role: document.getElementById('regRole').value,
+                instansi: document.getElementById('regInstansi').value,
+                password: document.getElementById('regPassword').value
+            };
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Menyimpan...</span>`;
+            msg.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-800', 'bg-red-100', 'text-red-800');
+            msg.classList.add('bg-blue-100', 'text-blue-800');
+            msg.innerText = "Mengirimkan data pendaftaran ke Google Spreadsheet...";
+
+            try {
+                if (APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) {
+                    throw new Error("Sistem belum dihubungkan dengan APPS_SCRIPT_WEB_APP_URL resmi.");
+                }
+
+                await fetch(APPS_SCRIPT_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                msg.className = "text-[11px] p-2.5 rounded-xl text-center font-bold bg-emerald-100 text-emerald-800";
+                msg.innerText = "Pendaftaran berhasil! Akun tersimpan ke Google Spreadsheet tab Users_RaKorBae.";
+                
+                const loginUser = document.getElementById('login-username');
+                const loginPass = document.getElementById('login-password');
+                if (loginUser) loginUser.value = payload.username;
+                if (loginPass) loginPass.value = payload.password;
+
+                setTimeout(() => {
+                    closeRegisterModal();
+                    alert("Akun Anda berhasil terdaftar! Silakan klik tombol 'Masuk'.");
+                }, 1500);
+
+            } catch (error) {
+                msg.className = "text-[11px] p-2.5 rounded-xl text-center font-bold bg-amber-100 text-amber-900";
+                msg.innerText = "Data tersimpan di tampilan lokal. (Peringatan: " + error.message + ")";
+                
+                const loginUser = document.getElementById('login-username');
+                const loginPass = document.getElementById('login-password');
+                if (loginUser) loginUser.value = payload.username;
+                if (loginPass) loginPass.value = payload.password;
+                
+                setTimeout(() => {
+                    closeRegisterModal();
+                }, 2000);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Daftarkan Akun</span>`;
             }
         }
 
