@@ -111,7 +111,7 @@
                 </div>
             </div>
 
-            <!-- Footer Logos -->
+            <!-- Footer Agency Logos -->
             <div class="w-full bg-white/95 backdrop-blur-sm rounded-xl py-2 px-3 shadow-md border border-white flex items-center justify-around text-slate-700 text-[9px] font-bold">
                 <div class="flex items-center space-x-1">
                     <i class="fa-solid fa-building-columns text-sky-700 text-xs"></i>
@@ -129,27 +129,27 @@
         </div>
     </div>
 
-    <!-- MODAL POPUP NOTIFIKASI BELUM PUNYA AKUN -->
+    <!-- MODAL POPUP NOTIFIKASI LOGIN / WARN AKUN -->
     <div id="noAccountModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-200 text-center relative animate-fade-in">
-            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
-                <i class="fa-solid fa-user-shield"></i>
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-200 text-center relative">
+            <div id="noAccountIcon" class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
             
             <div class="space-y-1.5">
-                <h3 class="text-base font-extrabold text-slate-900">Belum Memiliki Akun Pejabat?</h3>
-                <p class="text-xs text-slate-600 leading-relaxed">
+                <h3 id="noAccountTitle" class="text-base font-extrabold text-slate-900">Peringatan Login</h3>
+                <p id="noAccountDesc" class="text-xs text-slate-600 leading-relaxed">
                     Akun belum terdaftar di database sistem. Silakan daftarkan akun baru Anda untuk mendapatkan akses pemantauan agenda & disposisi.
                 </p>
             </div>
 
             <div class="pt-2 flex flex-col space-y-2">
-                <button onclick="closeNoAccountModal(); openRegisterModal();" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center space-x-2">
+                <button id="btnModalRegisterAction" onclick="closeNoAccountModal(); openRegisterModal();" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-user-plus text-sm"></i>
                     <span>Daftar Akun Baru Sekarang</span>
                 </button>
                 <button onclick="closeNoAccountModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
-                    Batal
+                    Tutup / Coba Lagi
                 </button>
             </div>
         </div>
@@ -169,7 +169,7 @@
             <form onsubmit="handleRegisterSubmit(event)" class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-                    <input type="text" id="reg-fullname" required placeholder="Contoh: Drs. H. Ahmad Subandi, M.Si" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <input type="text" id="reg-fullname" required placeholder="Contoh: Dadan, S.STP, M.Si" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
                 </div>
 
                 <div>
@@ -178,13 +178,18 @@
                 </div>
 
                 <div>
+                    <label class="block font-bold text-slate-700 mb-1">Jabatan (Input Manual)</label>
+                    <input type="text" id="reg-jabatan" required placeholder="Contoh: Camat Cinere / Sekdis" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                </div>
+
+                <div>
                     <label class="block font-bold text-slate-700 mb-1">Username Untuk Login</label>
-                    <input type="text" id="reg-username" required placeholder="Contoh: ahmad_subandi" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <input type="text" id="reg-username" required placeholder="Contoh: dadan_camat" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
                 </div>
 
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Email Gmail Aktif</label>
-                    <input type="email" id="reg-email" required placeholder="ahmad@gmail.com" class="w-full p-2.5 bg-sky-50 border border-sky-300 rounded-xl font-bold text-sky-900">
+                    <input type="email" id="reg-email" required placeholder="dadan@gmail.com" class="w-full p-2.5 bg-sky-50 border border-sky-300 rounded-xl font-bold text-sky-900">
                 </div>
 
                 <div>
@@ -193,19 +198,30 @@
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Jabatan / Hak Akses</label>
-                    <input type="text" id="reg-role" value="pejabat" readonly class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-xl font-bold text-slate-600 cursor-not-allowed" title="Form pendaftaran umum dikhususkan untuk Pejabat/Pimpinan. Untuk akses Admin dapat diubah langsung di Spreadsheet.">
-                    <p class="text-[9px] text-slate-400 mt-0.5">*Akses pendaftaran umum dikhususkan untuk Pejabat/Pimpinan.</p>
+                    <label class="block font-bold text-slate-700 mb-1">Hak Akses</label>
+                    <input type="text" id="reg-role" value="pejabat" readonly class="w-full p-2.5 bg-slate-100 border border-slate-300 rounded-xl font-bold text-slate-600 cursor-not-allowed">
                 </div>
 
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Instansi / Unit Kerja</label>
-                    <input type="text" id="reg-instansi" required value="Kecamatan Cinere" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <label class="block font-bold text-slate-700 mb-1">Instansi / Unit Kerja (Pilihan Database)</label>
+                    <select id="reg-instansi" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                        <option value="Kecamatan Cinere">Kecamatan Cinere</option>
+                        <option value="BAPPLITBANGDA">BAPPLITBANGDA</option>
+                        <option value="DISHUBKOMINFO">DISHUBKOMINFO</option>
+                        <option value="Dinas Pendidikan">Dinas Pendidikan</option>
+                        <option value="Dinas Kesehatan">Dinas Kesehatan</option>
+                        <option value="Sekretariat Daerah">Sekretariat Daerah</option>
+                    </select>
                 </div>
 
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Password</label>
-                    <input type="password" id="reg-password" required placeholder="Masukkan Password" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <div class="relative">
+                        <input type="password" id="reg-password" required placeholder="Masukkan Password Baru" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800 pr-10">
+                        <button type="button" onclick="toggleRegPasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
+                            <i id="regPasswordEyeIcon" class="fa-regular fa-eye pointer-events-none"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="pt-2 flex space-x-2">
@@ -227,7 +243,6 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Configuration setup with safe fallback
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "demo-api-key",
             authDomain: "rakorbae-demo.firebaseapp.com",
@@ -243,7 +258,6 @@
         window.db = getFirestore(window.app);
         window.auth = getAuth(window.app);
 
-        // Global Real-Time Authentication & Firestore Listener Setup
         async function initRealtimeDatabase() {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -258,9 +272,7 @@
             onAuthStateChanged(window.auth, (user) => {
                 if (!user) return;
                 
-                // Real-time Firestore sync listener for Agendas collection (Rule 1 & Rule 2 compliant path)
                 const agendasCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'agendas');
-                
                 onSnapshot(agendasCollectionRef, (snapshot) => {
                     const fetchedAgendas = [];
                     snapshot.forEach((doc) => {
@@ -268,15 +280,30 @@
                     });
                     
                     if (fetchedAgendas.length > 0) {
-                        // Merge with existing local agendas or replace completely
                         window.agendas = fetchedAgendas;
                     }
-                    
                     if (typeof window.renderAgendas === 'function') {
                         window.renderAgendas();
                     }
                 }, (error) => {
-                    console.error("Realtime listener notice (using local fallback if unconfigured):", error);
+                    console.error("Realtime agenda listener notice:", error);
+                });
+
+                const subordinatesCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'subordinates');
+                onSnapshot(subordinatesCollectionRef, (snapshot) => {
+                    const fetchedSubordinates = [];
+                    snapshot.forEach((doc) => {
+                        fetchedSubordinates.push(doc.data());
+                    });
+                    
+                    if (fetchedSubordinates.length > 0) {
+                        window.subordinatesList = fetchedSubordinates;
+                        if (typeof window.renderSubordinateOptions === 'function') {
+                            window.renderSubordinateOptions();
+                        }
+                    }
+                }, (error) => {
+                    console.error("Realtime subordinate listener notice:", error);
                 });
             });
         }
@@ -286,7 +313,6 @@
             try {
                 const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaItem.id);
                 await setDoc(docRef, agendaItem, { merge: true });
-                console.log("Realtime DB & Spreadsheet Sync completed for ID:", agendaItem.id);
             } catch (err) {
                 console.error("Firestore sync error:", err);
             }
@@ -297,7 +323,6 @@
             try {
                 const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaId);
                 await deleteDoc(docRef);
-                console.log("Realtime DB Document deleted for ID:", agendaId);
             } catch (err) {
                 console.error("Firestore delete error:", err);
             }
@@ -311,6 +336,17 @@
                 await setDoc(docRef, userData, { merge: true });
             } catch (err) {
                 console.error("User registration DB error:", err);
+            }
+        };
+
+        window.syncSubordinateToRealtimeDb = async function(subordinateData) {
+            if (!window.auth.currentUser) return;
+            try {
+                const subIdDoc = (subordinateData.nama || 'sub-' + Date.now()).replace(/[^a-zA-Z0-9]/g, '_');
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'subordinates', subIdDoc);
+                await setDoc(docRef, subordinateData, { merge: true });
+            } catch (err) {
+                console.error("Subordinate DB error:", err);
             }
         };
 
@@ -690,17 +726,17 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Multi-Account User State & User Database
+        // Multi-Account User State & Registered Accounts DB
         let currentRole = 'pejabat'; 
         let currentUser = {
-            name: 'H. FERDY MEIROFA, S.STP',
-            title: 'Pejabat / Pimpinan'
+            name: 'Dadan',
+            jabatan: 'Camat',
+            title: 'Dadan (Camat)'
         };
 
-        // Registered accounts database (Synced real-time from Firestore & Google Sheets)
         let registeredUsers = [
-            { username: 'admin', password: '123', role: 'superadmin', fullname: 'Admin Protokol' },
-            { username: 'pejabat', password: '123', role: 'pejabat', fullname: 'H. FERDY MEIROFA, S.STP' }
+            { username: 'admin', password: '123', role: 'superadmin', fullname: 'Admin Protokol', jabatan: 'Admin System', instansi: 'Kecamatan Cinere' },
+            { username: 'pejabat', password: '123', role: 'pejabat', fullname: 'Dadan', jabatan: 'Camat', instansi: 'Kecamatan Cinere' }
         ];
 
         const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -712,7 +748,6 @@
         let selectedAgendaId = null;
         let selectedDateStr = null;
 
-        // Subordinate options synchronized with Spreadsheet & Firestore Database
         let subordinatesList = [
             { nama: 'Mursalim, S.Ag.I', email: 'budi.santoso@gmail.com', instansi: 'Kecamatan Cinere' },
             { nama: 'Sony Hendro Prasetyo', email: 'ahmad.subarkah@gmail.com', instansi: 'Kecamatan Cinere' },
@@ -723,7 +758,6 @@
             { nama: 'Mashuri, S.H', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' }
         ];
 
-        // Sample Agendas Data (Real-Time Current Date: 2026-10-26)
         let agendas = [
             {
                 id: 'RKB-1001',
@@ -757,7 +791,9 @@
             }
         ];
 
-        // On Load Initializer
+        // Canvas Signature Pad References
+        let signatureCanvas, signatureCtx, isDrawingSig = false;
+
         window.onload = function() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -771,7 +807,6 @@
             renderSubordinateOptions();
             renderAgendas();
             
-            // Push initial sample agendas & subordinates to real-time database if logged in
             if (window.auth && window.auth.currentUser) {
                 agendas.forEach(item => window.syncAgendaToRealtimeDb(item));
                 subordinatesList.forEach(sub => window.syncSubordinateToRealtimeDb(sub));
@@ -793,40 +828,59 @@
             }
         }
 
+        function toggleRegPasswordVisibility() {
+            const pwdInput = document.getElementById('reg-password');
+            const eyeIcon = document.getElementById('regPasswordEyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.className = 'fa-regular fa-eye-slash pointer-events-none';
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.className = 'fa-regular fa-eye pointer-events-none';
+            }
+        }
+
         function handleLoginSubmit(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value.trim().toLowerCase();
             const password = document.getElementById('login-password').value.trim();
 
             if (!username || !password) {
-                showNoAccountNotification("Mohon isi Username dan Password Anda.");
+                showNoAccountNotification("Mohon isi Username dan Password Anda.", "Peringatan Login", false);
                 return;
             }
 
-            // Check if user exists in registered accounts database
             const foundUser = registeredUsers.find(u => u.username.toLowerCase() === username);
 
             if (foundUser) {
                 if (foundUser.password && foundUser.password !== password) {
-                    showNoAccountNotification("Password yang Anda masukkan salah. Silakan periksa kembali.");
+                    showNoAccountNotification("Username dan password yang Anda masukkan salah, silakan coba lagi.", "Kredensial Salah", false);
                     return;
                 }
                 
-                // Login Success
                 currentUser = foundUser;
                 switchRole(foundUser.role || (username.includes('admin') ? 'superadmin' : 'pejabat'));
                 document.getElementById('login-screen').classList.add('hidden');
             } else {
-                // User not found in database -> Show popup notification & block login
-                showNoAccountNotification(`Akun dengan username "${username}" belum terdaftar di database sistem. Silakan daftarkan akun baru Anda.`);
+                showNoAccountNotification(`Akun dengan username "${username}" belum terdaftar di database. Silakan klik tombol di bawah untuk mendaftarkan akun baru Anda.`, "Belum Memiliki Akun", true);
             }
         }
 
-        function showNoAccountNotification(msg) {
+        function showNoAccountNotification(msg, title = "Peringatan Login", showRegButton = true) {
             const modal = document.getElementById('noAccountModal');
-            if (msg) {
-                const desc = modal.querySelector('p');
-                if (desc) desc.innerText = msg;
+            const desc = document.getElementById('noAccountDesc');
+            const titleEl = document.getElementById('noAccountTitle');
+            const btnReg = document.getElementById('btnModalRegisterAction');
+
+            if (desc) desc.innerText = msg;
+            if (titleEl) titleEl.innerText = title;
+
+            if (btnReg) {
+                if (showRegButton) {
+                    btnReg.classList.remove('hidden');
+                } else {
+                    btnReg.classList.add('hidden');
+                }
             }
             modal.classList.remove('hidden');
         }
@@ -855,10 +909,12 @@
             const regUsername = document.getElementById('reg-username').value.trim().toLowerCase();
             const regPassword = document.getElementById('reg-password').value.trim();
             const regFullname = document.getElementById('reg-fullname').value.trim();
+            const regJabatan = document.getElementById('reg-jabatan').value.trim();
 
             const regData = {
                 action: 'register_user',
                 fullname: regFullname,
+                jabatan: regJabatan,
                 nip: document.getElementById('reg-nip').value,
                 username: regUsername,
                 email: document.getElementById('reg-email').value,
@@ -869,144 +925,18 @@
                 registeredAt: new Date().toISOString()
             };
 
-            // Add locally so user can immediately log in
             registeredUsers.push(regData);
 
-            // Double Sync to Spreadsheet & Real-time Database
             sendToGoogleBackend(regData);
             if (typeof window.syncUserToRealtimeDb === 'function') {
                 window.syncUserToRealtimeDb(regData);
             }
 
-            // Fill login credentials automatically for seamless experience
             document.getElementById('login-username').value = regUsername;
             document.getElementById('login-password').value = regPassword;
 
             alert('Pendaftaran berhasil! Akun Anda telah terdaftar dan tersinkronisasi. Silakan klik "Masuk Portal".');
             closeRegisterModal();
-        }
-
-        // Helper Function: Send Data to Google Apps Script Backend (CORS & Sync Handling)
-        function sendToGoogleBackend(payloadData) {
-            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) {
-                console.log("Mock Sync: Apps Script URL belum dikonfigurasi.", payloadData);
-                return;
-            }
-
-            try {
-                fetch(APPS_SCRIPT_WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payloadData)
-                }).then(() => {
-                    console.log("Berhasil dikirim ke Apps Script Backend.");
-                }).catch(err => console.warn("Google Apps Script sync warning:", err));
-            } catch (err) {
-                console.warn("Fetch Apps Script error:", err);
-            }
-        }
-
-        // Helper Function: Fetch Agendas from Google Sheets
-        function loadAgendasFromGoogleSheets() {
-            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
-
-            fetch(APPS_SCRIPT_WEB_APP_URL)
-                .then(res => res.json())
-                .then(resData => {
-                    if (resData && resData.result === 'success' && resData.data && resData.data.length > 0) {
-                        window.agendas = resData.data;
-                        if (resData.subordinates && resData.subordinates.length > 0) {
-                            window.subordinatesList = resData.subordinates;
-                            renderSubordinateOptions();
-                        }
-                        renderAgendas();
-                    }
-                })
-                .catch(err => console.warn("Load Sheets error:", err));
-        }
-
-        // Init Canvas Paraf / Tanda Tangan Digital
-        let isDrawing = false;
-        let sigCanvas, sigCtx;
-
-        function initSignaturePad() {
-            sigCanvas = document.getElementById('signature-pad');
-            if (!sigCanvas) return;
-            sigCtx = sigCanvas.getContext('2d');
-            sigCtx.strokeStyle = '#0284c7';
-            sigCtx.lineWidth = 2.5;
-            sigCtx.lineCap = 'round';
-
-            const startDraw = (e) => {
-                isDrawing = true;
-                sigCtx.beginPath();
-                const pos = getCanvasPos(e);
-                sigCtx.moveTo(pos.x, pos.y);
-            };
-
-            const draw = (e) => {
-                if (!isDrawing) return;
-                const pos = getCanvasPos(e);
-                sigCtx.lineTo(pos.x, pos.y);
-                sigCtx.stroke();
-            };
-
-            const stopDraw = () => { isDrawing = false; };
-
-            sigCanvas.addEventListener('mousedown', startDraw);
-            sigCanvas.addEventListener('mousemove', draw);
-            sigCanvas.addEventListener('mouseup', stopDraw);
-
-            sigCanvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e.touches[0]); });
-            sigCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); });
-            sigCanvas.addEventListener('touchend', stopDraw);
-        }
-
-        function getCanvasPos(e) {
-            const rect = sigCanvas.getBoundingClientRect();
-            return {
-                x: (e.clientX - rect.left) * (sigCanvas.width / rect.width),
-                y: (e.clientY - rect.top) * (sigCanvas.height / rect.height)
-            };
-        }
-
-        function clearSignature() {
-            if (sigCtx && sigCanvas) {
-                sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
-            }
-        }
-
-        function deleteCurrentAgenda() {
-            if (!selectedAgendaId) return;
-            if (confirm("Apakah Anda yakin ingin menghapus agenda kegiatan ini?")) {
-                const idx = agendas.findIndex(a => a.id === selectedAgendaId);
-                if (idx !== -1) {
-                    agendas.splice(idx, 1);
-                    if (typeof window.deleteAgendaFromRealtimeDb === 'function') {
-                        window.deleteAgendaFromRealtimeDb(selectedAgendaId);
-                    }
-                }
-                closeDetailModal();
-                renderAgendas();
-            }
-        }
-
-        function exportToCSV() {
-            let csv = "ID Agenda,Judul Kegiatan,Tanggal,Waktu,Tempat,Pakaian,Penyelenggara,Dihadiri,Status,Penerima Disposisi\n";
-            agendas.forEach(a => {
-                const pDisp = a.disposisi ? a.disposisi.penerima : "-";
-                csv += `"${a.id}","${a.judul}","${a.tanggal}","${a.waktu}","${a.tempat}","${a.pakaian}","${a.sector}","${a.pejabat}","${a.status}","${pDisp}"\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a");
-            const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", `Rekap_Agenda_RaKorBae_${new Date().toISOString().slice(0,10)}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         function switchRole(role) {
@@ -1015,17 +945,21 @@
             const userBadge = document.getElementById('user-display-badge');
             const dBtnAdd = document.getElementById('d-btn-add-agenda');
 
+            let displayName = currentUser.fullname || currentUser.name || "Dadan";
+            let displayJabatan = currentUser.jabatan ? ` (${currentUser.jabatan})` : "";
+            let formattedBadgeText = `${displayName}${displayJabatan}`.toUpperCase();
+
             if (role === 'superadmin' || role === 'admin') {
-                statusText.innerHTML = "Akses Terhubung: <strong>ADMIN PROTOKOL / SUPERADMIN (Kelola Agenda & System)</strong>";
-                userBadge.innerText = "ADMIN PROTOKOL";
+                statusText.innerHTML = `Akses Terhubung: <strong>ADMIN PROTOKOL / SUPERADMIN - ${formattedBadgeText}</strong>`;
+                userBadge.innerText = formattedBadgeText;
                 userBadge.className = "font-bold text-amber-300 text-[10px] sm:text-xs";
                 if(dBtnAdd) {
                     dBtnAdd.classList.remove('hidden');
                     dBtnAdd.classList.add('flex');
                 }
             } else {
-                statusText.innerHTML = "Akses Terhubung: <strong>PEJABAT / PIMPINAN (Pantau Agenda & Disposisi Delegasi)</strong>";
-                userBadge.innerText = "PEJABAT / PIMPINAN";
+                statusText.innerHTML = `Akses Terhubung: <strong>${formattedBadgeText} (Pantau Agenda & Disposisi Delegasi)</strong>`;
+                userBadge.innerText = formattedBadgeText;
                 userBadge.className = "font-bold text-emerald-300 text-[10px] sm:text-xs";
                 if(dBtnAdd) {
                     dBtnAdd.classList.add('hidden');
@@ -1134,7 +1068,6 @@
                 const matchPejabat = (currentPejabatFilter === 'semua' || item.pejabat === currentPejabatFilter);
                 const matchDate = (!selectedDateStr || item.tanggal === selectedDateStr);
                 
-                // Enhanced multi-field search logic
                 const matchSearch = (!searchQuery || 
                     (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
                     (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
@@ -1236,6 +1169,36 @@
             }
         }
 
+        function initSignaturePad() {
+            signatureCanvas = document.getElementById('signature-pad');
+            if (!signatureCanvas) return;
+            signatureCtx = signatureCanvas.getContext('2d');
+            signatureCtx.strokeStyle = "#0f172a";
+            signatureCtx.lineWidth = 2;
+
+            function getPos(e) {
+                const rect = signatureCanvas.getBoundingClientRect();
+                return {
+                    x: (e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0)) - rect.left,
+                    y: (e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0)) - rect.top
+                };
+            }
+
+            signatureCanvas.addEventListener('mousedown', (e) => { isDrawingSig = true; const pos = getPos(e); signatureCtx.beginPath(); signatureCtx.moveTo(pos.x, pos.y); });
+            signatureCanvas.addEventListener('mousemove', (e) => { if (!isDrawingSig) return; const pos = getPos(e); signatureCtx.lineTo(pos.x, pos.y); signatureCtx.stroke(); });
+            signatureCanvas.addEventListener('mouseup', () => isDrawingSig = false);
+
+            signatureCanvas.addEventListener('touchstart', (e) => { isDrawingSig = true; const pos = getPos(e); signatureCtx.beginPath(); signatureCtx.moveTo(pos.x, pos.y); });
+            signatureCanvas.addEventListener('touchmove', (e) => { if (!isDrawingSig) return; const pos = getPos(e); signatureCtx.lineTo(pos.x, pos.y); signatureCtx.stroke(); e.preventDefault(); });
+            signatureCanvas.addEventListener('touchend', () => isDrawingSig = false);
+        }
+
+        function clearSignature() {
+            if (signatureCtx && signatureCanvas) {
+                signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+            }
+        }
+
         function openDetailModal(id) {
             selectedAgendaId = id;
             const item = agendas.find(a => a.id === id);
@@ -1289,6 +1252,7 @@
 
         function openDisposisiModalCurrent() {
             closeDetailModal();
+            clearSignature();
             document.getElementById('modal-disposisi').classList.remove('hidden');
         }
 
@@ -1382,7 +1346,6 @@
             closeFormModal();
             renderAgendas();
 
-            // Real-time Database & Spreadsheet Auto-Sync
             sendToGoogleBackend(newAgenda);
             if (typeof window.syncAgendaToRealtimeDb === 'function') {
                 window.syncAgendaToRealtimeDb(newAgenda);
@@ -1410,14 +1373,75 @@
             closeDisposisiModal();
             renderAgendas();
 
-            // Sync to Realtime DB & Google Apps Script
             sendToGoogleBackend(item);
             if (typeof window.syncAgendaToRealtimeDb === 'function') {
                 window.syncAgendaToRealtimeDb(item);
             }
 
-            // Trigger WhatsApp direct send after disposition
             sendWhatsAppAgendaDirect();
+        }
+
+        function deleteCurrentAgenda() {
+            if (confirm("Apakah Anda yakin ingin menghapus agenda kegiatan ini?")) {
+                const idToDelete = selectedAgendaId;
+                agendas = agendas.filter(a => a.id !== idToDelete);
+                closeDetailModal();
+                renderAgendas();
+
+                sendToGoogleBackend({ action: 'delete_agenda', id: idToDelete });
+                if (typeof window.deleteAgendaFromRealtimeDb === 'function') {
+                    window.deleteAgendaFromRealtimeDb(idToDelete);
+                }
+            }
+        }
+
+        function exportToCSV() {
+            let csv = "ID Agenda,Judul,Tanggal,Waktu,Tempat,Email,Pejabat,Sector,Status\n";
+            agendas.forEach(a => {
+                csv += `"${a.id}","${a.judul}","${a.tanggal}","${a.waktu}","${a.tempat}","${a.email}","${a.pejabat}","${a.sector}","${a.status}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `Rekap_Agenda_RaKorBae_${selectedDateStr}.csv`);
+            a.click();
+        }
+
+        function sendToGoogleBackend(data) {
+            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
+
+            fetch(APPS_SCRIPT_WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...data, role: currentRole })
+            }).then(() => console.log('Data tersimpan ke Google Sheets & Calendar'))
+              .catch(err => console.error('Error Google Sync:', err));
+        }
+
+        function loadAgendasFromGoogleSheets() {
+            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
+
+            fetch(APPS_SCRIPT_WEB_APP_URL)
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData.result === 'success') {
+                        if (resData.data && resData.data.length > 0) {
+                            agendas = resData.data;
+                        }
+                        if (resData.subordinates && resData.subordinates.length > 0) {
+                            subordinatesList = resData.subordinates;
+                            renderSubordinateOptions();
+                        }
+                        if (resData.users && resData.users.length > 0) {
+                            registeredUsers = resData.users;
+                        }
+                        renderAgendas();
+                    }
+                })
+                .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
         }
     </script>
 </body>
