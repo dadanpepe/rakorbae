@@ -192,7 +192,7 @@
 
     <!-- URL Config Google Apps Script -->
     <script>
-        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwU9-BdCFd474JfehZ6olhw9tI9zlCtFQW0D6bR8vtiX-NO-nC4e6WRAXCGNV9rOZCu/exec';
+        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID_HERE/exec';
     </script>
 
     <!-- Firebase SDK Integration for Real-Time Database Persistence & Cross-Device Sync -->
@@ -680,12 +680,15 @@
         let selectedAgendaId = null;
         let selectedDateStr = null;
 
-        // Subordinate options managed via spreadsheet
+        // Subordinate options synchronized with Spreadsheet & Firestore Database
         let subordinatesList = [
-            { nama: 'Drs. Budi Santoso, M.AP (Sekdis)', email: 'budi.santoso@gmail.com' },
-            { nama: 'H. Ahmad Subarkah, ST (Sekban)', email: 'ahmad.subarkah@gmail.com' },
-            { nama: 'Ir. Mohammad Rizky (Kabid IT)', email: 'mohammad.rizky@gmail.com' },
-            { nama: 'Siti Rahma, S.Sos (Sekcam)', email: 'siti.rahma@gmail.com' }
+            { nama: 'Mursalim, S.Ag.I', email: 'budi.santoso@gmail.com', instansi: 'Kecamatan Cinere' },
+            { nama: 'Sony Hendro Prasetyo', email: 'ahmad.subarkah@gmail.com', instansi: 'Kecamatan Cinere' },
+            { nama: 'Annisa Ristyanti', email: 'mohammad.rizky@gmail.com', instansi: 'Kecamatan Cinere' },
+            { nama: 'Siti Zulaiha, S.E', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' },
+            { nama: 'Washinthon Marpaung', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' },
+            { nama: 'Nyai Aliyah, S.IP', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' },
+            { nama: 'Mashuri, S.H', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' }
         ];
 
         // Sample Agendas Data (Real-Time Current Date: 2026-10-26)
@@ -736,9 +739,10 @@
             renderSubordinateOptions();
             renderAgendas();
             
-            // Push initial sample agendas to real-time database if logged in
+            // Push initial sample agendas & subordinates to real-time database if logged in
             if (window.auth && window.auth.currentUser) {
                 agendas.forEach(item => window.syncAgendaToRealtimeDb(item));
+                subordinatesList.forEach(sub => window.syncSubordinateToRealtimeDb(sub));
             }
             
             loadAgendasFromGoogleSheets();
@@ -1201,132 +1205,132 @@
 
             closeDisposisiModal();
             renderAgendas();
+    <!-- Firebase SDK Integration for Real-Time Database Persistence & Cross-Device Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-            // Dual Sync (Realtime Firestore & Google Sheets Backend)
-            sendToGoogleBackend(item);
-            if (typeof window.syncAgendaToRealtimeDb === 'function') {
-                window.syncAgendaToRealtimeDb(item);
-            }
+        // Firebase Configuration setup with safe fallback
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-api-key",
+            authDomain: "rakorbae-demo.firebaseapp.com",
+            projectId: "rakorbae-demo",
+            storageBucket: "rakorbae-demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:rakorbae"
+        };
 
-            let waText = `📌 *DISPOSISI / DELEGASI AGENDA - RAKORBAE*\n\n`;
-            waText += `📝 *Acara:* ${item.judul}\n`;
-            waText += `📅 *Tanggal:* ${item.tanggal} (${item.waktu} WIB)\n`;
-            waText += `📍 *Tempat:* ${item.tempat}\n\n`;
-            waText += `👉 *Didelegasikan Kepada:* ${penerimaVal}\n`;
-            waText += `💬 *Instruksi Pimpinan:* "${catatanVal}"\n\n`;
-            waText += `_Disposisi Resmi RaKorBae_`;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rakorbae-app';
 
-            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(waText)}`, '_blank');
-        }
+        window.app = initializeApp(firebaseConfig);
+        window.db = getFirestore(window.app);
+        window.auth = getAuth(window.app);
 
-        function deleteCurrentAgenda() {
-            if (confirm("Apakah Anda yakin ingin menghapus agenda kegiatan ini? Data akan dihapus secara terpusat.")) {
-                const targetId = selectedAgendaId;
-                agendas = agendas.filter(a => a.id !== targetId);
-                closeDetailModal();
-                renderAgendas();
-
-                // Remove from real-time database
-                if (typeof window.deleteAgendaFromRealtimeDb === 'function') {
-                    window.deleteAgendaFromRealtimeDb(targetId);
+        // Global Real-Time Authentication & Firestore Listener Setup
+        async function initRealtimeDatabase() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(window.auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(window.auth);
                 }
+            } catch (err) {
+                console.warn("Auth initial setup notice:", err);
             }
-        }
 
-        function exportToCSV() {
-            let csv = "ID Agenda,Judul,Tanggal,Waktu,Tempat,Email,Pejabat,Sector,Status\n";
-            agendas.forEach(a => {
-                csv += `"${a.id}","${a.judul}","${a.tanggal}","${a.waktu}","${a.tempat}","${a.email}","${a.pejabat}","${a.sector}","${a.status}"\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', `Rekap_Agenda_RaKorBae_${selectedDateStr}.csv`);
-            a.click();
-        }
-
-        function sendToGoogleBackend(data) {
-            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
-
-            fetch(APPS_SCRIPT_WEB_APP_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...data, role: currentRole })
-            }).then(() => console.log('Data tersimpan ke Google Sheets & Calendar'))
-              .catch(err => console.error('Error Google Sync:', err));
-        }
-
-        function loadAgendasFromGoogleSheets() {
-            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
-
-            fetch(APPS_SCRIPT_WEB_APP_URL)
-                .then(res => res.json())
-                .then(resData => {
-                    if (resData.result === 'success') {
-                        if (resData.data && resData.data.length > 0) {
-                            agendas = resData.data;
-                        }
-                        if (resData.subordinates && resData.subordinates.length > 0) {
-                            subordinatesList = resData.subordinates;
-                            renderSubordinateOptions();
-                        }
-                        renderAgendas();
+            onAuthStateChanged(window.auth, (user) => {
+                if (!user) return;
+                
+                // Real-time Firestore sync listener for Agendas collection
+                const agendasCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'agendas');
+                
+                onSnapshot(agendasCollectionRef, (snapshot) => {
+                    const fetchedAgendas = [];
+                    snapshot.forEach((doc) => {
+                        fetchedAgendas.push(doc.data());
+                    });
+                    
+                    if (fetchedAgendas.length > 0) {
+                        window.agendas = fetchedAgendas;
                     }
-                })
-                .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
+                    
+                    if (typeof window.renderAgendas === 'function') {
+                        window.renderAgendas();
+                    }
+                }, (error) => {
+                    console.error("Realtime agenda listener notice:", error);
+                });
+
+                // Real-time Firestore sync listener for Subordinates (Bawahan Disposisi)
+                const subordinatesCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'subordinates');
+                
+                onSnapshot(subordinatesCollectionRef, (snapshot) => {
+                    const fetchedSubordinates = [];
+                    snapshot.forEach((doc) => {
+                        fetchedSubordinates.push(doc.data());
+                    });
+                    
+                    if (fetchedSubordinates.length > 0) {
+                        window.subordinatesList = fetchedSubordinates;
+                        if (typeof window.renderSubordinateOptions === 'function') {
+                            window.renderSubordinateOptions();
+                        }
+                    }
+                }, (error) => {
+                    console.error("Realtime subordinates listener notice:", error);
+                });
+            });
         }
 
-        // Paraf Canvas Signature Helper
-        let isDrawing = false;
-        function initSignaturePad() {
-            const canvas = document.getElementById('signature-pad');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = '#000000';
+        window.syncAgendaToRealtimeDb = async function(agendaItem) {
+            if (!window.auth.currentUser) return;
+            try {
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaItem.id);
+                await setDoc(docRef, agendaItem, { merge: true });
+                console.log("Realtime DB Sync completed for Agenda ID:", agendaItem.id);
+            } catch (err) {
+                console.error("Firestore sync error:", err);
+            }
+        };
 
-            canvas.addEventListener('mousedown', (e) => {
-                isDrawing = true;
-                ctx.beginPath();
-                ctx.moveTo(e.offsetX, e.offsetY);
-            });
-            canvas.addEventListener('mousemove', (e) => {
-                if (isDrawing) {
-                    ctx.lineTo(e.offsetX, e.offsetY);
-                    ctx.stroke();
-                }
-            });
-            window.addEventListener('mouseup', () => { isDrawing = false; });
+        window.syncSubordinateToRealtimeDb = async function(subordinate) {
+            if (!window.auth.currentUser) return;
+            try {
+                const docId = subordinate.nama.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'subordinates', docId);
+                await setDoc(docRef, subordinate, { merge: true });
+                console.log("Realtime DB Sync completed for Subordinate:", subordinate.nama);
+            } catch (err) {
+                console.error("Firestore subordinate sync error:", err);
+            }
+        };
 
-            // Touch events for mobile
-            canvas.addEventListener('touchstart', (e) => {
-                isDrawing = true;
-                const rect = canvas.getBoundingClientRect();
-                const touch = e.touches[0];
-                ctx.beginPath();
-                ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
-            });
-            canvas.addEventListener('touchmove', (e) => {
-                if (isDrawing) {
-                    const rect = canvas.getBoundingClientRect();
-                    const touch = e.touches[0];
-                    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
-                    ctx.stroke();
-                    e.preventDefault();
-                }
-            });
-            canvas.addEventListener('touchend', () => { isDrawing = false; });
-        }
+        window.deleteAgendaFromRealtimeDb = async function(agendaId) {
+            if (!window.auth.currentUser) return;
+            try {
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaId);
+                await deleteDoc(docRef);
+                console.log("Realtime DB Document deleted for ID:", agendaId);
+            } catch (err) {
+                console.error("Firestore delete error:", err);
+            }
+        };
 
-        function clearSignature() {
-            const canvas = document.getElementById('signature-pad');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+        window.syncUserToRealtimeDb = async function(userData) {
+            if (!window.auth.currentUser) return;
+            try {
+                const userIdDoc = userData.username || 'user-' + Date.now();
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'users', userIdDoc);
+                await setDoc(docRef, userData, { merge: true });
+            } catch (err) {
+                console.error("User registration DB error:", err);
+            }
+        };
+
+        window.addEventListener('load', () => {
+            initRealtimeDatabase();
+        });
     </script>
 </body>
 </html>
