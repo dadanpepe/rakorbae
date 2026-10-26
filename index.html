@@ -107,7 +107,7 @@
                 </form>
 
                 <div class="text-center mt-4">
-                    <p class="text-xs text-slate-600 font-medium">Belum punya akun? <a href="#" onclick="openRegisterModal()" class="text-emerald-500 font-bold hover:underline">Daftar</a></p>
+                    <p class="text-xs text-slate-600 font-medium">Belum punya akun? <a href="#" onclick="showNoAccountNotification()" class="text-emerald-600 font-bold hover:underline">Daftar Akun Baru</a></p>
                 </div>
             </div>
 
@@ -126,6 +126,32 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- MODAL POPUP NOTIFIKASI BELUM PUNYA AKUN -->
+    <div id="noAccountModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-200 text-center relative animate-fade-in">
+            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            
+            <div class="space-y-1.5">
+                <h3 class="text-base font-extrabold text-slate-900">Belum Memiliki Akun Pejabat?</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Akun belum terdaftar di database sistem. Silakan daftarkan akun baru Anda untuk mendapatkan akses pemantauan agenda & disposisi.
+                </p>
+            </div>
+
+            <div class="pt-2 flex flex-col space-y-2">
+                <button onclick="closeNoAccountModal(); openRegisterModal();" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-user-plus text-sm"></i>
+                    <span>Daftar Akun Baru Sekarang</span>
+                </button>
+                <button onclick="closeNoAccountModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                    Batal
+                </button>
+            </div>
         </div>
     </div>
 
@@ -764,16 +790,41 @@
         function handleLoginSubmit(e) {
             e.preventDefault();
             const username = document.getElementById('login-username').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value.trim();
+
+            if (!username || !password) {
+                showNoAccountNotification("Mohon isi Username dan Password Anda.");
+                return;
+            }
+
             if (username === 'admin' || username === 'superadmin') {
                 switchRole('superadmin');
-            } else {
+                document.getElementById('login-screen').classList.add('hidden');
+            } else if (username === 'pejabat' || username.length > 2) {
                 switchRole('pejabat');
+                document.getElementById('login-screen').classList.add('hidden');
+            } else {
+                showNoAccountNotification();
             }
-            document.getElementById('login-screen').classList.add('hidden');
+        }
+
+        function showNoAccountNotification(msg) {
+            const modal = document.getElementById('noAccountModal');
+            if (msg) {
+                const desc = modal.querySelector('p');
+                if (desc) desc.innerText = msg;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeNoAccountModal() {
+            document.getElementById('noAccountModal').classList.add('hidden');
         }
 
         function logoutPortal() {
             document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
         }
 
         function openRegisterModal() {
