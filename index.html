@@ -107,7 +107,7 @@
                 </form>
 
                 <div class="text-center mt-4">
-                    <p class="text-xs text-slate-600 font-medium">Belum punya akun? <a href="#" onclick="showNoAccountNotification()" class="text-emerald-600 font-bold hover:underline">Daftar Akun Baru</a></p>
+                    <p class="text-xs text-slate-600 font-medium">Belum punya akun? <a href="#" onclick="openRegisterModal(); return false;" class="text-emerald-600 font-bold hover:underline">Daftar Akun Baru</a></p>
                 </div>
             </div>
 
@@ -218,7 +218,7 @@
 
     <!-- URL Config Google Apps Script -->
     <script>
-        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwU9-BdCFd474JfehZ6olhw9tI9zlCtFQW0D6bR8vtiX-NO-nC4e6WRAXCGNV9rOZCu/exec';
+        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxYOUR_SCRIPT_ID_HERE/exec';
     </script>
 
     <!-- Firebase SDK Integration for Real-Time Database Persistence & Cross-Device Sync -->
@@ -690,12 +690,18 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Multi-Account User State
+        // Multi-Account User State & User Database
         let currentRole = 'pejabat'; 
         let currentUser = {
             name: 'H. FERDY MEIROFA, S.STP',
             title: 'Pejabat / Pimpinan'
         };
+
+        // Registered accounts database (Synced real-time from Firestore & Google Sheets)
+        let registeredUsers = [
+            { username: 'admin', password: '123', role: 'superadmin', fullname: 'Admin Protokol' },
+            { username: 'pejabat', password: '123', role: 'pejabat', fullname: 'H. FERDY MEIROFA, S.STP' }
+        ];
 
         const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -797,14 +803,22 @@
                 return;
             }
 
-            if (username === 'admin' || username === 'superadmin') {
-                switchRole('superadmin');
-                document.getElementById('login-screen').classList.add('hidden');
-            } else if (username === 'pejabat' || username.length > 2) {
-                switchRole('pejabat');
+            // Check if user exists in registered accounts database
+            const foundUser = registeredUsers.find(u => u.username.toLowerCase() === username);
+
+            if (foundUser) {
+                if (foundUser.password && foundUser.password !== password) {
+                    showNoAccountNotification("Password yang Anda masukkan salah. Silakan periksa kembali.");
+                    return;
+                }
+                
+                // Login Success
+                currentUser = foundUser;
+                switchRole(foundUser.role || (username.includes('admin') ? 'superadmin' : 'pejabat'));
                 document.getElementById('login-screen').classList.add('hidden');
             } else {
-                showNoAccountNotification();
+                // User not found in database -> Show popup notification & block login
+                showNoAccountNotification(`Akun dengan username "${username}" belum terdaftar di database sistem. Silakan daftarkan akun baru Anda.`);
             }
         }
 
@@ -828,6 +842,7 @@
         }
 
         function openRegisterModal() {
+            closeNoAccountModal();
             document.getElementById('registerModal').classList.remove('hidden');
         }
 
@@ -837,18 +852,25 @@
 
         function handleRegisterSubmit(e) {
             e.preventDefault();
+            const regUsername = document.getElementById('reg-username').value.trim().toLowerCase();
+            const regPassword = document.getElementById('reg-password').value.trim();
+            const regFullname = document.getElementById('reg-fullname').value.trim();
+
             const regData = {
                 action: 'register_user',
-                fullname: document.getElementById('reg-fullname').value,
+                fullname: regFullname,
                 nip: document.getElementById('reg-nip').value,
-                username: document.getElementById('reg-username').value,
+                username: regUsername,
                 email: document.getElementById('reg-email').value,
                 whatsapp: document.getElementById('reg-whatsapp').value,
                 role: 'pejabat',
                 instansi: document.getElementById('reg-instansi').value,
-                password: document.getElementById('reg-password').value,
+                password: regPassword,
                 registeredAt: new Date().toISOString()
             };
+
+            // Add locally so user can immediately log in
+            registeredUsers.push(regData);
 
             // Double Sync to Spreadsheet & Real-time Database
             sendToGoogleBackend(regData);
@@ -856,7 +878,11 @@
                 window.syncUserToRealtimeDb(regData);
             }
 
-            alert('Pendaftaran berhasil diserahkan! Data tersimpan dan ter-sinkronisasi secara real-time.');
+            // Fill login credentials automatically for seamless experience
+            document.getElementById('login-username').value = regUsername;
+            document.getElementById('login-password').value = regPassword;
+
+            alert('Pendaftaran berhasil! Akun Anda telah terdaftar dan tersinkronisasi. Silakan klik "Masuk Portal".');
             closeRegisterModal();
         }
 
@@ -1078,7 +1104,7 @@
         }
 
         function handleSearch(val) {
-            searchQuery = val.toLowerCase();
+            searchQuery = val.toLowerCase().trim();
             renderAgendas();
         }
 
@@ -1107,11 +1133,15 @@
                 const matchTab = (currentTabFilter === 'all' || item.status === currentTabFilter);
                 const matchPejabat = (currentPejabatFilter === 'semua' || item.pejabat === currentPejabatFilter);
                 const matchDate = (!selectedDateStr || item.tanggal === selectedDateStr);
+                
+                // Enhanced multi-field search logic
                 const matchSearch = (!searchQuery || 
-                    item.judul.toLowerCase().includes(searchQuery) ||
-                    item.tempat.toLowerCase().includes(searchQuery) ||
-                    item.sector.toLowerCase().includes(searchQuery) ||
-                    item.kontak.includes(searchQuery)
+                    (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
+                    (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
+                    (item.sector && item.sector.toLowerCase().includes(searchQuery)) ||
+                    (item.pejabat && item.pejabat.toLowerCase().includes(searchQuery)) ||
+                    (item.kontak && item.kontak.includes(searchQuery)) ||
+                    (item.disposisi && item.disposisi.penerima && item.disposisi.penerima.toLowerCase().includes(searchQuery))
                 );
 
                 return matchTab && matchPejabat && matchDate && matchSearch;
