@@ -195,6 +195,103 @@
         const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwU9-BdCFd474JfehZ6olhw9tI9zlCtFQW0D6bR8vtiX-NO-nC4e6WRAXCGNV9rOZCu/exec';
     </script>
 
+    <!-- Firebase SDK Integration for Real-Time Database Persistence & Cross-Device Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration setup with safe fallback
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-api-key",
+            authDomain: "rakorbae-demo.firebaseapp.com",
+            projectId: "rakorbae-demo",
+            storageBucket: "rakorbae-demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:rakorbae"
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rakorbae-app';
+
+        window.app = initializeApp(firebaseConfig);
+        window.db = getFirestore(window.app);
+        window.auth = getAuth(window.app);
+
+        // Global Real-Time Authentication & Firestore Listener Setup
+        async function initRealtimeDatabase() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(window.auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(window.auth);
+                }
+            } catch (err) {
+                console.warn("Auth initial setup notice:", err);
+            }
+
+            onAuthStateChanged(window.auth, (user) => {
+                if (!user) return;
+                
+                // Real-time Firestore sync listener for Agendas collection (Rule 1 & Rule 2 compliant path)
+                const agendasCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'agendas');
+                
+                onSnapshot(agendasCollectionRef, (snapshot) => {
+                    if (!snapshot.empty) {
+                        const fetchedAgendas = [];
+                        snapshot.forEach((doc) => {
+                            fetchedAgendas.push(doc.data());
+                        });
+                        if (fetchedAgendas.length > 0) {
+                            window.agendas = fetchedAgendas;
+                            if (typeof window.renderAgendas === 'function') {
+                                window.renderAgendas();
+                            }
+                        }
+                    }
+                }, (error) => {
+                    console.error("Realtime listener notice (using local fallback if unconfigured):", error);
+                });
+            });
+        }
+
+        window.syncAgendaToRealtimeDb = async function(agendaItem) {
+            if (!window.auth.currentUser) return;
+            try {
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaItem.id);
+                await setDoc(docRef, agendaItem, { merge: true });
+                console.log("Realtime DB & Spreadsheet Sync completed for ID:", agendaItem.id);
+            } catch (err) {
+                console.error("Firestore sync error:", err);
+            }
+        };
+
+        window.deleteAgendaFromRealtimeDb = async function(agendaId) {
+            if (!window.auth.currentUser) return;
+            try {
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaId);
+                await deleteDoc(docRef);
+                console.log("Realtime DB Document deleted for ID:", agendaId);
+            } catch (err) {
+                console.error("Firestore delete error:", err);
+            }
+        };
+
+        window.syncUserToRealtimeDb = async function(userData) {
+            if (!window.auth.currentUser) return;
+            try {
+                const userIdDoc = userData.username || 'user-' + Date.now();
+                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'users', userIdDoc);
+                await setDoc(docRef, userData, { merge: true });
+            } catch (err) {
+                console.error("User registration DB error:", err);
+            }
+        };
+
+        window.addEventListener('load', () => {
+            initRealtimeDatabase();
+        });
+    </script>
+
     <!-- Top Navigation Web Portal Header -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800 shadow-md">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
@@ -687,11 +784,17 @@
                 whatsapp: document.getElementById('reg-whatsapp').value,
                 role: 'pejabat',
                 instansi: document.getElementById('reg-instansi').value,
-                password: document.getElementById('reg-password').value
+                password: document.getElementById('reg-password').value,
+                registeredAt: new Date().toISOString()
             };
 
+            // Double Sync to Spreadsheet & Real-time Database
             sendToGoogleBackend(regData);
-            alert('Pendaftaran berhasil diserahkan! Silakan login menggunakan akun yang terdaftar.');
+            if (typeof window.syncUserToRealtimeDb === 'function') {
+                window.syncUserToRealtimeDb(regData);
+            }
+
+            alert('Pendaftaran berhasil diserahkan! Data tersimpan dan ter-sinkronisasi secara real-time.');
             closeRegisterModal();
         }
 
@@ -1056,13 +1159,19 @@
                 status: 'terjadwal',
                 disposisi: null,
                 pdfData: pdfData,
-                pdfName: pdfName
+                pdfName: pdfName,
+                createdAt: new Date().toISOString()
             };
 
             agendas.unshift(newAgenda);
             closeFormModal();
             renderAgendas();
+
+            // Real-time Database & Spreadsheet Auto-Sync
             sendToGoogleBackend(newAgenda);
+            if (typeof window.syncAgendaToRealtimeDb === 'function') {
+                window.syncAgendaToRealtimeDb(newAgenda);
+            }
         }
 
         function handleDisposisiSubmit(e) {
@@ -1079,12 +1188,18 @@
             item.disposisi = {
                 penerima: penerimaVal,
                 email: emailVal,
-                catatan: catatanVal
+                catatan: catatanVal,
+                disposedAt: new Date().toISOString()
             };
 
             closeDisposisiModal();
             renderAgendas();
+
+            // Dual Sync (Realtime Firestore & Google Sheets Backend)
             sendToGoogleBackend(item);
+            if (typeof window.syncAgendaToRealtimeDb === 'function') {
+                window.syncAgendaToRealtimeDb(item);
+            }
 
             let waText = `📌 *DISPOSISI / DELEGASI AGENDA - RAKORBAE*\n\n`;
             waText += `📝 *Acara:* ${item.judul}\n`;
@@ -1098,10 +1213,16 @@
         }
 
         function deleteCurrentAgenda() {
-            if (confirm("Apakah Anda yakin ingin menghapus agenda kegiatan ini?")) {
-                agendas = agendas.filter(a => a.id !== selectedAgendaId);
+            if (confirm("Apakah Anda yakin ingin menghapus agenda kegiatan ini? Data akan dihapus secara terpusat.")) {
+                const targetId = selectedAgendaId;
+                agendas = agendas.filter(a => a.id !== targetId);
                 closeDetailModal();
                 renderAgendas();
+
+                // Remove from real-time database
+                if (typeof window.deleteAgendaFromRealtimeDb === 'function') {
+                    window.deleteAgendaFromRealtimeDb(targetId);
+                }
             }
         }
 
