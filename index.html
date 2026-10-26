@@ -60,7 +60,6 @@
             
             <!-- Logo Section -->
             <div class="flex flex-col items-center mt-2">
-                <!-- App Blue Logo Icon (Jb / RkB) -->
                 <div class="w-24 h-24 bg-gradient-to-br from-sky-400 via-blue-500 to-blue-700 rounded-2xl shadow-xl flex flex-col items-center justify-center relative p-2 border-2 border-white/80">
                     <div class="grid grid-cols-4 gap-1 w-full mb-1">
                         <div class="h-2 bg-sky-200/80 rounded-sm"></div>
@@ -86,14 +85,15 @@
 
                 <form onsubmit="handleLoginSubmit(event)" class="space-y-3.5">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Username</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Username / Akun</label>
                         <input type="text" id="login-username" required value="pejabat" placeholder="Masukkan Username" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold">
+                        <p class="text-[10px] text-slate-500 mt-1">Gunakan 'admin' untuk Admin atau 'pejabat' untuk Pejabat</p>
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
                         <div class="relative">
-                            <input type="password" id="login-password" required value="••••••••" placeholder="Masukkan Password" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold pr-10">
+                            <input type="password" id="login-password" required value="123456" placeholder="Masukkan Password" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold pr-10">
                             <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
                                 <i id="passwordEyeIcon" class="fa-regular fa-eye pointer-events-none"></i>
                             </button>
@@ -101,7 +101,7 @@
                     </div>
 
                     <button type="submit" class="w-full py-3.5 bg-[#0e4a6f] hover:bg-[#0a3854] text-white font-bold rounded-full text-sm shadow-md hover:shadow-lg transition transform active:scale-95 mt-2 flex items-center justify-center space-x-2">
-                        <span>Masuk</span>
+                        <span>Masuk Portal</span>
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </button>
                 </form>
@@ -289,6 +289,7 @@
                 </div>
 
                 <div class="md:col-span-4 flex space-x-1 bg-slate-100 p-1 rounded-2xl text-[11px] sm:text-xs font-bold no-print overflow-x-auto custom-scrollbar">
+                    <button onclick="setTabFilter('all')" id="d-tab-all" class="flex-1 py-1 px-2.5 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Semua</button>
                     <button onclick="setTabFilter('terjadwal')" id="d-tab-terjadwal" class="flex-1 py-1 px-2.5 rounded-xl bg-sky-600 text-white shadow text-center">Terjadwal</button>
                     <button onclick="setTabFilter('disetujui')" id="d-tab-disetujui" class="flex-1 py-1 px-2.5 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Disetujui</button>
                     <button onclick="setTabFilter('diproses')" id="d-tab-diproses" class="flex-1 py-1 px-2.5 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Diproses</button>
@@ -411,7 +412,7 @@
                 </div>
             </div>
 
-            <!-- Action Buttons Emphasis for Pejabat vs Admin -->
+            <!-- Action Buttons -->
             <div class="pt-2 border-t border-slate-100 flex flex-col space-y-2">
                 <button id="btn-modal-disposisi" onclick="openDisposisiModalCurrent()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-lg flex items-center justify-center space-x-2 transition transform active:scale-95">
                     <i class="fa-solid fa-share-nodes text-base"></i>
@@ -420,6 +421,9 @@
                 <button onclick="sendWhatsAppAgendaDirect()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 transition">
                     <i class="fa-brands fa-whatsapp text-base"></i>
                     <span>Kirim Ke WhatsApp</span>
+                </button>
+                <button id="btn-modal-delete" onclick="deleteCurrentAgenda()" class="hidden w-full py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs rounded-xl transition">
+                    <i class="fa-solid fa-trash mr-1"></i>Hapus Agenda
                 </button>
             </div>
         </div>
@@ -563,7 +567,7 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // Multi-Account User State
-        let currentRole = 'pejabat'; // Default role pejabat
+        let currentRole = 'pejabat'; 
         let currentUser = {
             name: 'H. FERDY MEIROFA, S.STP',
             title: 'Pejabat / Pimpinan'
@@ -586,7 +590,7 @@
             { nama: 'Siti Rahma, S.Sos (Sekcam)', email: 'siti.rahma@gmail.com' }
         ];
 
-        // Sample Agendas Data
+        // Sample Agendas Data (Real-Time Current Date: 2026-10-26)
         let agendas = [
             {
                 id: 'RKB-1001',
@@ -620,43 +624,6 @@
             }
         ];
 
-        function renderSubordinateOptions() {
-            const selectEl = document.getElementById('disp-penerima');
-            if (!selectEl) return;
-            selectEl.innerHTML = '';
-
-            subordinatesList.forEach(sub => {
-                const opt = document.createElement('option');
-                opt.value = `${sub.nama}|${sub.email}`;
-                opt.innerText = sub.nama;
-                selectEl.appendChild(opt);
-            });
-
-            if (subordinatesList.length > 0 && subordinatesList[0].email) {
-                document.getElementById('disp-email').value = subordinatesList[0].email;
-            }
-        }
-
-        function loadAgendasFromGoogleSheets() {
-            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
-
-            fetch(APPS_SCRIPT_WEB_APP_URL)
-                .then(res => res.json())
-                .then(resData => {
-                    if (resData.result === 'success') {
-                        if (resData.data && resData.data.length > 0) {
-                            agendas = resData.data;
-                        }
-                        if (resData.subordinates && resData.subordinates.length > 0) {
-                            subordinatesList = resData.subordinates;
-                            renderSubordinateOptions();
-                        }
-                        renderAgendas();
-                    }
-                })
-                .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
-        }
-
         // On Load Initializer
         window.onload = function() {
             const today = new Date();
@@ -671,7 +638,62 @@
             renderSubordinateOptions();
             renderAgendas();
             loadAgendasFromGoogleSheets();
+            initSignaturePad();
         };
+
+        function togglePasswordVisibility() {
+            const pwdInput = document.getElementById('login-password');
+            const eyeIcon = document.getElementById('passwordEyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.className = 'fa-regular fa-eye-slash pointer-events-none';
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.className = 'fa-regular fa-eye pointer-events-none';
+            }
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim().toLowerCase();
+            if (username === 'admin' || username === 'superadmin') {
+                switchRole('superadmin');
+            } else {
+                switchRole('pejabat');
+            }
+            document.getElementById('login-screen').classList.add('hidden');
+        }
+
+        function logoutPortal() {
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').classList.remove('hidden');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.add('hidden');
+        }
+
+        function handleRegisterSubmit(e) {
+            e.preventDefault();
+            const regData = {
+                action: 'register_user',
+                fullname: document.getElementById('reg-fullname').value,
+                nip: document.getElementById('reg-nip').value,
+                username: document.getElementById('reg-username').value,
+                email: document.getElementById('reg-email').value,
+                whatsapp: document.getElementById('reg-whatsapp').value,
+                role: 'pejabat',
+                instansi: document.getElementById('reg-instansi').value,
+                password: document.getElementById('reg-password').value
+            };
+
+            sendToGoogleBackend(regData);
+            alert('Pendaftaran berhasil diserahkan! Silakan login menggunakan akun yang terdaftar.');
+            closeRegisterModal();
+        }
 
         function switchRole(role) {
             currentRole = role;
@@ -774,12 +796,14 @@
 
         function setTabFilter(tab) {
             currentTabFilter = tab;
-            ['terjadwal', 'disetujui', 'diproses', 'ditolak'].forEach(t => {
+            ['all', 'terjadwal', 'disetujui', 'diproses', 'ditolak'].forEach(t => {
                 const dBtn = document.getElementById(`d-tab-${t}`);
-                if (t === tab) {
-                    if(dBtn) dBtn.className = "flex-1 py-1 px-2.5 rounded-xl bg-sky-600 text-white shadow text-center font-extrabold";
-                } else {
-                    if(dBtn) dBtn.className = "flex-1 py-1 px-2.5 rounded-xl text-slate-600 hover:bg-slate-200 text-center";
+                if (dBtn) {
+                    if (t === tab) {
+                        dBtn.className = "flex-1 py-1 px-2.5 rounded-xl bg-sky-600 text-white shadow text-center font-extrabold";
+                    } else {
+                        dBtn.className = "flex-1 py-1 px-2.5 rounded-xl text-slate-600 hover:bg-slate-200 text-center";
+                    }
                 }
             });
             renderAgendas();
@@ -1125,6 +1149,55 @@
                     }
                 })
                 .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
+        }
+
+        // Paraf Canvas Signature Helper
+        let isDrawing = false;
+        function initSignaturePad() {
+            const canvas = document.getElementById('signature-pad');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#000000';
+
+            canvas.addEventListener('mousedown', (e) => {
+                isDrawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, e.offsetY);
+            });
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDrawing) {
+                    ctx.lineTo(e.offsetX, e.offsetY);
+                    ctx.stroke();
+                }
+            });
+            window.addEventListener('mouseup', () => { isDrawing = false; });
+
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', (e) => {
+                isDrawing = true;
+                const rect = canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                ctx.beginPath();
+                ctx.moveTo(touch.clientX - rect.left, touch.clientY - rect.top);
+            });
+            canvas.addEventListener('touchmove', (e) => {
+                if (isDrawing) {
+                    const rect = canvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    ctx.lineTo(touch.clientX - rect.left, touch.clientY - rect.top);
+                    ctx.stroke();
+                    e.preventDefault();
+                }
+            });
+            canvas.addEventListener('touchend', () => { isDrawing = false; });
+        }
+
+        function clearSignature() {
+            const canvas = document.getElementById('signature-pad');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
     </script>
 </body>
