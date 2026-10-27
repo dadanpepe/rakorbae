@@ -729,14 +729,14 @@
         // Multi-Account User State & Registered Accounts DB
         let currentRole = 'pejabat'; 
         let currentUser = {
-            name: 'Dadan',
+            fullname: 'DADAN',
             jabatan: 'Camat',
-            title: 'Dadan (Camat)'
+            username: 'pejabat'
         };
 
         let registeredUsers = [
-            { username: 'admin', password: '123', role: 'superadmin', fullname: 'Admin Protokol', jabatan: 'Admin System', instansi: 'Kecamatan Cinere' },
-            { username: 'pejabat', password: '123', role: 'pejabat', fullname: 'Dadan', jabatan: 'Camat', instansi: 'Kecamatan Cinere' }
+            { username: 'admin', password: '123', role: 'superadmin', fullname: 'ADMIN PROTOKOL', jabatan: 'Admin System', instansi: 'Kecamatan Cinere' },
+            { username: 'pejabat', password: '123', role: 'pejabat', fullname: 'DADAN', jabatan: 'Camat', instansi: 'Kecamatan Cinere' }
         ];
 
         const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -850,10 +850,10 @@
                 return;
             }
 
-            const foundUser = registeredUsers.find(u => u.username.toLowerCase() === username);
+            const foundUser = registeredUsers.find(u => String(u.username).toLowerCase() === username);
 
             if (foundUser) {
-                if (foundUser.password && foundUser.password !== password) {
+                if (foundUser.password && String(foundUser.password) !== password) {
                     showNoAccountNotification("Username dan password yang Anda masukkan salah, silakan coba lagi.", "Kredensial Salah", false);
                     return;
                 }
@@ -914,8 +914,8 @@
             const regData = {
                 action: 'register_user',
                 fullname: regFullname,
-                jabatan: regJabatan,
                 nip: document.getElementById('reg-nip').value,
+                jabatan: regJabatan,
                 username: regUsername,
                 email: document.getElementById('reg-email').value,
                 whatsapp: document.getElementById('reg-whatsapp').value,
@@ -945,7 +945,7 @@
             const userBadge = document.getElementById('user-display-badge');
             const dBtnAdd = document.getElementById('d-btn-add-agenda');
 
-            let displayName = currentUser.fullname || currentUser.name || "Dadan";
+            let displayName = currentUser.fullname || currentUser.name || "DADAN";
             let displayJabatan = currentUser.jabatan ? ` (${currentUser.jabatan})` : "";
             let formattedBadgeText = `${displayName}${displayJabatan}`.toUpperCase();
 
