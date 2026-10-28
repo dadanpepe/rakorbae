@@ -1560,6 +1560,7 @@
             closeDisposisiModal();
             renderAgendas();
 
+            // Simpan catatan disposisi ke Google Sheets dan Firestore Realtime DB
             sendToGoogleBackend(item);
             if (typeof window.syncAgendaToRealtimeDb === 'function') {
                 window.syncAgendaToRealtimeDb(item);
@@ -1586,6 +1587,7 @@
             closeLaporanModal();
             renderAgendas();
 
+            // Simpan laporan kegiatan ke Google Sheets dan Firestore Realtime DB
             sendToGoogleBackend(item);
             if (typeof window.syncAgendaToRealtimeDb === 'function') {
                 window.syncAgendaToRealtimeDb(item);
@@ -1594,26 +1596,13 @@
             alert("Laporan Hasil Kegiatan berhasil disimpan.");
         }
 
-        function deleteCurrentAgenda() {
-            if (confirm("Apakah Anda yakin ingin menghapus agenda kegiatan ini?")) {
-                const idToDelete = selectedAgendaId;
-                agendas = agendas.filter(a => a.id !== idToDelete);
-                closeDetailModal();
-                renderAgendas();
-
-                sendToGoogleBackend({ action: 'delete_agenda', id: idToDelete });
-                if (typeof window.deleteAgendaFromRealtimeDb === 'function') {
-                    window.deleteAgendaFromRealtimeDb(idToDelete);
-                }
-            }
-        }
-
         function exportToCSV() {
-            let csv = "ID Agenda,Judul,Tanggal,Waktu,Tempat,Email,Pejabat,Sector,Status,Penerima Disposisi,Notulensi Laporan\n";
+            let csv = "ID Agenda,Judul,Tanggal,Waktu,Tempat,Email,Pejabat,Sector,Status,Penerima Disposisi,Catatan Disposisi,Notulensi Laporan\n";
             agendas.forEach(a => {
                 const pDisp = a.disposisi ? a.disposisi.penerima : "";
-                const pNotulensi = a.laporan ? a.laporan.notulensi : "";
-                csv += `"${a.id}","${a.judul}","${a.tanggal}","${a.waktu}","${a.tempat}","${a.email}","${a.pejabat}","${a.sector}","${a.status}","${pDisp}","${pNotulensi}"\n`;
+                const cDisp = a.disposisi ? a.disposisi.catatan.replace(/"/g, '""') : "";
+                const pNotulensi = a.laporan ? a.laporan.notulensi.replace(/"/g, '""') : "";
+                csv += `"${a.id}","${a.judul}","${a.tanggal}","${a.waktu}","${a.tempat}","${a.email}","${a.pejabat}","${a.sector}","${a.status}","${pDisp}","${cDisp}","${pNotulensi}"\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
