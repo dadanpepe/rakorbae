@@ -641,6 +641,11 @@
                         <p id="mdetail-disposisi-text" class="text-amber-800 font-medium text-xs"></p>
                     </div>
 
+                    <div id="mdetail-disposisi-locked-badge" class="hidden bg-amber-100/80 border border-amber-300 text-amber-900 p-2.5 rounded-2xl text-xs font-bold flex items-center space-x-2">
+                        <i class="fa-solid fa-lock text-amber-700 text-sm"></i>
+                        <span>Surat sudah didisposisikan. Status disposisi hanya dapat diubah oleh Admin.</span>
+                    </div>
+
                     <div id="mdetail-laporan-box" class="hidden bg-emerald-50 p-2.5 rounded-2xl border border-emerald-200 space-y-1.5">
                         <p class="font-extrabold text-emerald-900 text-xs"><i class="fa-solid fa-clipboard-check mr-1"></i>Laporan Hasil Kegiatan:</p>
                         <p id="mdetail-laporan-notulensi" class="text-emerald-800 font-medium text-xs"></p>
@@ -1501,6 +1506,30 @@
                 dispBox.classList.add('hidden');
             }
 
+            // Pengecekan Kunci Disposisi
+            const btnDisposisi = document.getElementById('btn-modal-disposisi');
+            const lockBadge = document.getElementById('mdetail-disposisi-locked-badge');
+            const isAdmin = (currentRole === 'superadmin' || currentRole === 'admin');
+
+            if (item.disposisi) {
+                if (isAdmin) {
+                    if (btnDisposisi) {
+                        btnDisposisi.classList.remove('hidden');
+                        btnDisposisi.innerHTML = `<i class="fa-solid fa-pen-to-square text-base"></i><span>Ubah Disposisi (Akses Admin)</span>`;
+                    }
+                    if (lockBadge) lockBadge.classList.add('hidden');
+                } else {
+                    if (btnDisposisi) btnDisposisi.classList.add('hidden');
+                    if (lockBadge) lockBadge.classList.remove('hidden');
+                }
+            } else {
+                if (btnDisposisi) {
+                    btnDisposisi.classList.remove('hidden');
+                    btnDisposisi.innerHTML = `<i class="fa-solid fa-share-nodes text-base"></i><span>Disposisikan Ke Bawahan (Sekdis / Sekban / Kabid)</span>`;
+                }
+                if (lockBadge) lockBadge.classList.add('hidden');
+            }
+
             const lapBox = document.getElementById('mdetail-laporan-box');
             if (item.laporan) {
                 lapBox.classList.remove('hidden');
@@ -1516,7 +1545,7 @@
             }
 
             const btnDelete = document.getElementById('btn-modal-delete');
-            if (currentRole === 'superadmin' || currentRole === 'admin') btnDelete.classList.remove('hidden');
+            if (isAdmin) btnDelete.classList.remove('hidden');
             else btnDelete.classList.add('hidden');
 
             document.getElementById('modal-detail-agenda').classList.remove('hidden');
