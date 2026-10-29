@@ -1185,6 +1185,14 @@
             const currentMonth = currentDateObj.getMonth();
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
+            // Hitung tanggal-tanggal yang memiliki agenda
+            const datesWithAgendas = new Set();
+            agendas.forEach(a => {
+                if (a.tanggal) {
+                    datesWithAgendas.add(a.tanggal.trim());
+                }
+            });
+
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayDate = new Date(currentYear, currentMonth, i);
                 const dayNameShort = dayNames[dayDate.getDay()].substring(0, 3).toUpperCase();
@@ -1194,6 +1202,7 @@
                 const dateValStr = `${currentYear}-${mm}-${dd}`;
 
                 const isSelected = (dateValStr === selectedDateStr);
+                const hasEvent = datesWithAgendas.has(dateValStr);
                 
                 const today = new Date();
                 const isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear());
@@ -1201,15 +1210,19 @@
                 let activeClasses = "bg-white text-slate-700 border-slate-200 hover:border-sky-300";
                 if (isSelected) {
                     activeClasses = "bg-sky-600 text-white font-black border-sky-600 shadow-md transform scale-105";
+                } else if (hasEvent) {
+                    activeClasses = "bg-amber-50 text-slate-900 font-extrabold border-amber-300 ring-1 ring-amber-300";
                 } else if (isToday) {
-                    activeClasses = "bg-amber-100 text-amber-900 font-extrabold border-amber-300 ring-2 ring-amber-400";
+                    activeClasses = "bg-sky-50 text-sky-900 font-extrabold border-sky-300 ring-1 ring-sky-300";
                 }
 
                 dateStrip.innerHTML += `
-                    <button id="pill-date-${dateValStr}" onclick="selectDatePill('${dateValStr}')" class="flex-shrink-0 px-3 py-2 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[56px] ${activeClasses}">
-                        <span class="text-[9px] uppercase tracking-wider ${isSelected ? 'text-sky-100' : 'text-slate-400'}">${dayNameShort}</span>
+                    <button id="pill-date-${dateValStr}" onclick="selectDatePill('${dateValStr}')" class="flex-shrink-0 px-3 py-2 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[56px] relative ${activeClasses}">
+                        <span class="text-[9px] uppercase tracking-wider ${isSelected ? 'text-sky-100' : (hasEvent ? 'text-amber-800' : 'text-slate-400')}">${dayNameShort}</span>
                         <span class="text-xs font-black leading-none mt-1">${i}</span>
-                        ${isToday && !isSelected ? '<span class="text-[8px] bg-amber-400 text-amber-950 font-black px-1 rounded-full mt-1">INI</span>' : ''}
+                        ${hasEvent && !isSelected ? '<span class="w-2 h-2 rounded-full bg-amber-500 mt-1 animate-pulse" title="Ada Agenda Kegiatan"></span>' : ''}
+                        ${isSelected && hasEvent ? '<span class="w-2 h-2 rounded-full bg-white mt-1"></span>' : ''}
+                        ${isToday && !isSelected && !hasEvent ? '<span class="text-[8px] bg-sky-200 text-sky-950 font-black px-1 rounded-full mt-1">INI</span>' : ''}
                     </button>
                 `;
             }
@@ -1217,7 +1230,7 @@
 
         function selectDatePill(dateVal) {
             selectedDateStr = dateVal;
-            renderDateStrip(new Date());
+            renderDateStrip(new Date(dateVal));
             renderAgendas();
         }
 
@@ -1329,17 +1342,24 @@
             const nextInfoText = document.getElementById('next-agenda-info-text');
             if (!nextInfoText) return;
 
-            const upcoming = agendas.filter(a => a.status === 'terjadwal' || a.status === 'disetujui');
-            if (upcoming.length > 0) {
-                nextInfoText.innerText = `Terdeteksi ${upcoming.length} agenda kegiatan terjadwal berikutnya. Silakan pantau detail dan disposisi pimpinan.`;
+            if (searchQuery) {
+                nextInfoText.innerText = `Menampilkan hasil pencarian untuk "${searchQuery}".`;
+                return;
+            }
+
+            // Tampilkan jumlah agenda khusus pada tanggal yang sedang dipilih
+            const agendasOnSelectedDate = agendas.filter(a => a.tanggal === selectedDateStr);
+            if (agendasOnSelectedDate.length > 0) {
+                nextInfoText.innerText = `Terdeteksi ${agendasOnSelectedDate.length} agenda kegiatan pada tanggal ini (${selectedDateStr}).`;
             } else {
-                nextInfoText.innerText = `Belum ada agenda kegiatan baru yang terjadwal.`;
+                nextInfoText.innerText = `Tidak ada agenda kegiatan pada tanggal yang dipilih (${selectedDateStr}).`;
             }
         }
 
         function renderAgendas() {
             const filtered = filterData();
             const dGrid = document.getElementById('d-agenda-grid');
+            if (!dGrid) return;
             dGrid.innerHTML = '';
             updateNextAgendaInfo();
 
@@ -1347,7 +1367,7 @@
                 dGrid.innerHTML = `
                     <div class="col-span-full py-12 bg-white rounded-3xl border border-slate-200 text-center text-slate-400 space-y-3 shadow-sm px-4">
                         <i class="fa-regular fa-calendar-xmark text-4xl text-slate-300"></i>
-                        <p class="font-bold text-xs sm:text-sm">Tidak ada agenda kegiatan ditemukan pada tanggal / filter ini.</p>
+                        <p class="font-bold text-xs sm:text-sm">Tidak ada agenda kegiatan ditemukan pada tanggal / filter ini (${selectedDateStr || 'Semua'}).</p>
                         ${(currentRole === 'superadmin' || currentRole === 'admin') ? '<button onclick="openFormModal()" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-xl text-xs hover:bg-sky-700 shadow">+ Tambah Agenda Baru</button>' : ''}
                     </div>
                 `;
@@ -1659,6 +1679,27 @@
         }
 
         function openDisposisiModalCurrent() {
+            closeDetailModal();
+            clearSignature();
+            document.getElementById('modal-disposisi').classList.remove('hidden');
+        }
+
+        function filterData() {
+            return agendas.filter(item => {
+                const matchTab = (currentTabFilter === 'all' || item.status === currentTabFilter);
+                const matchPejabat = (currentPejabatFilter === 'semua' || item.pejabat === currentPejabatFilter);
+                const matchDate = searchQuery ? true : (!selectedDateStr || item.tanggal === selectedDateStr);
+                
+                // Penyaringan presisi berdasarkan profil pejabat yang sedang login
+                let isTargetPejabat = true;
+                if (currentRole === 'pejabat' && currentUser) {
+                    const userEmail = (currentUser.email || '').toLowerCase().trim();
+                    const userJabatan = (currentUser.jabatan || '').toLowerCase().trim();
+                    const userPejabatLevel = (currentUser.pejabat || '').toLowerCase().trim();
+
+                    isTargetPejabat = (item.email && item.email.toLowerCase() === userEmail) ||
+                                      (item.pejabat && item.pejabat.toLowerCase().includes(userJabatan)) ||
+                                      (item.pejabat && item.pejabat.toLowerCase().includes(userPejabatLevel)) ||
                                       (item.disposisi && item.disposisi.email && item.disposisi.email.toLowerCase() === userEmail);
                 }
                 
@@ -1780,7 +1821,15 @@
                 createdAt: new Date().toISOString()
             };
 
+            // Tambahkan agenda baru ke daftar teratas lokal
             agendas.unshift(newAgenda);
+            
+            // Set tanggal terpilih ke tanggal agenda baru agar langsung terlihat
+            if (newAgenda.tanggal) {
+                selectedDateStr = newAgenda.tanggal;
+                renderDateStrip(new Date(newAgenda.tanggal));
+            }
+
             closeFormModal();
             renderAgendas();
 
@@ -1891,7 +1940,7 @@
                 body: JSON.stringify({ ...data, role: currentRole })
             }).then(() => {
                 console.log('Data tersimpan ke Google Sheets & Google Calendar/Gmail');
-                setTimeout(loadAgendasFromGoogleSheets, 1500);
+                setTimeout(loadAgendasFromGoogleSheets, 1200);
             }).catch(err => console.error('Error Google Sync:', err));
         }
 
@@ -1902,25 +1951,45 @@
                 .then(res => res.json())
                 .then(resData => {
                     if (resData.result === 'success') {
-                        if (resData.data && resData.data.length > 0) {
-                            agendas = resData.data;
+                        let shouldReRender = false;
+
+                        // 1. Sinkronisasi Data Agenda dari Google Sheets Database
+                        if (resData.data && Array.isArray(resData.data)) {
+                            resData.data.forEach(fetchedItem => {
+                                if (!fetchedItem.id) return;
+                                const idx = agendas.findIndex(a => String(a.id).trim() === String(fetchedItem.id).trim());
+                                if (idx !== -1) {
+                                    // Timpa / perbarui data lokal dengan versi terbaru di database
+                                    agendas[idx] = { ...agendas[idx], ...fetchedItem };
+                                } else {
+                                    agendas.push(fetchedItem);
+                                }
+                            });
+                            shouldReRender = true;
                         }
-                        if (resData.subordinates && resData.subordinates.length > 0) {
+
+                        // 2. Sinkronisasi Master Data Bawahan Disposisi
+                        if (resData.subordinates && Array.isArray(resData.subordinates)) {
                             window.subordinatesList = resData.subordinates;
                             renderSubordinateOptions();
                         }
-                        if (resData.users && resData.users.length > 0) {
+
+                        // 3. Sinkronisasi User & Profil Akun dari Google Sheets Database
+                        if (resData.users && Array.isArray(resData.users)) {
                             resData.users.forEach(u => {
-                                const idx = window.registeredUsers.findIndex(existing => String(existing.username).toLowerCase() === String(u.username).toLowerCase());
+                                if (!u.username) return;
+                                const normUsername = String(u.username).toLowerCase().trim();
+                                const idx = window.registeredUsers.findIndex(existing => String(existing.username).toLowerCase().trim() === normUsername);
+                                
                                 if (idx !== -1) {
-                                    // Timpa data lokal dengan data terbaru dari Google Sheets
                                     window.registeredUsers[idx] = { ...window.registeredUsers[idx], ...u };
                                 } else {
                                     window.registeredUsers.push(u);
                                 }
 
-                                // Update profil pengguna yang sedang login secara realtime jika namanya diubah di database
-                                if (currentUser && String(currentUser.username).toLowerCase() === String(u.username).toLowerCase()) {
+                                // Jika data pengguna yang sedang login diubah di database (seperti Nama / Jabatan / Role),
+                                // perbarui profil aktif dan UI secara otomatis tanpa perlu re-login
+                                if (currentUser && String(currentUser.username).toLowerCase().trim() === normUsername) {
                                     currentUser = { ...currentUser, ...u };
                                     if (typeof switchRole === 'function') {
                                         switchRole(currentUser.role || currentRole);
@@ -1928,7 +1997,11 @@
                                 }
                             });
                         }
-                        renderAgendas();
+
+                        if (shouldReRender) {
+                            renderDateStrip(new Date(selectedDateStr || new Date()));
+                            renderAgendas();
+                        }
                     }
                 })
                 .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
@@ -1936,9 +2009,3 @@
     </script>
 </body>
 </html>
-### Ringkasan Pembaruan:
-1. **Modal Popup Notifikasi Sukses**:
-   - Menambahkan dialog visual **"Agenda Berhasil Disimpan!"** yang otomatis muncul segera setelah tombol simpan diklik.
-   - Menampilkan detail informasi email Gmail pejabat target tempat undangan Google Calendar disinkronkan.
-2. **Konfirmasi Sinkronisasi Realtime**:
-   - Backend Google Apps Script (`code.gs.txt`) mengirimkan konfirmasi `calendarStatus` dan mengirim invite kalender Google ke email pejabat secara *real-time*.
