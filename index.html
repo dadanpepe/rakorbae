@@ -180,7 +180,18 @@
 
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Jabatan (Input Manual)</label>
-                    <input type="text" id="reg-jabatan" required placeholder="Contoh: Camat Cinere / Sekdis" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <input type="text" id="reg-jabatan" required placeholder="Contoh: Camat Cinere / Sekdis / Prakom" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Tingkat Pejabat / Pimpinan Target</label>
+                    <select id="reg-pejabat-level" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
+                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban/Kadin)</option>
+                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekretaris Dinas / Badan (Sekdis/Sekban)</option>
+                        <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
+                        <option value="Camat / Sekcam">Camat / Sekcam</option>
+                        <option value="Lainnya / Staff Admin">Lainnya / Staff Admin</option>
+                    </select>
                 </div>
 
                 <div>
@@ -415,9 +426,9 @@
                 <!-- Right Action Bar -->
                 <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
                     <!-- Real-Time Day & Live Clock Badge -->
-                    <div class="hidden lg:flex items-center space-x-2 bg-slate-800/90 text-sky-400 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-mono font-bold shadow-inner">
+                    <div class="hidden sm:flex items-center space-x-2 bg-slate-800/90 text-sky-400 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-mono font-bold shadow-inner">
                         <i class="fa-regular fa-clock text-amber-400 animate-pulse"></i>
-                        <span id="live-realtime-clock">Loading...</span>
+                        <span id="live-realtime-clock">Memuat Waktu...</span>
                     </div>
 
                     <!-- User Identity Badge -->
@@ -457,59 +468,18 @@
     <!-- MAIN WEBSITE CONTENT CONTAINER -->
     <main id="main-content" class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full space-y-4 sm:space-y-6">
 
-        <!-- DASHBOARD EXECUTIVE SUMMARY WIDGET BAR -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-lg">
-                    <i class="fa-solid fa-calendar-days"></i>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase">Total Agenda</p>
-                    <p id="stat-total" class="text-base sm:text-lg font-black text-slate-800">0</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
-                    <i class="fa-regular fa-clock"></i>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase">Terjadwal</p>
-                    <p id="stat-terjadwal" class="text-base sm:text-lg font-black text-slate-800">0</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-lg">
-                    <i class="fa-solid fa-share-nodes"></i>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase">Disposisi</p>
-                    <p id="stat-disposisi" class="text-base sm:text-lg font-black text-slate-800">0</p>
-                </div>
-            </div>
-
-            <div class="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
-                    <i class="fa-solid fa-clipboard-check"></i>
-                </div>
-                <div>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase">Selesai</p>
-                    <p id="stat-selesai" class="text-base sm:text-lg font-black text-slate-800">0</p>
-                </div>
-            </div>
-        </div>
-
+        <!-- HEADER & FILTER BLOCK (Kotak Merah 1 Dihilangkan, Kotak Merah 2 & 3 Diperbarui) -->
         <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200 space-y-3 sm:space-y-4">
             
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 border-b border-slate-100 pb-3">
                 <div>
                     <h2 class="text-base sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
-                        <span>Portal Agenda Kegiatan Pejabat</span>
+                        <i class="fa-solid fa-calendar-day text-sky-600"></i>
+                        <span>Informasi Agenda Berikutnya</span>
                     </h2>
                     <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
                         <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span id="live-header-date" class="font-bold text-slate-700">Hari ini</span> • Pantau jadwal rapat koordinasi, disposisi pimpinan, dan kalender kegiatan daerah secara terpadu.
+                        <span id="live-header-date" class="font-bold text-slate-700">Hari ini</span> • <span id="next-agenda-info-text">Menampilkan jadwal kegiatan terdekat dan status disposisi pimpinan.</span>
                     </p>
                 </div>
 
@@ -525,7 +495,7 @@
                 </div>
             </div>
 
-            <!-- Filters Row -->
+            <!-- Filters Row (Kotak Merah 3) -->
             <div class="grid grid-cols-1 md:grid-cols-12 gap-2 sm:gap-3 items-center">
                 
                 <div class="md:col-span-4 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 flex items-center space-x-2">
@@ -533,16 +503,20 @@
                     <span class="text-xs font-bold text-slate-600 whitespace-nowrap">Pejabat:</span>
                     <select id="d-pejabat-filter" onchange="handlePejabatFilterChange(this.value)" class="bg-white text-slate-800 text-xs font-bold rounded-xl px-2 py-1.5 border border-slate-300 w-full focus:outline-none focus:ring-2 focus:ring-sky-500">
                         <option value="semua">Semua Tingkat Pejabat</option>
-                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban)</option>
-                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekdis / Sekban</option>
+                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban/Kadin)</option>
+                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekretaris Dinas / Badan (Sekdis/Sekban)</option>
                         <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
                         <option value="Camat / Sekcam">Camat / Sekcam</option>
+                        <option value="Lainnya / Staff Admin">Lainnya / Staff Admin</option>
                     </select>
                 </div>
 
                 <div class="md:col-span-4 relative">
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-xs"></i>
-                    <input type="text" id="d-search-input" onkeyup="handleSearch(this.value)" oninput="handleSearch(this.value)" placeholder="Cari acara, tempat, atau instansi..." class="w-full pl-9 pr-3 py-1.5 sm:py-2 bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 font-semibold placeholder:font-normal">
+                    <input type="text" id="d-search-input" onkeyup="handleSearch(this.value)" oninput="handleSearch(this.value)" placeholder="Cari acara, tempat, pejabat, atau instansi..." class="w-full pl-9 pr-8 py-1.5 sm:py-2 bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 font-semibold placeholder:font-normal">
+                    <button type="button" id="clear-search-btn" onclick="clearSearchInput()" class="hidden absolute right-3 top-2.5 text-slate-400 hover:text-slate-600">
+                        <i class="fa-solid fa-circle-xmark text-xs"></i>
+                    </button>
                 </div>
 
                 <div class="md:col-span-4 flex space-x-1 bg-slate-100 p-1 rounded-2xl text-[11px] sm:text-xs font-bold no-print overflow-x-auto custom-scrollbar">
@@ -895,11 +869,11 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         let currentRole = 'pejabat'; 
-        let currentUser = { fullname: 'DADAN', jabatan: 'Camat', username: 'pejabat' };
+        let currentUser = { fullname: 'DADAN PERMANA', jabatan: 'Camat', username: 'danpe', role: 'pejabat' };
 
         window.registeredUsers = [
-            { username: 'admin', password: '123', role: 'superadmin', fullname: 'ADMIN PROTOKOL', jabatan: 'Admin System', instansi: 'Kecamatan Cinere' },
-            { username: 'pejabat', password: '123', role: 'pejabat', fullname: 'DADAN', jabatan: 'Camat', instansi: 'Kecamatan Cinere' }
+            { username: 'admin', password: '12345', role: 'admin', fullname: 'Dadan Permana', jabatan: 'Prakom', instansi: 'Kecamatan Cinere' },
+            { username: 'danpe', password: '12345', role: 'pejabat', fullname: 'Dadan Permana', jabatan: 'Camat', instansi: 'Kecamatan Cinere' }
         ];
 
         const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
@@ -975,7 +949,7 @@
 
                 const clockEl = document.getElementById('live-realtime-clock');
                 if (clockEl) {
-                    clockEl.innerText = `${dayStr}, ${dateNum} ${monthStr} ${yearNum} | ${hrs}:${mins}:${secs} WIB`;
+                    clockEl.innerText = `${dayStr}, ${dateNum} ${monthStr} ${yearNum} • ${hrs}:${mins}:${secs} WIB`;
                 }
 
                 const headerDateEl = document.getElementById('live-header-date');
@@ -988,12 +962,14 @@
         }
 
         function updateDashboardStats() {
+            const statTotal = document.getElementById('stat-total');
+            if (!statTotal) return;
             const total = agendas.length;
             const terjadwal = agendas.filter(a => a.status === 'terjadwal' || a.status === 'disetujui').length;
             const disposisi = agendas.filter(a => a.status === 'ditolak' || a.disposisi !== null).length;
             const selesai = agendas.filter(a => a.status === 'selesai' || a.laporan !== null).length;
 
-            document.getElementById('stat-total').innerText = total;
+            statTotal.innerText = total;
             document.getElementById('stat-terjadwal').innerText = terjadwal;
             document.getElementById('stat-disposisi').innerText = disposisi;
             document.getElementById('stat-selesai').innerText = selesai;
@@ -1013,35 +989,9 @@
             eyeIcon.className = (pwdInput.type === 'password') ? 'fa-regular fa-eye pointer-events-none' : 'fa-regular fa-eye-slash pointer-events-none';
         }
 
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value.trim().toLowerCase();
-            const password = document.getElementById('login-password').value.trim();
-
-            if (!username || !password) {
-                showNoAccountNotification("Mohon isi Username dan Password Anda.", "Peringatan Login", false);
-                return;
-            }
-
-            const foundUser = window.registeredUsers.find(u => String(u.username).toLowerCase() === username);
-
-            if (foundUser) {
-                if (foundUser.password && String(foundUser.password) !== password) {
-                    showNoAccountNotification("Username dan password yang Anda masukkan salah, silakan coba lagi.", "Kredensial Salah", false);
-                    return;
-                }
-                
-                currentUser = foundUser;
-                const assignedRole = (foundUser.role ? String(foundUser.role).toLowerCase() : (username.includes('admin') ? 'admin' : 'pejabat'));
-                switchRole(assignedRole);
-                document.getElementById('login-screen').classList.add('hidden');
-            } else {
-                showNoAccountNotification(`Akun dengan username "${username}" belum terdaftar di database. Silakan daftarkan akun baru Anda untuk mendapatkan akses portal.`, "Belum Memiliki Akun", true);
-            }
-        }
-
         function showNoAccountNotification(msg, title = "Peringatan Login", showRegButton = true) {
             const modal = document.getElementById('noAccountModal');
+            if (!modal) return;
             document.getElementById('noAccountDesc').innerText = msg;
             document.getElementById('noAccountTitle').innerText = title;
 
@@ -1054,7 +1004,8 @@
         }
 
         function closeNoAccountModal() {
-            document.getElementById('noAccountModal').classList.add('hidden');
+            const modal = document.getElementById('noAccountModal');
+            if (modal) modal.classList.add('hidden');
         }
 
         function logoutPortal() {
@@ -1083,7 +1034,7 @@
             }
 
             const regUsername = document.getElementById('reg-username').value.trim().toLowerCase();
-            const regPassword = document.getElementById('reg-password').value.trim();
+            const regPassword = String(document.getElementById('reg-password').value).trim();
             const regFullname = document.getElementById('reg-fullname').value.trim();
             const regJabatan = document.getElementById('reg-jabatan').value.trim();
             const regNip = document.getElementById('reg-nip').value.trim();
@@ -1142,7 +1093,7 @@
             const dBtnAdd = document.getElementById('d-btn-add-agenda');
             const dBtnManageSub = document.getElementById('d-btn-manage-subordinates');
 
-            let displayName = currentUser.fullname || currentUser.name || "DADAN";
+            let displayName = currentUser.fullname || currentUser.name || "DADAN PERMANA";
             let displayJabatan = currentUser.jabatan ? ` (${currentUser.jabatan})` : "";
             let formattedBadgeText = `${displayName}${displayJabatan}`.toUpperCase();
 
@@ -1168,12 +1119,16 @@
             const monthName = monthNames[now.getMonth()];
             const yearNum = now.getFullYear();
 
-            document.getElementById('d-month-heading').innerHTML = `<i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender ${monthName} ${yearNum}`;
+            const headingEl = document.getElementById('d-month-heading');
+            if (headingEl) {
+                headingEl.innerHTML = `<i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender ${monthName} ${yearNum}`;
+            }
             renderDateStrip(now);
         }
 
         function renderDateStrip(currentDateObj) {
             const dateStrip = document.getElementById('m-date-strip');
+            if (!dateStrip) return;
             dateStrip.innerHTML = '';
 
             const currentYear = currentDateObj.getFullYear();
@@ -1234,7 +1189,70 @@
 
         function handleSearch(val) {
             searchQuery = val.toLowerCase().trim();
+            const clearBtn = document.getElementById('clear-search-btn');
+            if (clearBtn) {
+                if (searchQuery.length > 0) clearBtn.classList.remove('hidden');
+                else clearBtn.classList.add('hidden');
+            }
             renderAgendas();
+        }
+
+        function clearSearchInput() {
+            const searchInput = document.getElementById('d-search-input');
+            if (searchInput) {
+                searchInput.value = '';
+                handleSearch('');
+            }
+        }
+
+        function filterData() {
+            return agendas.filter(item => {
+                const matchTab = (currentTabFilter === 'all' || item.status === currentTabFilter);
+                const matchPejabat = (currentPejabatFilter === 'semua' || item.pejabat === currentPejabatFilter);
+                const matchDate = searchQuery ? true : (!selectedDateStr || item.tanggal === selectedDateStr);
+                
+                const matchSearch = (!searchQuery || 
+                    (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
+                    (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
+                    (item.sector && item.sector.toLowerCase().includes(searchQuery)) ||
+                    (item.pejabat && item.pejabat.toLowerCase().includes(searchQuery)) ||
+                    (item.kontak && item.kontak.includes(searchQuery)) ||
+                    (item.pakaian && item.pakaian.toLowerCase().includes(searchQuery)) ||
+                    (item.disposisi && item.disposisi.penerima && item.disposisi.penerima.toLowerCase().includes(searchQuery)) ||
+                    (item.disposisi && item.disposisi.catatan && item.disposisi.catatan.toLowerCase().includes(searchQuery)) ||
+                    (item.laporan && item.laporan.notulensi && item.laporan.notulensi.toLowerCase().includes(searchQuery))
+                );
+
+                return matchTab && matchPejabat && matchDate && matchSearch;
+            });
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim().toLowerCase();
+            const password = String(document.getElementById('login-password').value).trim();
+
+            if (!username || !password) {
+                showNoAccountNotification("Mohon isi Username dan Password Anda.", "Peringatan Login", false);
+                return;
+            }
+
+            const foundUser = window.registeredUsers.find(u => String(u.username).toLowerCase().trim() === username);
+
+            if (foundUser) {
+                const registeredPassword = String(foundUser.password || '').trim();
+                if (registeredPassword !== '' && registeredPassword !== password) {
+                    showNoAccountNotification("Username dan password yang Anda masukkan salah, silakan coba lagi.", "Kredensial Salah", false);
+                    return;
+                }
+                
+                currentUser = foundUser;
+                const userRole = foundUser.role ? String(foundUser.role).toLowerCase() : (username.includes('admin') ? 'admin' : 'pejabat');
+                switchRole(userRole);
+                document.getElementById('login-screen').classList.add('hidden');
+            } else {
+                showNoAccountNotification(`Akun dengan username "${username}" belum terdaftar di database. Silakan daftarkan akun baru Anda untuk mendapatkan akses portal.`, "Belum Memiliki Akun", true);
+            }
         }
 
         function setTabFilter(tab) {
@@ -1257,32 +1275,23 @@
             renderAgendas();
         }
 
-        function filterData() {
-            return agendas.filter(item => {
-                const matchTab = (currentTabFilter === 'all' || item.status === currentTabFilter);
-                const matchPejabat = (currentPejabatFilter === 'semua' || item.pejabat === currentPejabatFilter);
-                const matchDate = (!selectedDateStr || item.tanggal === selectedDateStr);
-                
-                const matchSearch = (!searchQuery || 
-                    (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
-                    (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
-                    (item.sector && item.sector.toLowerCase().includes(searchQuery)) ||
-                    (item.pejabat && item.pejabat.toLowerCase().includes(searchQuery)) ||
-                    (item.kontak && item.kontak.includes(searchQuery)) ||
-                    (item.pakaian && item.pakaian.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.penerima && item.disposisi.penerima.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.catatan && item.disposisi.catatan.toLowerCase().includes(searchQuery))
-                );
+        function updateNextAgendaInfo() {
+            const nextInfoText = document.getElementById('next-agenda-info-text');
+            if (!nextInfoText) return;
 
-                return matchTab && matchPejabat && matchDate && matchSearch;
-            });
+            const upcoming = agendas.filter(a => a.status === 'terjadwal' || a.status === 'disetujui');
+            if (upcoming.length > 0) {
+                nextInfoText.innerText = `Terdeteksi ${upcoming.length} agenda kegiatan terjadwal berikutnya. Silakan pantau detail dan disposisi pimpinan.`;
+            } else {
+                nextInfoText.innerText = `Belum ada agenda kegiatan baru yang terjadwal.`;
+            }
         }
 
         function renderAgendas() {
             const filtered = filterData();
             const dGrid = document.getElementById('d-agenda-grid');
             dGrid.innerHTML = '';
-            updateDashboardStats();
+            updateNextAgendaInfo();
 
             if (filtered.length === 0) {
                 dGrid.innerHTML = `
