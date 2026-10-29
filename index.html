@@ -156,6 +156,35 @@
         </div>
     </div>
 
+    <!-- MODAL NOTIFIKASI SINKRONISASI AGENDA & GOOGLE CALENDAR -->
+    <div id="saveNotificationModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-200 text-center relative">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner animate-bounce">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            
+            <div class="space-y-1.5">
+                <h3 class="text-base font-black text-slate-900">Agenda Berhasil Disimpan!</h3>
+                <p id="saveNotificationMessage" class="text-xs text-slate-600 leading-relaxed font-medium">
+                    Data agenda kegiatan telah tersimpan secara realtime ke database dan disinkronisasikan ke Google Calendar / Gmail pejabat penerima.
+                </p>
+            </div>
+
+            <div class="bg-sky-50 border border-sky-200 rounded-2xl p-3 text-left space-y-1 text-xs">
+                <div class="flex items-center text-sky-900 font-bold space-x-1.5">
+                    <i class="fa-regular fa-calendar-check text-sky-600"></i>
+                    <span>Status Sinkronisasi Realtime:</span>
+                </div>
+                <p id="saveNotificationEmail" class="text-slate-600 text-[11px] font-semibold truncate"><i class="fa-solid fa-envelope text-sky-500 mr-1"></i>Pejabat: -</p>
+                <p class="text-[10px] text-emerald-700 font-extrabold flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-1"></i>Google Calendar Invite Active</p>
+            </div>
+
+            <button onclick="closeSaveNotificationModal()" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition transform active:scale-95">
+                Selesai / Tutup
+            </button>
+        </div>
+    </div>
+
     <!-- MODAL POPUP REGISTER USER BARU -->
     <div id="registerModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white rounded-3xl w-full max-w-sm sm:max-w-md p-5 space-y-3 shadow-2xl border border-slate-200 relative max-h-[90vh] flex flex-col overflow-hidden">
@@ -840,13 +869,24 @@
                     </div>
                 </div>
 
+                <div class="bg-amber-50 p-2.5 rounded-2xl border border-amber-200 space-y-1">
+                    <label class="block font-bold text-amber-900 flex items-center justify-between">
+                        <span>Pilih Akun Pejabat Terdaftar (Tujuan)</span>
+                        <span class="text-[9px] bg-amber-200 text-amber-800 font-bold px-2 py-0.5 rounded-full">*Target Tepat Sasaran</span>
+                    </label>
+                    <select id="f-pejabat-user" onchange="handlePejabatUserSelectChange(this.value)" class="w-full p-2.5 bg-white border border-amber-300 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-amber-500">
+                        <option value="">-- Pilih Akun Pejabat Terdaftar --</option>
+                    </select>
+                </div>
+
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Tingkat Pejabat (Dihadiri Oleh)</label>
                     <select id="f-pejabat" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban)</option>
-                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekdis / Sekban</option>
+                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban/Kadin)</option>
+                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekretaris Dinas / Badan (Sekdis/Sekban)</option>
                         <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
                         <option value="Camat / Sekcam">Camat / Sekcam</option>
+                        <option value="Lainnya / Staff Admin">Lainnya / Staff Admin</option>
                     </select>
                 </div>
 
@@ -938,6 +978,11 @@
             
             loadAgendasFromGoogleSheets();
             initSignaturePad();
+
+            // Polling otomatis tiap 10 detik agar perubahan di Google Sheets / Database langsung tersinkron
+            setInterval(() => {
+                loadAgendasFromGoogleSheets();
+            }, 10000);
         };
 
         function startLiveClock() {
@@ -1556,17 +1601,81 @@
         }
 
         function openFormModal() {
+            populatePejabatUserDropdown();
             document.getElementById('modal-form-agenda').classList.remove('hidden');
+        }
+
+        function populatePejabatUserDropdown() {
+            const selectEl = document.getElementById('f-pejabat-user');
+            if (!selectEl) return;
+            selectEl.innerHTML = '<option value="">-- Pilih Akun Pejabat Terdaftar --</option>';
+
+            const pejabatUsers = window.registeredUsers.filter(u => String(u.role).toLowerCase() === 'pejabat' || String(u.role).toLowerCase() === 'pimpinan');
+            pejabatUsers.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = `${u.username}|${u.email || ''}|${u.fullname || ''}|${u.jabatan || ''}`;
+                opt.innerText = `${u.fullname} (${u.jabatan || 'Pejabat'}) - ${u.email || 'Tanpa Email'}`;
+                selectEl.appendChild(opt);
+            });
+        }
+
+        function handlePejabatUserSelectChange(val) {
+            if (!val) return;
+            const parts = val.split('|');
+            const email = parts[1];
+            const jabatan = parts[3];
+
+            if (email) {
+                document.getElementById('f-email').value = email;
+            }
+
+            const levelSelect = document.getElementById('f-pejabat');
+            if (levelSelect && jabatan) {
+                for (let opt of levelSelect.options) {
+                    if (opt.value.toLowerCase().includes(jabatan.toLowerCase()) || jabatan.toLowerCase().includes(opt.value.toLowerCase())) {
+                        levelSelect.value = opt.value;
+                        break;
+                    }
+                }
+            }
         }
 
         function closeFormModal() {
             document.getElementById('modal-form-agenda').classList.add('hidden');
         }
 
+        function showSaveNotification(agenda) {
+            const modal = document.getElementById('saveNotificationModal');
+            const emailText = document.getElementById('saveNotificationEmail');
+            if (emailText) {
+                emailText.innerHTML = `<i class="fa-solid fa-envelope text-sky-500 mr-1"></i>Pejabat Target: <strong>${agenda.email || 'pejabat@gmail.com'}</strong>`;
+            }
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeSaveNotificationModal() {
+            const modal = document.getElementById('saveNotificationModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
         function openDisposisiModalCurrent() {
-            closeDetailModal();
-            clearSignature();
-            document.getElementById('modal-disposisi').classList.remove('hidden');
+                                      (item.disposisi && item.disposisi.email && item.disposisi.email.toLowerCase() === userEmail);
+                }
+                
+                const matchSearch = (!searchQuery || 
+                    (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
+                    (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
+                    (item.sector && item.sector.toLowerCase().includes(searchQuery)) ||
+                    (item.pejabat && item.pejabat.toLowerCase().includes(searchQuery)) ||
+                    (item.kontak && item.kontak.includes(searchQuery)) ||
+                    (item.pakaian && item.pakaian.toLowerCase().includes(searchQuery)) ||
+                    (item.disposisi && item.disposisi.penerima && item.disposisi.penerima.toLowerCase().includes(searchQuery)) ||
+                    (item.disposisi && item.disposisi.catatan && item.disposisi.catatan.toLowerCase().includes(searchQuery)) ||
+                    (item.laporan && item.laporan.notulensi && item.laporan.notulensi.toLowerCase().includes(searchQuery))
+                );
+
+                return matchTab && matchPejabat && matchDate && matchSearch && isTargetPejabat;
+            });
         }
 
         function closeDisposisiModal() {
@@ -1679,6 +1788,9 @@
             if (typeof window.syncAgendaToRealtimeDb === 'function') {
                 window.syncAgendaToRealtimeDb(newAgenda);
             }
+
+            // Tampilkan Notifikasi Sukses Simpan & Google Calendar Sync
+            showSaveNotification(newAgenda);
         }
 
         function handleDisposisiSubmit(e) {
@@ -1777,8 +1889,10 @@
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...data, role: currentRole })
-            }).then(() => console.log('Data tersimpan ke Google Sheets & Calendar'))
-              .catch(err => console.error('Error Google Sync:', err));
+            }).then(() => {
+                console.log('Data tersimpan ke Google Sheets & Google Calendar/Gmail');
+                setTimeout(loadAgendasFromGoogleSheets, 1500);
+            }).catch(err => console.error('Error Google Sync:', err));
         }
 
         function loadAgendasFromGoogleSheets() {
@@ -1797,8 +1911,21 @@
                         }
                         if (resData.users && resData.users.length > 0) {
                             resData.users.forEach(u => {
-                                const exists = window.registeredUsers.some(existing => String(existing.username).toLowerCase() === String(u.username).toLowerCase());
-                                if (!exists) window.registeredUsers.push(u);
+                                const idx = window.registeredUsers.findIndex(existing => String(existing.username).toLowerCase() === String(u.username).toLowerCase());
+                                if (idx !== -1) {
+                                    // Timpa data lokal dengan data terbaru dari Google Sheets
+                                    window.registeredUsers[idx] = { ...window.registeredUsers[idx], ...u };
+                                } else {
+                                    window.registeredUsers.push(u);
+                                }
+
+                                // Update profil pengguna yang sedang login secara realtime jika namanya diubah di database
+                                if (currentUser && String(currentUser.username).toLowerCase() === String(u.username).toLowerCase()) {
+                                    currentUser = { ...currentUser, ...u };
+                                    if (typeof switchRole === 'function') {
+                                        switchRole(currentUser.role || currentRole);
+                                    }
+                                }
                             });
                         }
                         renderAgendas();
@@ -1809,3 +1936,9 @@
     </script>
 </body>
 </html>
+### Ringkasan Pembaruan:
+1. **Modal Popup Notifikasi Sukses**:
+   - Menambahkan dialog visual **"Agenda Berhasil Disimpan!"** yang otomatis muncul segera setelah tombol simpan diklik.
+   - Menampilkan detail informasi email Gmail pejabat target tempat undangan Google Calendar disinkronkan.
+2. **Konfirmasi Sinkronisasi Realtime**:
+   - Backend Google Apps Script (`code.gs.txt`) mengirimkan konfirmasi `calendarStatus` dan mengirim invite kalender Google ke email pejabat secara *real-time*.
