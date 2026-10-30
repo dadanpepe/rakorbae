@@ -281,7 +281,7 @@
 
     <!-- URL Config Google Apps Script -->
     <script>
-        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxTm-uZftmsuG4vXoQoJqgHpOVxn3timY6_6X7D3ZZxNuaoh9U3CQpPkjY3BFdSTIeo/exec';
+        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';
     </script>
 
     <!-- Firebase SDK Integration for Real-Time Database Persistence & Cross-Device Sync -->
@@ -330,8 +330,8 @@
                     if (fetchedAgendas.length > 0) {
                         window.agendas = fetchedAgendas;
                     }
-                    if (typeof window.renderAgendas === 'function') {
-                        window.renderAgendas();
+                    if (typeof window.syncAndRenderAllUI === 'function') {
+                        window.syncAndRenderAllUI();
                     }
                 }, (error) => {
                     console.error("Realtime agenda listener notice:", error);
@@ -352,6 +352,9 @@
                             }
                         }
                     });
+                    if (typeof window.populatePejabatUserDropdown === 'function') {
+                        window.populatePejabatUserDropdown();
+                    }
                 }, (error) => {
                     console.error("Realtime users listener notice:", error);
                 });
@@ -961,6 +964,18 @@
 
         let signatureCanvas, signatureCtx, isDrawingSig = false;
 
+        // Function terpusat untuk memperbarui seluruh UI ketika database berubah
+        window.syncAndRenderAllUI = function() {
+            if (selectedDateStr) {
+                renderDateStrip(new Date(selectedDateStr));
+            } else {
+                renderDateStrip(new Date());
+            }
+            renderAgendas();
+            updateDashboardStats();
+            populatePejabatUserDropdown();
+        };
+
         window.onload = function() {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -970,19 +985,17 @@
             agendas.forEach(a => { if(!a.tanggal) a.tanggal = selectedDateStr; });
 
             initCalendarAndHeader();
-            renderDateStrip(today);
             renderSubordinateOptions();
-            renderAgendas();
-            updateDashboardStats();
+            syncAndRenderAllUI();
             startLiveClock();
             
             loadAgendasFromGoogleSheets();
             initSignaturePad();
 
-            // Polling otomatis tiap 10 detik agar perubahan di Google Sheets / Database langsung tersinkron
+            // Polling otomatis setiap 5 detik agar Google Sheets & Realtime Database selalu presisi dan sinkron
             setInterval(() => {
                 loadAgendasFromGoogleSheets();
-            }, 10000);
+            }, 5000);
         };
 
         function startLiveClock() {
@@ -1918,7 +1931,7 @@
                 body: JSON.stringify({ ...data, role: currentRole })
             }).then(() => {
                 console.log('Data tersimpan ke Google Sheets & Google Calendar/Gmail');
-                setTimeout(loadAgendasFromGoogleSheets, 1200);
+                setTimeout(loadAgendasFromGoogleSheets, 800);
             }).catch(err => console.error('Error Google Sync:', err));
         }
 
@@ -1937,7 +1950,6 @@
                                 if (!fetchedItem.id) return;
                                 const idx = agendas.findIndex(a => String(a.id).trim() === String(fetchedItem.id).trim());
                                 if (idx !== -1) {
-                                    // Timpa / perbarui data lokal dengan versi terbaru di database
                                     agendas[idx] = { ...agendas[idx], ...fetchedItem };
                                 } else {
                                     agendas.push(fetchedItem);
@@ -1965,8 +1977,6 @@
                                     window.registeredUsers.push(u);
                                 }
 
-                                // Jika data pengguna yang sedang login diubah di database (seperti Nama / Jabatan / Role),
-                                // perbarui profil aktif dan UI secara otomatis tanpa perlu re-login
                                 if (currentUser && String(currentUser.username).toLowerCase().trim() === normUsername) {
                                     currentUser = { ...currentUser, ...u };
                                     if (typeof switchRole === 'function') {
@@ -1977,8 +1987,7 @@
                         }
 
                         if (shouldReRender) {
-                            renderDateStrip(new Date(selectedDateStr || new Date()));
-                            renderAgendas();
+                            syncAndRenderAllUI();
                         }
                     }
                 })
