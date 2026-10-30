@@ -281,7 +281,7 @@
 
     <!-- URL Config Google Apps Script -->
     <script>
-        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';
+        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxTm-uZftmsuG4vXoQoJqgHpOVxn3timY6_6X7D3ZZxNuaoh9U3CQpPkjY3BFdSTIeo/exec';
     </script>
 
     <!-- Firebase SDK Integration for Real-Time Database Persistence & Cross-Device Sync -->
@@ -497,7 +497,7 @@
     <!-- MAIN WEBSITE CONTENT CONTAINER -->
     <main id="main-content" class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full space-y-4 sm:space-y-6">
 
-        <!-- HEADER & FILTER BLOCK (Kotak Merah 1 Dihilangkan, Kotak Merah 2 & 3 Diperbarui) -->
+        <!-- HEADER & FILTER BLOCK -->
         <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200 space-y-3 sm:space-y-4">
             
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 border-b border-slate-100 pb-3">
@@ -524,7 +524,7 @@
                 </div>
             </div>
 
-            <!-- Filters Row (Kotak Merah 3) -->
+            <!-- Filters Row -->
             <div class="grid grid-cols-1 md:grid-cols-12 gap-2 sm:gap-3 items-center">
                 
                 <div class="md:col-span-4 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 flex items-center space-x-2">
@@ -1266,28 +1266,6 @@
                 searchInput.value = '';
                 handleSearch('');
             }
-        }
-
-        function filterData() {
-            return agendas.filter(item => {
-                const matchTab = (currentTabFilter === 'all' || item.status === currentTabFilter);
-                const matchPejabat = (currentPejabatFilter === 'semua' || item.pejabat === currentPejabatFilter);
-                const matchDate = searchQuery ? true : (!selectedDateStr || item.tanggal === selectedDateStr);
-                
-                const matchSearch = (!searchQuery || 
-                    (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
-                    (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
-                    (item.sector && item.sector.toLowerCase().includes(searchQuery)) ||
-                    (item.pejabat && item.pejabat.toLowerCase().includes(searchQuery)) ||
-                    (item.kontak && item.kontak.includes(searchQuery)) ||
-                    (item.pakaian && item.pakaian.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.penerima && item.disposisi.penerima.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.catatan && item.disposisi.catatan.toLowerCase().includes(searchQuery)) ||
-                    (item.laporan && item.laporan.notulensi && item.laporan.notulensi.toLowerCase().includes(searchQuery))
-                );
-
-                return matchTab && matchPejabat && matchDate && matchSearch;
-            });
         }
 
         function handleLoginSubmit(e) {
