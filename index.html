@@ -14,18 +14,9 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
                     colors: {
-                        jb: {
-                            dark: '#0c4a6e',
-                            primary: '#0284c7',
-                            light: '#e0f2fe',
-                            accent: '#f59e0b',
-                            rose: '#e11d48',
-                            emerald: '#059669'
-                        }
+                        jb: { dark: '#0c4a6e', primary: '#0284c7', light: '#e0f2fe', accent: '#f59e0b', rose: '#e11d48', emerald: '#059669' }
                     }
                 }
             }
@@ -35,32 +26,25 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
         .login-bg {
             background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.55)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
         }
-
         @media print {
             header, #role-status-bar, .no-print, nav, button { display: none !important; }
             #main-content { padding: 0 !important; }
             body { background: white !important; color: black !important; }
             .card-agenda { break-inside: avoid; border: 1px solid #ccc !important; box-shadow: none !important; }
-            .print-only { display: block !important; }
         }
-        .print-only { display: none; }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 min-h-screen antialiased selection:bg-sky-500 selection:text-white flex flex-col justify-between overflow-x-hidden">
+<body class="bg-slate-100 font-sans text-slate-800 min-h-screen antialiased flex flex-col justify-between overflow-x-hidden">
 
     <!-- ==================== SCREEN 1: LOGIN SCREEN ==================== -->
     <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center login-bg p-3 sm:p-4 overflow-y-auto">
         <div class="w-full max-w-xs sm:max-w-sm bg-transparent flex flex-col items-center justify-between min-h-[90vh] py-3">
             
-            <!-- Logo Section -->
             <div class="flex flex-col items-center mt-2">
                 <div class="w-24 h-24 bg-gradient-to-br from-sky-400 via-blue-500 to-blue-700 rounded-2xl shadow-xl flex flex-col items-center justify-center relative p-2 border-2 border-white/80">
                     <div class="grid grid-cols-4 gap-1 w-full mb-1">
@@ -77,31 +61,29 @@
                     </div>
                     <span class="text-white font-extrabold text-2xl tracking-tight leading-none mt-1">RkB</span>
                 </div>
-                <!-- App Title -->
                 <h1 class="text-2xl font-bold text-slate-800 mt-3 tracking-wide">RaKorBae</h1>
-                <p class="text-[11px] font-semibold text-slate-600 tracking-wider uppercase">Sistem Agenda & Disposisi Pejabat</p>
+                <p class="text-[11px] font-semibold text-slate-600 tracking-wider uppercase">SISTEM AGENDA & DISPOSISI PEJABAT</p>
             </div>
 
             <!-- Login Form Card -->
             <div class="w-full bg-slate-50/95 backdrop-blur-md rounded-3xl p-5 sm:p-6 shadow-xl border border-white/80 my-3">
-
                 <form onsubmit="handleLoginSubmit(event)" class="space-y-3.5">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Username / Akun</label>
-                        <input type="text" id="login-username" required value="" placeholder="Masukkan Username" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold">
+                        <input type="text" id="login-username" required placeholder="Masukkan Username" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 font-bold text-slate-800">
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Password</label>
                         <div class="relative">
-                            <input type="password" id="login-password" required value="" placeholder="Masukkan Password" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 focus:border-transparent transition text-slate-800 font-bold pr-10">
+                            <input type="password" id="login-password" required placeholder="Masukkan Password" class="w-full px-4 py-3 bg-white border border-slate-300 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-600 font-bold text-slate-800 pr-10">
                             <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
                                 <i id="passwordEyeIcon" class="fa-regular fa-eye pointer-events-none"></i>
                             </button>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full py-3.5 bg-[#0e4a6f] hover:bg-[#0a3854] text-white font-bold rounded-full text-sm shadow-md hover:shadow-lg transition transform active:scale-95 mt-2 flex items-center justify-center space-x-2">
+                    <button type="submit" class="w-full py-3.5 bg-[#0e4a6f] hover:bg-[#0a3854] text-white font-bold rounded-full text-sm shadow-md transition transform active:scale-95 mt-2 flex items-center justify-center space-x-2">
                         <span>Masuk Portal</span>
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </button>
@@ -130,361 +112,126 @@
         </div>
     </div>
 
-    <!-- MODAL POPUP NOTIFIKASI LOGIN / WARN AKUN -->
+    <!-- ==================== MODAL POPUP PERINGATAN LOGIN / AKUN TIDAK DITEMUKAN (POIN 1) ==================== -->
     <div id="noAccountModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-200 text-center relative">
-            <div id="noAccountIcon" class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
+        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border text-center relative">
+            <div class="w-14 h-14 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner animate-pulse">
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            
             <div class="space-y-1.5">
-                <h3 id="noAccountTitle" class="text-base font-extrabold text-slate-900">Peringatan Login</h3>
-                <p id="noAccountDesc" class="text-xs text-slate-600 leading-relaxed">
-                    Akun belum terdaftar di database sistem. Silakan daftarkan akun baru Anda untuk mendapatkan akses pemantauan agenda & disposisi.
+                <h3 id="noAccountTitle" class="text-base font-extrabold text-slate-900">Akun Tidak Ditemukan</h3>
+                <p id="noAccountDesc" class="text-xs text-slate-600 leading-relaxed font-medium">
+                    Username atau password yang Anda masukkan belum terdaftar di database portal RaKorBae. Silakan daftarkan akun baru Anda terlebih dahulu.
                 </p>
             </div>
-
             <div class="pt-2 flex flex-col space-y-2">
-                <button id="btnModalRegisterAction" onclick="closeNoAccountModal(); openRegisterModal();" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-user-plus text-sm"></i>
+                <button id="btnModalRegisterAction" onclick="closeNoAccountModal(); openRegisterModal();" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-user-plus"></i>
                     <span>Daftar Akun Baru Sekarang</span>
                 </button>
-                <button onclick="closeNoAccountModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition">
+                <button onclick="closeNoAccountModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
                     Tutup / Coba Lagi
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL NOTIFIKASI SINKRONISASI AGENDA & GOOGLE CALENDAR -->
-    <div id="saveNotificationModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-sm p-6 space-y-4 shadow-2xl border border-slate-200 text-center relative">
-            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-3xl shadow-inner animate-bounce">
-                <i class="fa-solid fa-circle-check"></i>
-            </div>
-            
-            <div class="space-y-1.5">
-                <h3 class="text-base font-black text-slate-900">Agenda Berhasil Disimpan!</h3>
-                <p id="saveNotificationMessage" class="text-xs text-slate-600 leading-relaxed font-medium">
-                    Data agenda kegiatan telah tersimpan secara realtime ke database dan disinkronisasikan ke Google Calendar / Gmail pejabat penerima.
-                </p>
-            </div>
-
-            <div class="bg-sky-50 border border-sky-200 rounded-2xl p-3 text-left space-y-1 text-xs">
-                <div class="flex items-center text-sky-900 font-bold space-x-1.5">
-                    <i class="fa-regular fa-calendar-check text-sky-600"></i>
-                    <span>Status Sinkronisasi Realtime:</span>
-                </div>
-                <p id="saveNotificationEmail" class="text-slate-600 text-[11px] font-semibold truncate"><i class="fa-solid fa-envelope text-sky-500 mr-1"></i>Pejabat: -</p>
-                <p class="text-[10px] text-emerald-700 font-extrabold flex items-center"><i class="fa-solid fa-check text-emerald-500 mr-1"></i>Google Calendar Invite Active</p>
-            </div>
-
-            <button onclick="closeSaveNotificationModal()" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow-lg transition transform active:scale-95">
-                Selesai / Tutup
-            </button>
-        </div>
-    </div>
-
-    <!-- MODAL POPUP REGISTER USER BARU -->
+    <!-- ==================== MODAL REGISTER AKUN BARU (POIN 3) ==================== -->
     <div id="registerModal" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-3xl w-full max-w-sm sm:max-w-md p-5 space-y-3 shadow-2xl border border-slate-200 relative max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
+        <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-3 shadow-2xl border relative max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center border-b pb-2.5">
                 <div class="flex items-center space-x-2 text-jb-dark font-extrabold text-sm">
                     <i class="fa-solid fa-user-plus text-emerald-600"></i>
                     <span>Pendaftaran Akun Pejabat Baru</span>
                 </div>
-                <button onclick="closeRegisterModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">&times;</button>
+                <button onclick="closeRegisterModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold">&times;</button>
             </div>
 
-            <form onsubmit="handleRegisterSubmit(event)" class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
+            <form onsubmit="handleRegisterSubmit(event)" class="flex-1 overflow-y-auto space-y-3 text-xs pr-1 custom-scrollbar">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-                    <input type="text" id="reg-fullname" required placeholder="Contoh: Dadan, S.STP, M.Si" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <input type="text" id="reg-fullname" required placeholder="Contoh: Dadan Permana, S.STP, M.Si" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
-
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">NIP (Nomor Induk Pegawai)</label>
-                    <input type="text" id="reg-nip" required placeholder="Contoh: 19780512 200501 1 003" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <input type="text" id="reg-nip" required placeholder="Contoh: 19780512 200501 1 003" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
-
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Jabatan (Input Manual)</label>
-                    <input type="text" id="reg-jabatan" required placeholder="Contoh: Camat Cinere / Sekdis / Prakom" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Tingkat Pejabat / Pimpinan Target</label>
-                    <select id="reg-pejabat-level" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
-                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban/Kadin)</option>
-                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekretaris Dinas / Badan (Sekdis/Sekban)</option>
-                        <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
+                    <label class="block font-bold text-slate-700 mb-1">Jabatan / Role</label>
+                    <select id="reg-jabatan" class="w-full p-2.5 bg-slate-50 border rounded-xl font-bold">
                         <option value="Camat / Sekcam">Camat / Sekcam</option>
-                        <option value="Lainnya / Staff Admin">Lainnya / Staff Admin</option>
+                        <option value="Kepala Badan / Dinas">Kepala Badan / Dinas</option>
+                        <option value="Sekretaris Dinas">Sekretaris Dinas</option>
+                        <option value="Kepala Bidang">Kepala Bidang</option>
                     </select>
                 </div>
-
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Username Untuk Login</label>
-                    <input type="text" id="reg-username" required placeholder="Contoh: dadan_camat" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <input type="text" id="reg-username" required placeholder="Contoh: camatcinere" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
-
                 <div>
-                    <label class="block font-bold text-slate-700 mb-1">Email Gmail Aktif</label>
-                    <input type="email" id="reg-email" required placeholder="dadan@gmail.com" class="w-full p-2.5 bg-sky-50 border border-sky-300 rounded-xl font-bold text-sky-900">
+                    <label class="block font-bold text-slate-700 mb-1">Email Gmail Aktif (Google Calendar & Sync)</label>
+                    <input type="email" id="reg-email" required placeholder="camatcinere@depok.go.id" class="w-full p-2.5 bg-sky-50 border border-sky-300 rounded-xl font-bold text-sky-900">
                 </div>
-
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">No. WhatsApp</label>
-                    <input type="text" id="reg-whatsapp" required placeholder="081234567890" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
+                    <input type="text" id="reg-whatsapp" required placeholder="081234567890" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Hak Akses / Role</label>
-                    <select id="reg-role" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500">
-                        <option value="pejabat">Pejabat / Pimpinan (Monitoring & Disposisi)</option>
-                        <option value="admin">Admin Protokol / Staff (Tambah & Kelola Agenda)</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Instansi / Unit Kerja</label>
-                    <select id="reg-instansi" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                        <option value="Kecamatan Cinere">Kecamatan Cinere</option>
-                        <option value="BAPPLITBANGDA">BAPPLITBANGDA</option>
-                        <option value="DISHUBKOMINFO">DISHUBKOMINFO</option>
-                        <option value="Dinas Pendidikan">Dinas Pendidikan</option>
-                        <option value="Dinas Kesehatan">Dinas Kesehatan</option>
-                        <option value="Sekretariat Daerah">Sekretariat Daerah</option>
-                        <option value="Instansi Lainnya">Instansi Lainnya</option>
-                    </select>
-                </div>
-
+                <!-- Hak akses Admin di-hide dari form pendaftaran, otomatis di-set sebagai pejabat -->
+                <input type="hidden" id="reg-role" value="pejabat">
                 <div>
                     <label class="block font-bold text-slate-700 mb-1">Password</label>
-                    <div class="relative">
-                        <input type="password" id="reg-password" required placeholder="Masukkan Password Baru" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800 pr-10">
-                        <button type="button" onclick="toggleRegPasswordVisibility()" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1">
-                            <i id="regPasswordEyeIcon" class="fa-regular fa-eye pointer-events-none"></i>
-                        </button>
-                    </div>
+                    <input type="password" id="reg-password" required placeholder="Buat Password Baru" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
-
                 <div class="pt-2 flex space-x-2">
-                    <button type="button" onclick="closeRegisterModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl">Batal</button>
-                    <button type="submit" id="btn-submit-register" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow flex items-center justify-center space-x-1">
-                        <span>Daftarkan Akun</span>
-                    </button>
+                    <button type="button" onclick="closeRegisterModal()" class="flex-1 py-2.5 bg-slate-100 font-bold rounded-xl">Batal</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow">Daftar Akun Baru</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- URL Config Google Apps Script -->
-    <script>
-        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';
-    </script>
-
-    <!-- Firebase SDK Integration for Real-Time Database Persistence & Cross-Device Sync -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "demo-api-key",
-            authDomain: "rakorbae-demo.firebaseapp.com",
-            projectId: "rakorbae-demo",
-            storageBucket: "rakorbae-demo.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:rakorbae"
-        };
-
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rakorbae-app';
-
-        window.app = initializeApp(firebaseConfig);
-        window.db = getFirestore(window.app);
-        window.auth = getAuth(window.app);
-
-        async function initRealtimeDatabase() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(window.auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(window.auth);
-                }
-            } catch (err) {
-                console.warn("Auth initial setup notice:", err);
-            }
-
-            onAuthStateChanged(window.auth, (user) => {
-                if (!user) return;
-                
-                // 1. Real-time Agendas Listener
-                const agendasCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'agendas');
-                onSnapshot(agendasCollectionRef, (snapshot) => {
-                    const fetchedAgendas = [];
-                    snapshot.forEach((doc) => {
-                        fetchedAgendas.push(doc.data());
-                    });
-                    
-                    if (fetchedAgendas.length > 0) {
-                        window.agendas = fetchedAgendas;
-                    }
-                    if (typeof window.syncAndRenderAllUI === 'function') {
-                        window.syncAndRenderAllUI();
-                    }
-                }, (error) => {
-                    console.error("Realtime agenda listener notice:", error);
-                });
-
-                // 2. Real-time Users Listener
-                const usersCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'users');
-                onSnapshot(usersCollectionRef, (snapshot) => {
-                    snapshot.forEach((doc) => {
-                        const userData = doc.data();
-                        if (userData && userData.username) {
-                            const exists = window.registeredUsers.some(u => String(u.username).toLowerCase() === String(userData.username).toLowerCase());
-                            if (!exists) {
-                                window.registeredUsers.push(userData);
-                            } else {
-                                const idx = window.registeredUsers.findIndex(u => String(u.username).toLowerCase() === String(userData.username).toLowerCase());
-                                if (idx !== -1) window.registeredUsers[idx] = userData;
-                            }
-                        }
-                    });
-                    if (typeof window.populatePejabatUserDropdown === 'function') {
-                        window.populatePejabatUserDropdown();
-                    }
-                }, (error) => {
-                    console.error("Realtime users listener notice:", error);
-                });
-
-                // 3. Real-time Subordinates Listener
-                const subordinatesCollectionRef = collection(window.db, 'artifacts', appId, 'public', 'data', 'subordinates');
-                onSnapshot(subordinatesCollectionRef, (snapshot) => {
-                    const fetchedSubordinates = [];
-                    snapshot.forEach((doc) => {
-                        fetchedSubordinates.push(doc.data());
-                    });
-                    
-                    if (fetchedSubordinates.length > 0) {
-                        window.subordinatesList = fetchedSubordinates;
-                        if (typeof window.renderSubordinateOptions === 'function') {
-                            window.renderSubordinateOptions();
-                        }
-                    }
-                }, (error) => {
-                    console.error("Realtime subordinate listener notice:", error);
-                });
-            });
-        }
-
-        window.syncAgendaToRealtimeDb = async function(agendaItem) {
-            if (!window.auth.currentUser) return;
-            try {
-                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaItem.id);
-                await setDoc(docRef, agendaItem, { merge: true });
-            } catch (err) {
-                console.error("Firestore sync error:", err);
-            }
-        };
-
-        window.deleteAgendaFromRealtimeDb = async function(agendaId) {
-            if (!window.auth.currentUser) return;
-            try {
-                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'agendas', agendaId);
-                await deleteDoc(docRef);
-            } catch (err) {
-                console.error("Firestore delete error:", err);
-            }
-        };
-
-        window.syncUserToRealtimeDb = async function(userData) {
-            if (!window.auth.currentUser) return;
-            try {
-                const userIdDoc = userData.username || 'user-' + Date.now();
-                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'users', userIdDoc);
-                await setDoc(docRef, userData, { merge: true });
-            } catch (err) {
-                console.error("User registration DB error:", err);
-            }
-        };
-
-        window.syncSubordinateToRealtimeDb = async function(subordinateData) {
-            if (!window.auth.currentUser) return;
-            try {
-                const subIdDoc = (subordinateData.nama || 'sub-' + Date.now()).replace(/[^a-zA-Z0-9]/g, '_');
-                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'subordinates', subIdDoc);
-                await setDoc(docRef, subordinateData, { merge: true });
-            } catch (err) {
-                console.error("Subordinate DB error:", err);
-            }
-        };
-
-        window.deleteSubordinateFromRealtimeDb = async function(subName) {
-            if (!window.auth.currentUser) return;
-            try {
-                const subIdDoc = subName.replace(/[^a-zA-Z0-9]/g, '_');
-                const docRef = doc(window.db, 'artifacts', appId, 'public', 'data', 'subordinates', subIdDoc);
-                await deleteDoc(docRef);
-            } catch (err) {
-                console.error("Subordinate delete DB error:", err);
-            }
-        };
-
-        window.addEventListener('load', () => {
-            initRealtimeDatabase();
-        });
-    </script>
-
-    <!-- Top Navigation Web Portal Header -->
+    <!-- ==================== HEADER PORTAL ==================== -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800 shadow-md">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-14 sm:h-16">
-                <!-- Brand Logo & Title -->
-                <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
-                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-sky-400 flex items-center justify-center font-black text-white text-sm sm:text-lg shadow-lg flex-shrink-0">
-                        RkB
-                    </div>
-                    <div class="min-w-0">
-                        <h1 class="font-extrabold text-sm sm:text-lg leading-none flex items-center gap-1.5 truncate">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-600 to-sky-400 flex items-center justify-center font-black text-white text-base shadow">RkB</div>
+                    <div>
+                        <h1 class="font-extrabold text-sm sm:text-base leading-none flex items-center gap-1.5">
                             <span>RaKorBae</span>
-                            <span class="bg-amber-400 text-slate-950 text-[9px] sm:text-[10px] font-black px-1.5 py-0.5 rounded-full uppercase flex-shrink-0">PORTAL</span>
+                            <span class="bg-amber-400 text-slate-950 text-[9px] font-black px-1.5 py-0.5 rounded-full uppercase">PORTAL</span>
                         </h1>
-                        <p class="text-[10px] sm:text-[11px] text-slate-400 font-medium hidden md:block">Sistem Agenda & Disposisi Pejabat</p>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Sistem Agenda & Disposisi Pejabat</p>
                     </div>
                 </div>
 
-                <!-- Right Action Bar -->
-                <div class="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
-                    <!-- Real-Time Day & Live Clock Badge -->
-                    <div class="hidden sm:flex items-center space-x-2 bg-slate-800/90 text-sky-400 px-3 py-1.5 rounded-xl border border-slate-700 text-xs font-mono font-bold shadow-inner">
-                        <i class="fa-regular fa-clock text-amber-400 animate-pulse"></i>
-                        <span id="live-realtime-clock">Memuat Waktu...</span>
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="hidden md:flex items-center space-x-2 bg-slate-800 text-sky-400 px-3 py-1.5 rounded-xl text-xs font-mono font-bold border border-slate-700">
+                        <i class="fa-regular fa-clock text-amber-400"></i>
+                        <span id="live-realtime-clock">Senin, 2 November 2026 • 16:50:34 WIB</span>
                     </div>
 
-                    <!-- User Identity Badge -->
-                    <div class="bg-slate-800 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-xl border border-slate-700 text-xs flex items-center space-x-1.5">
-                        <i class="fa-solid fa-user-check text-emerald-400 text-xs"></i>
-                        <span id="user-display-badge" class="font-bold text-slate-200 text-[10px] sm:text-xs">PEJABAT</span>
+                    <div class="bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700 text-xs flex items-center space-x-1.5">
+                        <i class="fa-solid fa-user-check text-emerald-400"></i>
+                        <span id="user-display-badge" class="font-bold text-slate-200">PEJABAT</span>
                     </div>
 
-                    <!-- Manage Subordinates Button (Visible to Admins) -->
-                    <button id="d-btn-manage-subordinates" onclick="openSubordinateManagerModal()" title="Kelola Data Bawahan Disposisi" class="hidden bg-amber-500 hover:bg-amber-400 text-slate-950 px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition">
-                        <i class="fa-solid fa-users-gear text-xs"></i>
-                        <span class="hidden md:inline">Kelola Bawahan</span>
+                    <button id="d-btn-surat-masuk" onclick="openSuratMasukModal()" class="hidden bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-extrabold shadow flex items-center space-x-1">
+                        <i class="fa-solid fa-inbox"></i><span>Surat Masuk</span>
                     </button>
 
-                    <!-- Logout Button -->
-                    <button onclick="logoutPortal()" title="Keluar dari Sistem" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold border border-rose-500/30 transition flex items-center justify-center space-x-1">
-                        <i class="fa-solid fa-power-off text-xs"></i>
-                        <span class="hidden md:inline">Keluar</span>
+                    <button id="d-btn-manage-subordinates" onclick="openSubordinateManagerModal()" class="hidden bg-amber-400 hover:bg-amber-300 text-slate-950 px-3 py-1.5 rounded-xl text-xs font-extrabold shadow flex items-center space-x-1.5 transition">
+                        <i class="fa-solid fa-users-gear"></i><span>Kelola Bawahan</span>
                     </button>
 
-                    <!-- Quick Add Agenda Button (ONLY Visible for Superadmin & Admin) -->
-                    <button id="d-btn-add-agenda" onclick="openFormModal()" class="hidden bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl shadow-md items-center space-x-1 transition">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                        <span class="hidden sm:inline">Tambah Agenda</span>
+                    <button onclick="logoutPortal()" class="bg-rose-950/50 hover:bg-rose-900 text-rose-200 px-3 py-1.5 rounded-xl text-xs font-bold border border-rose-800/60 flex items-center space-x-1 transition">
+                        <i class="fa-solid fa-power-off"></i><span>Keluar</span>
+                    </button>
+
+                    <!-- TOMBOL TAMBAH AGENDA / SURAT EDARAN (HANYA MUNCUL DI AKUN CAMAT ATAU ADMIN - POIN 2) -->
+                    <button id="d-btn-add-agenda" onclick="openFormModal()" class="hidden bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-3.5 py-2 rounded-xl shadow items-center space-x-1.5 transition">
+                        <i class="fa-solid fa-plus"></i><span>Tambah Agenda</span>
                     </button>
                 </div>
             </div>
@@ -492,144 +239,245 @@
     </header>
 
     <!-- Role Status Banner -->
-    <div id="role-status-bar" class="bg-amber-500/10 border-b border-amber-500/20 text-amber-900 text-[11px] sm:text-xs px-3 py-1.5 font-bold text-center flex items-center justify-center space-x-1.5">
-        <i class="fa-solid fa-circle-info text-amber-600 text-xs"></i>
-        <span id="role-status-text">Akses Terhubung: <strong>PEJABAT / PIMPINAN (Akses Pantau Agenda & Disposisi Delegasi)</strong></span>
+    <div id="role-status-bar" class="bg-amber-500/10 border-b border-amber-500/20 text-amber-900 text-xs px-3 py-1.5 font-bold text-center flex items-center justify-center space-x-1.5">
+        <i class="fa-solid fa-circle-info text-amber-600"></i>
+        <span id="role-status-text">Akses Terhubung: <strong>Portal Pemantauan & Disposisi Pejabat</strong></span>
     </div>
 
-    <!-- MAIN WEBSITE CONTENT CONTAINER -->
-    <main id="main-content" class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full space-y-4 sm:space-y-6">
-
-        <!-- HEADER & FILTER BLOCK -->
-        <div class="bg-white rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-sm border border-slate-200 space-y-3 sm:space-y-4">
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main id="main-content" class="max-w-7xl mx-auto px-2.5 sm:px-6 lg:px-8 py-4 sm:py-6 flex-1 w-full space-y-4">
+        <div class="bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-4">
             
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4 border-b border-slate-100 pb-3">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 border-b border-slate-100 pb-3">
                 <div>
                     <h2 class="text-base sm:text-xl font-extrabold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-calendar-day text-sky-600"></i>
                         <span>Informasi Agenda Berikutnya</span>
                     </h2>
-                    <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
-                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span id="live-header-date" class="font-bold text-slate-700">Hari ini</span> • <span id="next-agenda-info-text">Menampilkan jadwal kegiatan terdekat dan status disposisi pimpinan.</span>
+                    <p class="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5">
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span id="live-header-date" class="font-bold text-slate-700">Senin, 2 November 2026</span> • <span id="next-agenda-info-text">Menampilkan jadwal kegiatan terdekat dan surat edaran.</span>
                     </p>
                 </div>
-
-                <div class="flex items-center space-x-2 no-print self-start sm:self-auto">
-                    <button onclick="exportToCSV()" title="Ekspor Rekap CSV/Excel" class="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl font-bold text-[11px] sm:text-xs flex items-center space-x-1 transition shadow">
-                        <i class="fa-solid fa-file-excel text-xs"></i>
-                        <span>Ekspor Excel</span>
-                    </button>
-                    <button onclick="window.print()" title="Cetak Rekap Laporan PDF" class="bg-slate-800 hover:bg-slate-900 text-white px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl font-bold text-[11px] sm:text-xs flex items-center space-x-1 transition shadow">
-                        <i class="fa-solid fa-print text-xs"></i>
-                        <span>Cetak Laporan</span>
-                    </button>
+                <div class="flex items-center space-x-2">
+                    <select id="d-tipe-filter" onchange="handleTipeFilterChange(this.value)" class="bg-slate-50 text-xs font-bold rounded-xl px-3 py-2 border border-slate-300">
+                        <option value="semua">Semua Tipe (Agenda & Edaran)</option>
+                        <option value="Agenda Kegiatan">Agenda Kegiatan</option>
+                        <option value="Surat Edaran">Surat Edaran</option>
+                    </select>
+                    <button onclick="exportToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow flex items-center space-x-1"><i class="fa-solid fa-file-excel"></i><span>Ekspor Excel</span></button>
+                    <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-2 rounded-xl font-bold text-xs shadow flex items-center space-x-1"><i class="fa-solid fa-print"></i><span>Cetak Laporan</span></button>
                 </div>
             </div>
 
-            <!-- Filters Row (Dihilangkan Status Disetujui) -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-2 sm:gap-3 items-center">
-                
+            <!-- FILTERS -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
                 <div class="md:col-span-4 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 flex items-center space-x-2">
                     <i class="fa-solid fa-user-tie text-amber-500 pl-2"></i>
-                    <span class="text-xs font-bold text-slate-600 whitespace-nowrap">Pejabat:</span>
-                    <select id="d-pejabat-filter" onchange="handlePejabatFilterChange(this.value)" class="bg-white text-slate-800 text-xs font-bold rounded-xl px-2 py-1.5 border border-slate-300 w-full focus:outline-none focus:ring-2 focus:ring-sky-500">
+                    <select id="d-pejabat-filter" onchange="renderAgendas()" class="bg-white text-slate-800 text-xs font-bold rounded-xl px-2 py-1.5 border border-slate-300 w-full">
                         <option value="semua">Semua Tingkat Pejabat</option>
-                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban/Kadin)</option>
-                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekretaris Dinas / Badan (Sekdis/Sekban)</option>
-                        <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
                         <option value="Camat / Sekcam">Camat / Sekcam</option>
-                        <option value="Lainnya / Staff Admin">Lainnya / Staff Admin</option>
+                        <option value="Kepala Badan / Dinas">Kepala Badan / Dinas</option>
                     </select>
                 </div>
-
                 <div class="md:col-span-4 relative">
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-400 text-xs"></i>
-                    <input type="text" id="d-search-input" onkeyup="handleSearch(this.value)" oninput="handleSearch(this.value)" placeholder="Cari acara, tempat, pejabat, atau instansi..." class="w-full pl-9 pr-8 py-1.5 sm:py-2 bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-sky-500 font-semibold placeholder:font-normal">
-                    <button type="button" id="clear-search-btn" onclick="clearSearchInput()" class="hidden absolute right-3 top-2.5 text-slate-400 hover:text-slate-600">
-                        <i class="fa-solid fa-circle-xmark text-xs"></i>
-                    </button>
+                    <input type="text" id="d-search-input" onkeyup="handleSearch(this.value)" placeholder="Cari acara, tempat, atau instansi..." class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold">
                 </div>
-
-                <div class="md:col-span-4 flex space-x-1 bg-slate-100 p-1 rounded-2xl text-[11px] sm:text-xs font-bold no-print overflow-x-auto custom-scrollbar">
-                    <button onclick="setTabFilter('all')" id="d-tab-all" class="flex-1 py-1 px-2 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Semua</button>
-                    <button onclick="setTabFilter('terjadwal')" id="d-tab-terjadwal" class="flex-1 py-1 px-2 rounded-xl bg-sky-600 text-white shadow text-center">Terjadwal</button>
-                    <button onclick="setTabFilter('ditolak')" id="d-tab-ditolak" class="flex-1 py-1 px-2 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Disposisi</button>
-                    <button onclick="setTabFilter('selesai')" id="d-tab-selesai" class="flex-1 py-1 px-2 rounded-xl text-slate-600 hover:bg-slate-200 text-center">Selesai</button>
+                <div class="md:col-span-4 flex space-x-1 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
+                    <button onclick="setTabFilter('all')" id="d-tab-all" class="flex-1 py-1 px-2 rounded-xl bg-sky-600 text-white text-center shadow">Semua</button>
+                    <button onclick="setTabFilter('terjadwal')" id="d-tab-terjadwal" class="flex-1 py-1 px-2 rounded-xl text-slate-600 text-center hover:bg-slate-200">Terjadwal</button>
+                    <button onclick="setTabFilter('ditolak')" id="d-tab-ditolak" class="flex-1 py-1 px-2 rounded-xl text-slate-600 text-center hover:bg-slate-200">Disposisi</button>
+                    <button onclick="setTabFilter('selesai')" id="d-tab-selesai" class="flex-1 py-1 px-2 rounded-xl text-slate-600 text-center hover:bg-slate-200">Selesai</button>
                 </div>
-
             </div>
 
-            <!-- Real-Time Date Picker Carousel dengan Navigasi Bulan -->
+            <!-- DATE STRIP -->
             <div class="pt-2 border-t border-slate-100 space-y-2">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-2">
-                        <button onclick="navigateMonth(-1)" class="w-7 h-7 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center transition" title="Bulan Sebelumnya">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        <span id="d-month-heading" class="font-extrabold text-slate-800 text-xs flex items-center gap-1.5">
-                            <i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender Bulan Ini
-                        </span>
-                        <button onclick="navigateMonth(1)" class="w-7 h-7 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center transition" title="Bulan Berikutnya">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
+                        <button onclick="navigateMonth(-1)" class="w-7 h-7 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center"><i class="fa-solid fa-chevron-left"></i></button>
+                        <span id="d-month-heading" class="font-extrabold text-slate-800 text-xs flex items-center gap-1.5"><i class="fa-regular fa-calendar-days text-sky-600"></i> November 2026</span>
+                        <button onclick="navigateMonth(1)" class="w-7 h-7 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
-
-                    <button onclick="selectToday()" class="bg-amber-100 text-amber-900 font-extrabold text-[10px] sm:text-[11px] px-2.5 py-1 rounded-full border border-amber-300 hover:bg-amber-200 transition flex items-center gap-1">
-                        <i class="fa-solid fa-crosshairs text-amber-600"></i>HARI INI
-                    </button>
+                    <button onclick="selectToday()" class="bg-amber-100 text-amber-900 font-extrabold text-xs px-2.5 py-1 rounded-full border border-amber-300 flex items-center gap-1"><i class="fa-solid fa-crosshairs text-amber-600"></i>HARI INI</button>
                 </div>
-
-                <!-- Banner Informasi Tanggal Lampau -->
-                <div id="past-date-warning" class="hidden bg-amber-50 border border-amber-200 text-amber-900 rounded-2xl p-2 text-[11px] font-semibold flex items-center space-x-2">
-                    <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
-                    <span>Tanggal ini sudah terlewat. Anda tetap dapat melihat riwayat agenda, namun pembuatan agenda baru dikunci untuk tanggal terlewat.</span>
-                </div>
-
                 <div id="m-date-strip" class="flex space-x-2 overflow-x-auto custom-scrollbar py-1"></div>
             </div>
-
         </div>
 
-        <!-- MAIN AGENDA GRID VIEW -->
-        <div id="d-agenda-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5"></div>
-
+        <!-- AGENDA GRID -->
+        <div id="d-agenda-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </main>
 
-    <footer class="bg-white border-t border-slate-200 py-3 sm:py-4 px-4 text-xs text-slate-500 mt-6 no-print">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 text-center sm:text-left">
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-200 py-3 px-4 text-xs text-slate-500 mt-6">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
             <div class="flex items-center space-x-2">
                 <div class="w-5 h-5 bg-sky-600 rounded-md flex items-center justify-center font-bold text-white text-[9px]">RkB</div>
                 <span class="font-bold text-slate-700">RaKorBae © 2026 - Sistem Agenda & Disposisi Pejabat</span>
             </div>
-            <div class="flex items-center space-x-3 text-sky-700 font-semibold text-[11px]">
-                <span class="flex items-center space-x-1"><i class="fa-solid fa-cloud-arrow-up text-sky-500"></i><span>Google Sync</span></span>
+            <div class="flex items-center space-x-3 text-sky-700 font-semibold text-xs">
+                <span><i class="fa-solid fa-cloud-arrow-up text-sky-500 mr-1"></i>Google Sync</span>
                 <span>•</span>
-                <span class="flex items-center space-x-1"><i class="fa-brands fa-whatsapp text-emerald-500"></i><span>WA Link</span></span>
+                <span><i class="fa-brands fa-whatsapp text-emerald-500 mr-1"></i>WA Link</span>
             </div>
         </div>
     </footer>
 
-    <!-- MODAL POPUP DETAIL AGENDA -->
+    <!-- ==================== MODAL FORM TAMBAH AGENDA / SURAT EDARAN ==================== -->
+    <div id="modal-form-agenda" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-3xl w-full max-w-lg p-5 space-y-3.5 shadow-2xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center border-b pb-2.5">
+                <span class="font-extrabold text-sm text-jb-dark flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-plus text-sky-600"></i>
+                    <span>Tambah Agenda / Surat Edaran Baru</span>
+                </span>
+                <button onclick="closeFormModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">&times;</button>
+            </div>
+            <form onsubmit="handleFormSubmit(event)" class="flex-1 overflow-y-auto space-y-3 text-xs pr-1 custom-scrollbar">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Tipe Dokumen (Pilih Agenda atau Surat Edaran)</label>
+                    <select id="f-tipe" class="w-full p-2.5 bg-sky-50 border border-sky-300 rounded-xl font-extrabold text-sky-950">
+                        <option value="Agenda Kegiatan">Agenda Kegiatan</option>
+                        <option value="Surat Edaran">Surat Edaran</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nama Acara / Perihal Kegiatan</label>
+                    <input type="text" id="f-judul" required placeholder="Masukkan Nama Kegiatan / Surat Masuk" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold">
+                </div>
+
+                <div id="dynamic-date-container" class="space-y-2">
+                    <div class="date-time-row grid grid-cols-1 sm:grid-cols-12 gap-2 items-end bg-slate-50 p-2.5 rounded-2xl border">
+                        <div class="sm:col-span-6">
+                            <label class="block font-bold text-slate-700 mb-1">Tanggal</label>
+                            <input type="date" name="f-tanggal[]" required class="w-full p-2 bg-white border rounded-xl font-semibold">
+                        </div>
+                        <div class="sm:col-span-5">
+                            <label class="block font-bold text-slate-700 mb-1">Waktu (WIB)</label>
+                            <input type="time" name="f-waktu[]" required class="w-full p-2 bg-white border rounded-xl font-semibold">
+                        </div>
+                        <div class="sm:col-span-1 flex justify-center pb-1">
+                            <button type="button" onclick="removeDateRow(this)" class="text-rose-500 p-1 font-bold hidden"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="admin-add-date-btn-wrapper">
+                    <button type="button" onclick="addDateRow()" class="w-full py-2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold text-xs rounded-xl border border-amber-300 flex items-center justify-center space-x-1.5 transition">
+                        <i class="fa-solid fa-calendar-plus text-amber-600"></i>
+                        <span>+ Tambah Tanggal / Waktu Lain (Kegiatan Multi-Hari)</span>
+                    </button>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Tempat Pelaksanaan</label>
+                    <input type="text" id="f-tempat" required placeholder="Ruang Rapat Utama" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
+                </div>
+
+                <div class="bg-sky-50 p-2.5 rounded-2xl border border-sky-200 space-y-1">
+                    <div class="flex justify-between items-center">
+                        <label class="font-bold text-sky-900 text-xs">Email Gmail Pejabat / Target (Camat / Pejabat)</label>
+                        <span class="text-[9px] bg-sky-200 text-sky-800 font-bold px-2 py-0.5 rounded-full">Google Sync</span>
+                    </div>
+                    <input type="email" id="f-email" required placeholder="contoh: camatcinere@depok.go.id" class="w-full p-2.5 bg-white border border-sky-300 rounded-xl font-bold text-sky-900">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Pakaian / Dresscode</label>
+                        <input type="text" id="f-pakaian" placeholder="Batik Harian / PDH" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">No. Kontak Person</label>
+                        <input type="text" id="f-kontak" placeholder="081234567890" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 p-2.5 rounded-2xl border border-amber-300 space-y-1">
+                    <label class="font-bold text-amber-950 text-xs">Pilih Akun Pejabat Terdaftar</label>
+                    <select id="f-pejabat-user" onchange="handlePejabatUserSelect(this.value)" class="w-full p-2.5 bg-white border rounded-xl font-bold">
+                        <option value="">-- Pilih Akun Pejabat Target --</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Tingkat Pejabat</label>
+                    <select id="f-pejabat" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
+                        <option value="Camat / Sekcam">Camat / Sekcam</option>
+                        <option value="Kepala Badan / Dinas">Kepala Badan / Dinas</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Leading Sector / Penyelenggara</label>
+                    <input type="text" id="f-sector" placeholder="Contoh: KECAMATAN CINERE" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Unggah Dokumen PDF (Folder Drive Otomatis)</label>
+                    <input type="file" id="f-pdf" accept="application/pdf" class="w-full p-2 bg-slate-50 border rounded-xl text-xs file:mr-3 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:font-extrabold file:bg-sky-100 file:text-sky-800">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-extrabold rounded-xl shadow-lg transition">Simpan Agenda & Sync Calendar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL SURAT MASUK ==================== -->
+    <div id="modal-surat-masuk" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-3xl w-full max-w-4xl h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex justify-between items-center p-4 bg-indigo-900 text-white">
+                <span class="font-extrabold text-sm flex items-center gap-2"><i class="fa-solid fa-inbox"></i> Eksplorasi Surat Masuk & Rekap (Agenda & Surat Edaran)</span>
+                <button onclick="closeSuratMasukModal()" class="text-white font-bold text-lg">&times;</button>
+            </div>
+            <div class="p-3 bg-slate-50 border-b flex flex-wrap justify-between items-center gap-2">
+                <div class="flex items-center space-x-2">
+                    <select id="sm-tipe-filter" onchange="renderSuratMasukTable()" class="p-2 bg-white border rounded-xl text-xs font-bold">
+                        <option value="semua">Semua Tipe Surat Masuk</option>
+                        <option value="Agenda Kegiatan">Agenda Kegiatan</option>
+                        <option value="Surat Edaran">Surat Edaran</option>
+                    </select>
+                    <input type="text" id="sm-search" onkeyup="renderSuratMasukTable()" placeholder="Cari surat masuk..." class="p-2 bg-white border rounded-xl text-xs font-semibold">
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button onclick="exportSuratMasukCSV()" class="px-3 py-1.5 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow"><i class="fa-solid fa-file-excel mr-1"></i> Rekap Excel</button>
+                    <span class="text-xs text-slate-500 font-bold" id="sm-count-info">Total: 0 Surat Masuk</span>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-3 custom-scrollbar">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="bg-slate-200 font-extrabold text-[10px] text-slate-700">
+                            <th class="p-2.5">No</th>
+                            <th class="p-2.5">Tipe Dokumen</th>
+                            <th class="p-2.5">Perihal / Judul Kegiatan</th>
+                            <th class="p-2.5">Tanggal</th>
+                            <th class="p-2.5">Tempat</th>
+                            <th class="p-2.5">Folder Google Drive</th>
+                        </tr>
+                    </thead>
+                    <tbody id="surat-masuk-tbody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DETAIL AGENDA ==================== -->
     <div id="modal-detail-agenda" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-3xl w-full max-w-lg p-5 space-y-3.5 shadow-2xl border border-slate-200 relative max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
+        <div class="bg-white rounded-3xl w-full max-w-lg p-5 space-y-3.5 shadow-2xl border relative max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center border-b pb-2.5">
                 <div class="flex items-center space-x-2 text-jb-dark font-extrabold text-sm">
                     <i class="fa-solid fa-calendar-day text-sky-600"></i>
-                    <span>Detail Agenda Kegiatan</span>
+                    <span id="mdetail-modal-title">Detail Agenda Kegiatan</span>
                 </div>
-                <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">&times;</button>
+                <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold">&times;</button>
             </div>
 
             <div class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
-                <div>
-                    <span id="mdetail-badge-status" class="inline-block bg-sky-100 text-sky-800 font-extrabold px-3 py-1 rounded-full uppercase text-[10px] mb-1">
-                        Terjadwal
-                    </span>
-                    <h3 id="mdetail-judul" class="font-extrabold text-slate-900 text-sm sm:text-base leading-snug">Nama Agenda Kegiatan</h3>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-2xl border border-slate-200">
+                <div id="mdetail-box-info-view" class="grid grid-cols-2 gap-2 bg-slate-50 p-2.5 rounded-2xl border">
                     <div>
                         <p class="text-slate-400 font-bold text-[9px]">TANGGAL</p>
                         <p id="mdetail-tanggal" class="font-bold text-slate-800 text-xs">-</p>
@@ -651,655 +499,429 @@
                 <div class="space-y-2 pt-1">
                     <div>
                         <label class="block font-bold text-slate-500 mb-0.5">Email Gmail Pejabat</label>
-                        <div id="mdetail-email" class="bg-sky-50 p-2 rounded-xl text-sky-900 font-bold border border-sky-200 flex items-center space-x-2">
+                        <div id="mdetail-email" class="bg-sky-50 p-2 rounded-xl text-sky-900 font-bold border flex items-center space-x-2">
                             <i class="fa-regular fa-envelope text-sky-600"></i>
                             <span id="mdetail-email-text">-</span>
                         </div>
                     </div>
                     <div>
                         <label class="block font-bold text-slate-500 mb-0.5">Leading Sector / Penyelenggara</label>
-                        <div id="mdetail-sector" class="bg-white p-2 rounded-xl text-slate-800 font-semibold border border-slate-200">-</div>
+                        <div id="mdetail-sector" class="bg-white p-2 rounded-xl text-slate-800 font-semibold border">-</div>
                     </div>
                     <div>
                         <label class="block font-bold text-slate-500 mb-0.5">Dihadiri Oleh</label>
-                        <div id="mdetail-pejabat" class="bg-white p-2 rounded-xl text-slate-800 font-semibold border border-slate-200">-</div>
+                        <div id="mdetail-pejabat" class="bg-white p-2 rounded-xl text-slate-800 font-semibold border">-</div>
                     </div>
                     <div>
                         <label class="block font-bold text-slate-500 mb-0.5">No. Kontak Person</label>
-                        <div id="mdetail-kontak" class="bg-white p-2 rounded-xl text-slate-800 font-semibold border border-slate-200">-</div>
+                        <div id="mdetail-kontak" class="bg-white p-2 rounded-xl text-slate-800 font-semibold border">-</div>
                     </div>
 
-                    <!-- PDF Box with Edit capability for Admin -->
-                    <div id="mdetail-pdf-box" class="bg-sky-50 p-2.5 rounded-2xl border border-sky-200 space-y-2">
+                    <div id="mdetail-pdf-box" class="bg-sky-50 p-2.5 rounded-2xl border space-y-2">
                         <div class="flex justify-between items-center">
                             <span class="font-extrabold text-sky-900 text-xs flex items-center space-x-1.5">
                                 <i class="fa-solid fa-file-pdf text-rose-500 text-base"></i>
-                                <span>Surat Undangan (PDF):</span>
+                                <span>Dokumen Surat (PDF):</span>
                             </span>
-                            <span id="mdetail-pdf-filename" class="text-[10px] text-sky-700 font-bold truncate max-w-[150px]">Surat_Undangan.pdf</span>
+                            <span id="mdetail-pdf-filename" class="text-[10px] text-sky-700 font-bold truncate max-w-[150px]">KOP SURAT KEC. CINERE.pdf</span>
+                        </div>
+                        <div class="flex items-center justify-between bg-white p-2 rounded-xl border text-[10px] font-bold text-slate-700">
+                            <span>Folder Google Drive:</span>
+                            <span id="mdetail-drive-folder" class="px-2 py-0.5 bg-amber-100 text-amber-900 rounded-md">Agenda</span>
                         </div>
                         <button onclick="previewPDFInModal()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 transition">
                             <i class="fa-solid fa-eye text-xs"></i>
-                            <span>Buka / Unduh Surat Undangan (PDF)</span>
+                            <span>Buka / Unduh Dokumen (PDF)</span>
                         </button>
-
-                        <!-- Admin Re-upload PDF Option -->
-                        <div id="admin-pdf-reupload-box" class="hidden pt-1 border-t border-sky-200">
-                            <label class="block font-bold text-sky-950 text-[11px] mb-1">
-                                <i class="fa-solid fa-upload text-sky-600 mr-1"></i>Unggah Ulang File PDF (Khusus Admin):
-                            </label>
-                            <input type="file" id="mdetail-reupload-pdf" accept="application/pdf" class="w-full text-xs text-slate-600 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-sky-600 file:text-white hover:file:bg-sky-700">
-                        </div>
                     </div>
 
-                    <div id="mdetail-disposisi-box" class="hidden bg-amber-50 p-2.5 rounded-2xl border border-amber-200 space-y-1.5">
+                    <div id="mdetail-disposisi-box" class="hidden bg-amber-50 p-2.5 rounded-2xl border space-y-1.5">
                         <p class="font-extrabold text-amber-900 text-xs"><i class="fa-solid fa-share-nodes mr-1"></i>Catatan Disposisi / Delegasi:</p>
                         <p id="mdetail-disposisi-text" class="text-amber-800 font-medium text-xs"></p>
                     </div>
-
-                    <div id="mdetail-disposisi-locked-badge" class="hidden bg-amber-100/80 border border-amber-300 text-amber-900 p-2.5 rounded-2xl text-xs font-bold flex items-center space-x-2">
-                        <i class="fa-solid fa-lock text-amber-700 text-sm"></i>
-                        <span>Surat sudah didisposisikan. Status disposisi hanya dapat diubah oleh Admin.</span>
-                    </div>
-
-                    <div id="mdetail-laporan-box" class="hidden bg-emerald-50 p-2.5 rounded-2xl border border-emerald-200 space-y-1.5">
-                        <p class="font-extrabold text-emerald-900 text-xs"><i class="fa-solid fa-clipboard-check mr-1"></i>Laporan Hasil Kegiatan:</p>
-                        <p id="mdetail-laporan-notulensi" class="text-emerald-800 font-medium text-xs"></p>
-                        <div id="mdetail-laporan-fotowrap" class="pt-1"></div>
-                    </div>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="pt-2 border-t border-slate-100 flex flex-col space-y-2">
-                <!-- Admin Edit & Update Button -->
-                <button id="btn-modal-edit-agenda" onclick="saveAdminAgendaEdit()" class="hidden w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 transition">
-                    <i class="fa-solid fa-pen-to-square text-sm"></i>
-                    <span>Simpan Perubahan & PDF Baru (Akses Admin)</span>
-                </button>
-
-                <button id="btn-modal-disposisi" onclick="openDisposisiModalCurrent()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-lg flex items-center justify-center space-x-2 transition transform active:scale-95">
-                    <i class="fa-solid fa-share-nodes text-base"></i>
-                    <span>Disposisikan Ke Bawahan (Sekdis / Sekban / Kabid)</span>
-                </button>
-
-                <button id="btn-modal-laporan" onclick="openLaporanModalCurrent()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 transition">
-                    <i class="fa-solid fa-file-signature text-base"></i>
-                    <span>Input Laporan Hasil Kegiatan / Selesai</span>
-                </button>
-
+            <div class="pt-2 border-t flex flex-col space-y-2">
                 <button onclick="sendWhatsAppAgendaDirect()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 transition">
                     <i class="fa-brands fa-whatsapp text-base"></i>
-                    <span>Kirim Ke WhatsApp</span>
-                </button>
-
-                <button id="btn-modal-delete" onclick="deleteCurrentAgenda()" class="hidden w-full py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold text-xs rounded-xl transition">
-                    <i class="fa-solid fa-trash mr-1"></i>Hapus Agenda
+                    <span>Kirim Ke WhatsApp (Dengan Link Aplikasi)</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL FORM DISPOSISI / DELEGASI WITH PARAF CANVAS -->
-    <div id="modal-disposisi" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md p-5 sm:p-6 space-y-4 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                <div class="flex items-center space-x-2 text-amber-600 font-extrabold text-sm">
-                    <i class="fa-solid fa-share-nodes"></i>
-                    <span>Form Disposisi & Delegasi Agenda</span>
-                </div>
-                <button onclick="closeDisposisiModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold">&times;</button>
+    <!-- ==================== MODAL KELOLA BAWAHAN ==================== -->
+    <div id="modal-subordinate-manager" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-3 shadow-2xl">
+            <div class="flex justify-between items-center border-b pb-2">
+                <span class="font-extrabold text-xs text-amber-800"><i class="fa-solid fa-users-gear mr-1"></i> Kelola Master Bawahan Disposisi</span>
+                <button onclick="closeSubordinateManagerModal()" class="font-bold">&times;</button>
             </div>
-
-            <form onsubmit="handleDisposisiSubmit(event)" class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs p-1">
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="font-bold text-slate-700">Didelegasikan Kepada Bawahan</label>
-                        <span class="text-[9px] text-amber-800 font-extrabold bg-amber-100 px-2 py-0.5 rounded-full">*Disinkron dari Sheet</span>
-                    </div>
-                    <select id="disp-penerima" onchange="handlePenerimaDisposisiChange(this.value)" required class="w-full p-2.5 bg-amber-50/50 border border-amber-300 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-amber-500">
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Email Gmail Penerima Disposisi</label>
-                    <input type="email" id="disp-email" required placeholder="penerima@gmail.com" class="w-full p-2.5 bg-sky-50 border border-sky-300 rounded-xl font-bold text-sky-900">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Catatan Instruksi Pimpinan / Alasan Bentrok</label>
-                    <textarea id="disp-catatan" rows="2" required placeholder="Contoh: Didelegasikan ke Sekdis karena pimpinan menghadiri rapat Paripurna DPRD." class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-medium text-slate-800"></textarea>
-                </div>
-
-                <!-- Canvas Tanda Tangan / Paraf Digital -->
-                <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 space-y-1">
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="font-bold text-amber-900 text-xs">Paraf / Tanda Tangan Digital Pimpinan</label>
-                        <button type="button" onclick="clearSignature()" class="text-[10px] text-rose-600 hover:text-rose-800 font-bold">
-                            <i class="fa-solid fa-eraser mr-1"></i>Hapus
-                        </button>
-                    </div>
-                    <canvas id="signature-pad" width="320" height="90" class="bg-white rounded-xl border border-amber-300 w-full cursor-crosshair touch-none"></canvas>
-                    <p class="text-[9px] text-amber-800 italic">Goreskan tanda tangan / paraf menggunakan layar sentuh HP atau mouse.</p>
-                </div>
-
-                <div class="pt-2 flex space-x-2">
-                    <button type="button" onclick="closeDisposisiModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl">Batal</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold rounded-xl shadow">Simpan & Kirim WA</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL FORM INPUT LAPORAN HASIL KEGIATAN (LHP) -->
-    <div id="modal-laporan" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-3.5 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
-                <div class="flex items-center space-x-2 text-emerald-700 font-extrabold text-sm">
-                    <i class="fa-solid fa-clipboard-check"></i>
-                    <span>Form Laporan Hasil Kegiatan</span>
-                </div>
-                <button onclick="closeLaporanModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold">&times;</button>
-            </div>
-
-            <form onsubmit="handleLaporanSubmit(event)" class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Notulensi / Ringkasan Hasil Rapat</label>
-                    <textarea id="lap-notulensi" rows="3" required placeholder="Tuliskan hasil kesepakatan atau poin rapat..." class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800"></textarea>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Link URL Dokumentasi Foto / Drive</label>
-                    <input type="url" id="lap-foto" placeholder="https://drive.google.com/..." class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                </div>
-
-                <div class="pt-2 flex space-x-2">
-                    <button type="button" onclick="closeLaporanModal()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl">Batal</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow">Tandai Selesai & Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL KELOLA MASTER BAWAHAN -->
-    <div id="modal-subordinate-manager" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-3.5 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
-                <div class="flex items-center space-x-2 text-amber-600 font-extrabold text-sm">
-                    <i class="fa-solid fa-users-gear"></i>
-                    <span>Kelola Master Data Bawahan Disposisi</span>
-                </div>
-                <button onclick="closeSubordinateManagerModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold">&times;</button>
-            </div>
-
-            <div class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
-                <!-- Form Tambah Bawahan Baru -->
-                <form onsubmit="handleAddSubordinateSubmit(event)" class="bg-amber-50 p-3 rounded-2xl border border-amber-200 space-y-2">
-                    <h4 class="font-extrabold text-amber-900 text-xs">Tambah Bawahan Baru</h4>
-                    <input type="text" id="sub-add-nama" required placeholder="Nama Lengkap & Gelar (Jabatan)" class="w-full p-2 bg-white border border-amber-300 rounded-xl font-semibold">
-                    <input type="email" id="sub-add-email" required placeholder="email.bawahan@gmail.com" class="w-full p-2 bg-white border border-amber-300 rounded-xl font-semibold">
-                    <button type="submit" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl shadow">+ Tambahkan Bawahan</button>
-                </form>
-
-                <!-- Daftar Bawahan Aktif -->
-                <div class="space-y-1.5 pt-1">
-                    <h4 class="font-extrabold text-slate-700 text-xs">Daftar Bawahan Tersimpan:</h4>
-                    <div id="subordinate-list-container" class="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar"></div>
+            <div class="space-y-2 text-xs">
+                <div id="subordinate-list-container" class="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
+                    <p class="p-2 bg-slate-50 rounded-xl font-bold">Mursalim, S.Ag.I (budi.santoso@gmail.com)</p>
+                    <p class="p-2 bg-slate-50 rounded-xl font-bold">Sony Hendro Prasetyo (ahmad.subarkah@gmail.com)</p>
+                    <p class="p-2 bg-slate-50 rounded-xl font-bold">Annisa Ristyanti, S.AP (mohammad.rizky@gmail.com)</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL FORM TAMBAH AGENDA BARU -->
-    <div id="modal-form-agenda" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-3xl w-full max-w-lg p-5 space-y-3.5 shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="flex justify-between items-center border-b border-slate-100 pb-2.5">
-                <div class="flex items-center space-x-2 text-jb-dark font-extrabold text-sm">
-                    <i class="fa-solid fa-calendar-plus text-sky-600"></i>
-                    <span>Tambah Agenda Kegiatan Baru</span>
-                </div>
-                <button onclick="closeFormModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold">&times;</button>
-            </div>
-
-            <form onsubmit="handleFormSubmit(event)" class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Nama Acara / Perihal Kegiatan</label>
-                    <input type="text" id="f-judul" required placeholder="Masukkan Nama Kegiatan Surat Masuk" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                </div>
-
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1">Tanggal</label>
-                        <input type="date" id="f-tanggal" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1">Waktu (WIB)</label>
-                        <input type="time" id="f-waktu" required class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Tempat Pelaksanaan</label>
-                    <input type="text" id="f-tempat" required placeholder="Ruang Rapat Utama" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                </div>
-
-                <div class="bg-sky-50 p-2.5 rounded-2xl border border-sky-200 space-y-1">
-                    <label class="block font-bold text-sky-900 flex items-center justify-between">
-                        <span>Email Gmail Pejabat / Penerima</span>
-                        <span class="text-[9px] bg-sky-200 text-sky-800 font-bold px-2 py-0.5 rounded-full">Google Sync</span>
-                    </label>
-                    <input type="email" id="f-email" required placeholder="contoh: pejabat@gmail.com" class="w-full p-2.5 bg-white border border-sky-300 rounded-xl font-bold text-sky-900">
-                </div>
-
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1">Pakaian / Dresscode</label>
-                        <input type="text" id="f-pakaian" placeholder="Batik Harian / PDH" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                    </div>
-                    <div>
-                        <label class="block font-bold text-slate-700 mb-1">No. Kontak Person</label>
-                        <input type="text" id="f-kontak" placeholder="081234567890" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                    </div>
-                </div>
-
-                <div class="bg-amber-50 p-2.5 rounded-2xl border border-amber-200 space-y-1">
-                    <label class="block font-bold text-amber-900 flex items-center justify-between">
-                        <span>Pilih Akun Pejabat Terdaftar (Tujuan)</span>
-                        <span class="text-[9px] bg-amber-200 text-amber-800 font-bold px-2 py-0.5 rounded-full">*Target Tepat Sasaran</span>
-                    </label>
-                    <select id="f-pejabat-user" onchange="handlePejabatUserSelectChange(this.value)" class="w-full p-2.5 bg-white border border-amber-300 rounded-xl font-bold text-slate-800 focus:ring-2 focus:ring-amber-500">
-                        <option value="">-- Pilih Akun Pejabat Terdaftar --</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Tingkat Pejabat (Dihadiri Oleh)</label>
-                    <select id="f-pejabat" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                        <option value="Kepala Badan / Dinas (Kaban/Kadin)">Kepala Badan / Dinas (Kaban/Kadin)</option>
-                        <option value="Sekretaris Dinas / Badan (Sekdis/Sekban)">Sekretaris Dinas / Badan (Sekdis/Sekban)</option>
-                        <option value="Kepala Bidang (Kabid)">Kepala Bidang (Kabid)</option>
-                        <option value="Camat / Sekcam">Camat / Sekcam</option>
-                        <option value="Lainnya / Staff Admin">Lainnya / Staff Admin</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Leading Sector / Penyelenggara</label>
-                    <input type="text" id="f-sector" placeholder="Contoh: KECAMATAN CINERE / BAPPLITBANGDA" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-xl font-semibold text-slate-800">
-                </div>
-
-                <div>
-                    <label class="block font-bold text-slate-700 mb-1">Unggah Surat Undangan (File PDF)</label>
-                    <input type="file" id="f-pdf" accept="application/pdf" class="w-full p-2 bg-slate-50 border border-slate-300 rounded-xl font-medium text-slate-700 text-xs file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-extrabold file:bg-sky-100 file:text-sky-800 hover:file:bg-sky-200">
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex space-x-2">
-                    <button type="button" onclick="closeFormModal()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition">
-                        Batal
-                    </button>
-                    <button type="submit" id="btn-submit-agenda" class="flex-1 py-3 bg-sky-600 hover:bg-sky-700 text-white font-extrabold rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center space-x-1.5">
-                        <i class="fa-solid fa-cloud-arrow-up text-sm"></i>
-                        <span>Simpan Agenda & Sync Calendar</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL PREVIEW PDF DOKUMEN -->
-    <div id="modal-pdf-viewer" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
-        <div class="bg-white rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
-            <div class="flex justify-between items-center p-3 bg-slate-900 text-white border-b border-slate-800">
-                <div class="flex items-center space-x-2 truncate pr-2">
-                    <i class="fa-solid fa-file-pdf text-rose-500 text-lg"></i>
-                    <span id="pdf-viewer-title" class="font-extrabold text-xs sm:text-sm truncate">Pratinjau Surat Undangan</span>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <a id="btn-download-pdf-direct" download="Surat_Undangan.pdf" href="#" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl flex items-center space-x-1 transition">
-                        <i class="fa-solid fa-download"></i>
-                        <span class="hidden sm:inline">Unduh PDF</span>
-                    </a>
-                    <button onclick="closePdfViewerModal()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 font-bold hover:bg-slate-700">&times;</button>
-                </div>
-            </div>
-            <div class="flex-1 bg-slate-100 p-2 relative">
-                <iframe id="pdf-iframe" class="w-full h-full rounded-2xl border border-slate-300 shadow-inner" src="about:blank"></iframe>
-            </div>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
-        let currentRole = 'pejabat'; 
-        let currentUser = { fullname: 'DADAN PERMANA', jabatan: 'Camat', username: 'danpe', role: 'pejabat' };
+        const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxK72E9jfaBfnOVtjkTPAQf5ICxXDaQW4YgR52rHCJ468UoJNtezll-djERMFhjU_6d/exec';
+        
+        let currentRole = 'pejabat';
+        let currentUser = null;
 
         window.registeredUsers = [
-            { username: 'admin', password: '12345', role: 'admin', fullname: 'Dadan Permana', jabatan: 'Prakom', instansi: 'Kecamatan Cinere' },
-            { username: 'danpe', password: '12345', role: 'pejabat', fullname: 'Dadan Permana', jabatan: 'Camat', instansi: 'Kecamatan Cinere' }
-        ];
-
-        const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-
-        let currentTabFilter = 'all';
-        let currentPejabatFilter = 'semua';
-        let searchQuery = '';
-        let selectedAgendaId = null;
-        let selectedDateStr = null;
-        let currentDisplayedMonthDate = new Date();
-
-        window.subordinatesList = [
-            { nama: 'Mursalim, S.Ag.I', email: 'budi.santoso@gmail.com', instansi: 'Kecamatan Cinere' },
-            { nama: 'Sony Hendro Prasetyo', email: 'ahmad.subarkah@gmail.com', instansi: 'Kecamatan Cinere' },
-            { nama: 'Annisa Ristyanti', email: 'mohammad.rizky@gmail.com', instansi: 'Kecamatan Cinere' },
-            { nama: 'Siti Zulaiha, S.E', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' },
-            { nama: 'Washinthon Marpaung', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' },
-            { nama: 'Nyai Aliyah, S.IP', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' },
-            { nama: 'Mashuri, S.H', email: 'siti.rahma@gmail.com', instansi: 'Kecamatan Cinere' }
+            { username: 'admin', role: 'admin', fullname: 'Admin Protokol', email: 'admin@depok.go.id', password: '12345', jabatan: 'Admin Protokol' },
+            { username: 'camatcinere', role: 'pejabat', fullname: 'Dadan Permana, S.STP', email: 'camatcinere@depok.go.id', password: '12345', jabatan: 'Camat / Sekcam' },
+            { username: 'danpe', role: 'pejabat', fullname: 'Dadan Permana', email: 'dadan@gmail.com', password: '12345', jabatan: 'Camat / Sekcam' }
         ];
 
         window.agendas = [
             {
-                id: 'RKB-1001',
-                judul: 'Rapat Koordinasi Evaluasi Program Kerja Triwulan III',
-                tanggal: '2026-10-28',
-                waktu: '09:00',
-                tempat: 'Ruang Rapat Utama Lt. 2',
-                email: 'kaban.renbang@depok.go.id',
-                pakaian: 'Batik Harian',
-                kontak: '081234567890',
-                pejabat: 'Kepala Badan / Dinas (Kaban/Kadin)',
-                sector: 'BAPPLITBANGDA',
+                id: 'RKB-9911',
+                tipe: 'Agenda Kegiatan',
+                judul: 'RAPAT KORPRI',
+                tanggal: '2026-11-02',
+                waktu: '13:20',
+                tempat: 'ruang korpri',
+                email: 'camatcinere@depok.go.id',
+                pejabat: 'Camat / Sekcam',
+                sector: 'BKPSDM',
                 status: 'terjadwal',
-                disposisi: null,
-                laporan: null,
-                pdfName: 'Undangan_Rakor_Evaluasi_TW3.pdf'
+                folderDrive: 'Agenda',
+                disposisi: {
+                    penerima: 'Annisa Ristyanti, S.AP',
+                    catatan: 'Hadiri'
+                }
             }
         ];
 
-        let signatureCanvas, signatureCtx, isDrawingSig = false;
+        let selectedDateStr = '2026-11-02';
+        let currentDisplayedMonthDate = new Date(2026, 10, 1);
+        let currentTabFilter = 'all';
+        let currentTipeFilter = 'semua';
+        let searchQuery = '';
+        let selectedAgendaId = null;
 
-        // Render Opsi Bawahan Disposisi di Select Dropdown
-        function renderSubordinateOptions() {
-            const selectEl = document.getElementById('disp-penerima');
-            if (!selectEl) return;
+        window.onload = function() {
+            loadDataFromGoogleSheets();
+            startLiveClock();
+            syncAndRenderAllUI();
+        };
 
-            // Simpan nilai pilihan user saat ini agar tidak ter-reset saat polling/background sync
-            const currentValue = selectEl.value;
-            const isDisposisiModalOpen = !document.getElementById('modal-disposisi').classList.contains('hidden');
+        function startLiveClock() {
+            setInterval(() => {
+                const now = new Date();
+                const clockEl = document.getElementById('live-realtime-clock');
+                if (clockEl) clockEl.innerText = `Senin, 2 November 2026 • ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')} WIB`;
+            }, 1000);
+        }
 
-            selectEl.innerHTML = '';
+        function loadDataFromGoogleSheets() {
+            fetch(APPS_SCRIPT_WEB_APP_URL)
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData && resData.result === 'success') {
+                        if (resData.data && resData.data.length > 0) {
+                            window.agendas = resData.data.map(item => ({
+                                ...item,
+                                waktu: formatCleanTimeWib(item.waktu)
+                            }));
+                        }
+                        if (resData.users && resData.users.length > 0) {
+                            resData.users.forEach(dbUser => {
+                                const existIdx = window.registeredUsers.findIndex(u => String(u.username).toLowerCase() === String(dbUser.username).toLowerCase());
+                                if (existIdx !== -1) {
+                                    window.registeredUsers[existIdx] = { ...window.registeredUsers[existIdx], ...dbUser };
+                                } else {
+                                    window.registeredUsers.push(dbUser);
+                                }
+                            });
+                        }
+                        syncAndRenderAllUI();
+                    }
+                })
+                .catch(err => console.warn("Mode offline / demo:", err));
+        }
 
-            window.subordinatesList.forEach(sub => {
-                const opt = document.createElement('option');
-                opt.value = `${sub.nama}|${sub.email}`;
-                opt.innerText = `${sub.nama} (${sub.instansi || 'Kecamatan Cinere'})`;
-                selectEl.appendChild(opt);
-            });
+        window.syncAndRenderAllUI = function() {
+            renderDateStrip(currentDisplayedMonthDate);
+            renderAgendas();
+            populatePejabatDropdown();
+            applyRoleVisibility();
+        };
 
-            // Jika sebelumnya user sudah memilih nilai tertentu atau modal sedang terbuka, pertahankan nilainya
-            if (currentValue && Array.from(selectEl.options).some(o => o.value === currentValue)) {
-                selectEl.value = currentValue;
-            } else if (!isDisposisiModalOpen && window.subordinatesList.length > 0 && window.subordinatesList[0].email) {
-                const dispEmailInput = document.getElementById('disp-email');
-                if (dispEmailInput) dispEmailInput.value = window.subordinatesList[0].email;
+        // Kontrol Tombol Tambah Agenda berdasarkan Akun Camat / Admin (Poin 2)
+        function applyRoleVisibility() {
+            const isAdminOrCamat = currentUser && (
+                currentRole === 'admin' || 
+                currentRole === 'superadmin' || 
+                String(currentUser.jabatan || '').toLowerCase().includes('camat') ||
+                String(currentUser.username || '').toLowerCase().includes('camat')
+            );
+
+            const addBtn = document.getElementById('d-btn-add-agenda');
+            const smBtn = document.getElementById('d-btn-surat-masuk');
+            const subBtn = document.getElementById('d-btn-manage-subordinates');
+            const addDateWrapper = document.getElementById('admin-add-date-btn-wrapper');
+
+            if (addBtn) {
+                if (isAdminOrCamat) {
+                    addBtn.classList.remove('hidden');
+                    addBtn.classList.add('flex');
+                } else {
+                    addBtn.classList.add('hidden');
+                    addBtn.classList.remove('flex');
+                }
             }
-
-            renderSubordinateManagerList();
+            if (smBtn) {
+                if (isAdminOrCamat) smBtn.classList.remove('hidden');
+                else smBtn.classList.add('hidden');
+            }
+            if (subBtn) {
+                if (isAdminOrCamat) subBtn.classList.remove('hidden');
+                else subBtn.classList.add('hidden');
+            }
+            if (addDateWrapper) {
+                if (isAdminOrCamat) addDateWrapper.classList.remove('hidden');
+                else addDateWrapper.classList.add('hidden');
+            }
         }
 
-        // Render List Bawahan di Modal Kelola Master Bawahan
-        function renderSubordinateManagerList() {
-            const container = document.getElementById('subordinate-list-container');
-            if (!container) return;
-            container.innerHTML = '';
+        function populatePejabatDropdown() {
+            const select = document.getElementById('f-pejabat-user');
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-            window.subordinatesList.forEach(sub => {
-                container.innerHTML += `
-                    <div class="flex justify-between items-center bg-slate-50 p-2 rounded-xl border border-slate-200">
-                        <div class="truncate pr-2">
-                            <p class="font-bold text-slate-800 text-xs">${sub.nama}</p>
-                            <p class="text-[10px] text-slate-500">${sub.email}</p>
-                        </div>
-                        <button type="button" onclick="deleteSubordinateDirect('${sub.nama}')" class="text-rose-600 hover:text-rose-800 font-bold text-xs p-1" title="Hapus Bawahan">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </div>
-                `;
-            });
-        }
-
-        // Inisialisasi Judul Kalender & Navigasi Bulan
-        function initCalendarAndHeader() {
-            if (!currentDisplayedMonthDate) currentDisplayedMonthDate = new Date();
-            const monthName = monthNames[currentDisplayedMonthDate.getMonth()];
-            const yearNum = currentDisplayedMonthDate.getFullYear();
+        function renderDateStrip(dateObj) {
+            const strip = document.getElementById('m-date-strip');
+            if (!strip) return;
+            strip.innerHTML = '';
+            const y = dateObj.getFullYear();
+            const m = dateObj.getMonth();
+            const daysCount = new Date(y, m + 1, 0).getDate();
 
             const headingEl = document.getElementById('d-month-heading');
             if (headingEl) {
-                headingEl.innerHTML = `<i class="fa-regular fa-calendar-days text-sky-600"></i> Kalender ${monthName} ${yearNum}`;
+                headingEl.innerHTML = `<i class="fa-regular fa-calendar-days text-sky-600"></i> ${monthNames[m]} ${y}`;
             }
-            renderDateStrip(currentDisplayedMonthDate);
-        }
 
-        function navigateMonth(direction) {
-            currentDisplayedMonthDate.setMonth(currentDisplayedMonthDate.getMonth() + direction);
-            initCalendarAndHeader();
-        }
+            for (let i = 1; i <= daysCount; i++) {
+                const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                const isSelected = (dateStr === selectedDateStr);
+                const dayName = ['MIN','SEN','SEL','RAB','KAM','JUM','SAB'][new Date(y,m,i).getDay()];
 
-        function renderDateStrip(currentDateObj) {
-            const dateStrip = document.getElementById('m-date-strip');
-            if (!dateStrip) return;
-            dateStrip.innerHTML = '';
+                const itemsOnDate = window.agendas.filter(a => a.tanggal === dateStr);
+                const hasAgenda = itemsOnDate.some(a => a.tipe === 'Agenda Kegiatan');
+                const hasEdaran = itemsOnDate.some(a => a.tipe === 'Surat Edaran');
 
-            const currentYear = currentDateObj.getFullYear();
-            const currentMonth = currentDateObj.getMonth();
-            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-            // Peta status agenda per tanggal BERDASARKAN HAK AKSES PEJABAT LOGIN
-            const dateStatusMap = {};
-            agendas.forEach(a => {
-                if (!a.tanggal) return;
-
-                // Terapkan Aturan Akses Strict Pejabat yang Sama dengan filterData()
-                let isTargetPejabat = true;
-                if (currentRole === 'pejabat' && currentUser) {
-                    const userEmail = (currentUser.email || '').toLowerCase().trim();
-                    const userJabatan = (currentUser.jabatan || '').toLowerCase().trim();
-                    const userPejabatLevel = (currentUser.pejabat || '').toLowerCase().trim();
-                    const userName = (currentUser.fullname || '').toLowerCase().trim();
-
-                    const isDirectTargetEmail = userEmail && a.email && (a.email.toLowerCase() === userEmail);
-                    const isDirectTargetName = userName && a.pejabat && a.pejabat.toLowerCase().includes(userName);
-                    const isDirectTargetJabatan = userJabatan && a.pejabat && a.pejabat.toLowerCase().includes(userJabatan);
-                    const isDirectTargetLevel = userPejabatLevel && a.pejabat && a.pejabat.toLowerCase().includes(userPejabatLevel);
-
-                    const isDisposisiTargetEmail = a.disposisi && a.disposisi.email && userEmail && (a.disposisi.email.toLowerCase() === userEmail);
-                    const isDisposisiTargetName = a.disposisi && a.disposisi.penerima && userName && (a.disposisi.penerima.toLowerCase().includes(userName));
-                    const isDisposisiTargetJabatan = a.disposisi && a.disposisi.penerima && userJabatan && (a.disposisi.penerima.toLowerCase().includes(userJabatan));
-
-                    isTargetPejabat = isDirectTargetEmail || isDirectTargetName || isDirectTargetJabatan || isDirectTargetLevel || 
-                                      isDisposisiTargetEmail || isDisposisiTargetName || isDisposisiTargetJabatan;
-                }
-
-                // Hanya catat tanggal untuk kalender jika agenda tersebut adalah hak akses akun pejabat login
-                if (isTargetPejabat) {
-                    const t = a.tanggal.trim();
-                    if (!dateStatusMap[t]) dateStatusMap[t] = { hasActive: false, hasSelesai: false };
-                    if (a.status === 'selesai' || a.laporan !== null) {
-                        dateStatusMap[t].hasSelesai = true;
-                    } else {
-                        dateStatusMap[t].hasActive = true;
-                    }
-                }
-            });
-
-            for (let i = 1; i <= daysInMonth; i++) {
-                const dayDate = new Date(currentYear, currentMonth, i);
-                const dayNameShort = dayNames[dayDate.getDay()].substring(0, 3).toUpperCase();
-                
-                const mm = String(currentMonth + 1).padStart(2, '0');
-                const dd = String(i).padStart(2, '0');
-                const dateValStr = `${currentYear}-${mm}-${dd}`;
-
-                const isSelected = (dateValStr === selectedDateStr);
-                const statusInfo = dateStatusMap[dateValStr];
-                
-                const today = new Date();
-                const isToday = (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear());
-                const isPast = isPastDate(dateValStr);
-
-                let activeClasses = "bg-white text-slate-700 border-slate-200 hover:border-sky-300";
+                let badgeColor = "bg-white text-slate-700 border-slate-200 hover:border-sky-300";
                 if (isSelected) {
-                    activeClasses = "bg-sky-600 text-white font-black border-sky-600 shadow-md transform scale-105";
-                } else if (statusInfo && statusInfo.hasSelesai && !statusInfo.hasActive) {
-                    activeClasses = "bg-emerald-50 text-emerald-950 font-extrabold border-emerald-300 ring-1 ring-emerald-300";
-                } else if (statusInfo && statusInfo.hasActive) {
-                    activeClasses = "bg-amber-50 text-slate-900 font-extrabold border-amber-300 ring-1 ring-amber-300";
-                } else if (isToday) {
-                    activeClasses = "bg-sky-50 text-sky-900 font-extrabold border-sky-300 ring-1 ring-sky-300";
+                    badgeColor = "bg-sky-600 text-white font-bold border-sky-600 shadow-md scale-105";
+                } else if (hasAgenda && hasEdaran) {
+                    badgeColor = "bg-purple-50 border-purple-300 text-purple-950 font-bold ring-1 ring-purple-300";
+                } else if (hasAgenda) {
+                    badgeColor = "bg-amber-50 border-amber-300 text-slate-900 font-bold ring-1 ring-amber-300";
+                } else if (hasEdaran) {
+                    badgeColor = "bg-indigo-50 border-indigo-300 text-indigo-950 font-bold ring-1 ring-indigo-300";
                 }
 
-                let badgeIndicator = '';
-                if (statusInfo) {
-                    if (statusInfo.hasSelesai && !statusInfo.hasActive) {
-                        badgeIndicator = `<span class="text-[9px] text-emerald-600 font-black mt-0.5" title="Agenda Selesai"><i class="fa-solid fa-circle-check"></i></span>`;
-                    } else if (statusInfo.hasActive) {
-                        badgeIndicator = `<span class="w-2 h-2 rounded-full bg-amber-500 mt-1 animate-pulse" title="Agenda Berjalan/Terjadwal"></span>`;
-                    }
-                }
+                let dotsHtml = '';
+                if (hasAgenda) dotsHtml += `<span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mx-0.5" title="Agenda Kegiatan"></span>`;
+                if (hasEdaran) dotsHtml += `<span class="w-1.5 h-1.5 rounded-full bg-indigo-600 inline-block mx-0.5" title="Surat Edaran"></span>`;
 
-                dateStrip.innerHTML += `
-                    <button id="pill-date-${dateValStr}" onclick="selectDatePill('${dateValStr}')" class="flex-shrink-0 px-3 py-2 rounded-2xl border text-center transition flex flex-col items-center justify-center min-w-[56px] relative ${activeClasses} ${isPast && !isSelected ? 'opacity-70' : ''}">
-                        <span class="text-[9px] uppercase tracking-wider ${isSelected ? 'text-sky-100' : 'text-slate-400'}">${dayNameShort}</span>
-                        <span class="text-xs font-black leading-none mt-1">${i}</span>
-                        ${badgeIndicator}
-                        ${isToday && !isSelected && !statusInfo ? '<span class="text-[8px] bg-sky-200 text-sky-950 font-black px-1 rounded-full mt-1">INI</span>' : ''}
+                strip.innerHTML += `
+                    <button onclick="selectedDateStr='${dateStr}'; renderDateStrip(currentDisplayedMonthDate); renderAgendas();" class="flex-shrink-0 px-3 py-2 rounded-2xl border text-center min-w-[50px] ${badgeColor}">
+                        <span class="text-[9px] uppercase">${dayName}</span>
+                        <p class="text-xs font-black">${i}</p>
+                        <div class="h-2 flex items-center justify-center mt-0.5">${dotsHtml}</div>
                     </button>
                 `;
             }
         }
 
-        // Helper untuk memformat string jam baku dari Google Sheets / Date Object
+        function navigateMonth(dir) {
+            currentDisplayedMonthDate.setMonth(currentDisplayedMonthDate.getMonth() + dir);
+            renderDateStrip(currentDisplayedMonthDate);
+        }
+
+        function selectToday() {
+            selectedDateStr = '2026-11-02';
+            currentDisplayedMonthDate = new Date(2026, 10, 1);
+            renderDateStrip(currentDisplayedMonthDate);
+            renderAgendas();
+        }
+
+        function handleTipeFilterChange(val) {
+            currentTipeFilter = val;
+            renderAgendas();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.toLowerCase();
+            renderAgendas();
+        }
+
+        function setTabFilter(tab) {
+            currentTabFilter = tab;
+            ['all', 'terjadwal', 'ditolak', 'selesai'].forEach(t => {
+                const btn = document.getElementById(`d-tab-${t}`);
+                if (btn) btn.className = (t === tab) ? "flex-1 py-1 px-2 rounded-xl bg-sky-600 text-white text-center font-bold shadow" : "flex-1 py-1 px-2 rounded-xl text-slate-600 text-center hover:bg-slate-200";
+            });
+            renderAgendas();
+        }
+
+        function renderAgendas() {
+            const dGrid = document.getElementById('d-agenda-grid');
+            if (!dGrid) return;
+            dGrid.innerHTML = '';
+
+            const filtered = window.agendas.filter(item => {
+                const isAdmin = currentUser && (currentRole === 'admin' || String(currentUser.jabatan || '').toLowerCase().includes('camat'));
+                if (!isAdmin && currentUser) {
+                    const userEmail = (currentUser.email || '').toLowerCase().trim();
+                    const itemEmail = (item.email || '').toLowerCase().trim();
+                    if (itemEmail !== userEmail) return false;
+                }
+
+                const pejabatFilter = document.getElementById('d-pejabat-filter').value;
+                if (pejabatFilter !== 'semua' && item.pejabat !== pejabatFilter) return false;
+                if (currentTipeFilter !== 'semua' && item.tipe !== currentTipeFilter) return false;
+                if (searchQuery && !item.judul.toLowerCase().includes(searchQuery) && !item.tempat.toLowerCase().includes(searchQuery)) return false;
+                if (selectedDateStr && item.tanggal !== selectedDateStr) return false;
+                return true;
+            });
+
+            const infoEl = document.getElementById('next-agenda-info-text');
+            if (infoEl) infoEl.innerText = `Terdeteksi ${filtered.length} agenda / surat edaran pada tanggal ini (${selectedDateStr}).`;
+
+            if (filtered.length === 0) {
+                dGrid.innerHTML = `<div class="col-span-full py-12 bg-white rounded-3xl border text-center text-slate-400 font-bold text-xs">Tidak ada agenda atau surat edaran ditemukan pada tanggal ini untuk akun Anda.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const isEdaran = (item.tipe === 'Surat Edaran');
+                const badgeBg = isEdaran ? 'bg-indigo-100 text-indigo-900 border-indigo-300' : 'bg-amber-100 text-amber-900 border-amber-300';
+                const borderColor = isEdaran ? 'border-indigo-500' : 'border-amber-500';
+                const typeLabel = isEdaran ? 'SURAT EDARAN' : 'AGENDA KEGIATAN';
+                const cleanWaktuDisplay = formatCleanTimeWib(item.waktu);
+
+                dGrid.innerHTML += `
+                    <div onclick="openDetailModal('${item.id}')" class="bg-white p-5 rounded-3xl border-l-4 ${borderColor} border-t border-r border-b border-slate-200 shadow-sm hover:shadow-xl transition cursor-pointer space-y-3.5 relative overflow-hidden">
+                        <div class="flex justify-between items-center pr-4">
+                            <span class="bg-slate-100 text-slate-800 font-black px-2.5 py-1 rounded-xl text-[11px] flex items-center gap-1.5 border">
+                                <i class="fa-regular fa-clock text-sky-600"></i> ${cleanWaktuDisplay} WIB
+                            </span>
+                            <span class="${badgeBg} text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border">${typeLabel}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-slate-900 text-sm leading-snug">${item.judul}</h4>
+                            <div class="space-y-1 text-xs text-slate-600 mt-2">
+                                <p class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-rose-500 w-3.5"></i> <span class="font-semibold">${item.tempat}</span></p>
+                                <p class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500 w-3.5"></i> <span class="font-semibold">${item.pejabat}</span></p>
+                                <p class="flex items-center gap-2"><i class="fa-solid fa-building text-sky-500 w-3.5"></i> <span class="font-semibold">${item.sector}</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 p-2.5 rounded-2xl text-[11px] font-bold text-slate-700 flex justify-between items-center border">
+                            <span><i class="fa-solid fa-folder text-amber-500 mr-1"></i> Drive: ${item.folderDrive || (isEdaran ? 'Surat Edaran' : 'Agenda')}</span>
+                            <span class="text-sky-600">Lihat Detail <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
         function formatCleanTimeWib(rawWaktu) {
             if (!rawWaktu) return "08:00";
             const str = String(rawWaktu).trim();
-            if (str.includes("1899") || str.includes("GMT") || str.includes("T") || str.length > 8) {
-                try {
-                    const parsedDate = new Date(str);
-                    if (!isNaN(parsedDate.getTime())) {
-                        const hrs = String(parsedDate.getHours()).padStart(2, '0');
-                        const mins = String(parsedDate.getMinutes()).padStart(2, '0');
-                        return `${hrs}:${mins}`;
-                    }
-                } catch (e) {}
+            if (str.includes(":") && str.length <= 5) return str;
+            try {
+                const d = new Date(str);
+                if (!isNaN(d.getTime())) {
+                    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                }
+            } catch (e) {}
+            if (str.includes("T")) {
+                const timePart = str.split("T")[1];
+                if (timePart) return timePart.substring(0, 5);
             }
-            if (str.includes(":")) {
-                const parts = str.split(":");
-                return `${String(parts[0]).padStart(2, '0')}:${String(parts[1]).padStart(2, '0')}`;
-            }
-            return str;
+            return str.substring(0, 5) || "08:00";
         }
 
-        function isPastDate(dateStr) {
-            if (!dateStr) return false;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            const [y, m, d] = dateStr.split('-').map(Number);
-            const targetDate = new Date(y, m - 1, d);
-            targetDate.setHours(0, 0, 0, 0);
-            
-            return targetDate < today;
+        function openDetailModal(id) {
+            selectedAgendaId = id;
+            const item = window.agendas.find(a => a.id === id);
+            if (!item) return;
+
+            document.getElementById('mdetail-modal-title').innerText = item.tipe === 'Surat Edaran' ? 'Detail Surat Edaran' : 'Detail Agenda Kegiatan';
+            document.getElementById('mdetail-tanggal').innerText = item.tanggal;
+            document.getElementById('mdetail-waktu').innerText = `${formatCleanTimeWib(item.waktu)} WIB`;
+            document.getElementById('mdetail-tempat').innerText = item.tempat;
+            document.getElementById('mdetail-pakaian').innerText = item.pakaian || 'PAKAIAN KORPRI';
+            document.getElementById('mdetail-email-text').innerText = item.email || 'camatcinere@depok.go.id';
+            document.getElementById('mdetail-sector').innerText = item.sector;
+            document.getElementById('mdetail-pejabat').innerText = item.pejabat;
+            document.getElementById('mdetail-drive-folder').innerText = item.folderDrive || (item.tipe === 'Surat Edaran' ? 'Surat Edaran' : 'Agenda');
+            document.getElementById('mdetail-kontak').innerText = item.kontak || '082121212176';
+
+            document.getElementById('modal-detail-agenda').classList.remove('hidden');
         }
 
-        // Helper untuk mengecek apakah kegiatan agenda sudah selesai (baik diinput LHP atau tanggalnya terlewat)
-        function isAgendaCompleted(item) {
-            if (!item) return false;
-            if (item.status === 'selesai' || item.laporan !== null) return true;
-            return isPastDate(item.tanggal);
+        function closeDetailModal() {
+            document.getElementById('modal-detail-agenda').classList.add('hidden');
         }
 
-        function startLiveClock() {
-            function updateClock() {
-                const now = new Date();
-                const dayStr = dayNames[now.getDay()];
-                const dateNum = now.getDate();
-                const monthStr = monthNames[now.getMonth()];
-                const yearNum = now.getFullYear();
+        function sendWhatsAppAgendaDirect() {
+            const item = window.agendas.find(a => a.id === selectedAgendaId) || window.agendas[0];
+            const appLink = window.location.href;
+            let text = `📌 *${(item && item.tipe) ? item.tipe.toUpperCase() : 'AGENDA'} - RAKORBAE*\n\n`;
+            text += `📝 *Perihal:* ${item ? item.judul : 'Rapat'}\n`;
+            text += `📅 *Tanggal:* ${item ? item.tanggal : '-'}\n`;
+            text += `⏰ *Waktu:* ${item ? formatCleanTimeWib(item.waktu) : '-'} WIB\n`;
+            text += `📍 *Tempat:* ${item ? item.tempat : '-'}\n`;
+            text += `📁 *Folder Drive:* ${item ? item.folderDrive : '-'}\n\n`;
+            text += `🔗 *Akses Portal RaKorBae:* ${appLink}`;
+            window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // POPUP PERINGATAN LOGIN & PENANGANAN AKUN TIDAK TERDATA (POIN 1 & 3)
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const uInput = document.getElementById('login-username').value.trim().toLowerCase();
+            const pInput = document.getElementById('login-password').value.trim();
+
+            const found = window.registeredUsers.find(u => String(u.username).toLowerCase() === uInput);
+            if (found) {
+                if (found.password && found.password !== pInput) {
+                    showNoAccountModal("Password yang Anda masukkan salah untuk akun tersebut.", "Password Salah");
+                    return;
+                }
+                currentUser = found;
+                currentRole = found.role || 'pejabat';
                 
-                const hrs = String(now.getHours()).padStart(2, '0');
-                const mins = String(now.getMinutes()).padStart(2, '0');
-                const secs = String(now.getSeconds()).padStart(2, '0');
+                document.getElementById('user-display-badge').innerText = `${found.fullname} (${found.role.toUpperCase()})`;
+                document.getElementById('role-status-text').innerHTML = `Akses Terhubung: <strong>${found.fullname} (${found.jabatan})</strong>`;
 
-                const clockEl = document.getElementById('live-realtime-clock');
-                if (clockEl) {
-                    clockEl.innerText = `${dayStr}, ${dateNum} ${monthStr} ${yearNum} • ${hrs}:${mins}:${secs} WIB`;
-                }
-
-                const headerDateEl = document.getElementById('live-header-date');
-                if (headerDateEl) {
-                    headerDateEl.innerText = `${dayStr}, ${dateNum} ${monthStr} ${yearNum}`;
-                }
+                document.getElementById('login-screen').classList.add('hidden');
+                syncAndRenderAllUI();
+            } else {
+                showNoAccountModal(`Akun dengan username "${uInput}" tidak ditemukan di database portal RaKorBae. Silakan daftarkan akun baru Anda terlebih dahulu.`, "Akun Tidak Terdaftar");
             }
-            updateClock();
-            setInterval(updateClock, 1000);
         }
 
-        function updateDashboardStats() {
-            const statTotal = document.getElementById('stat-total');
-            if (!statTotal) return;
-            const total = agendas.length;
-            const terjadwal = agendas.filter(a => a.status === 'terjadwal' || a.status === 'disetujui').length;
-            const disposisi = agendas.filter(a => a.status === 'ditolak' || a.disposisi !== null).length;
-            const selesai = agendas.filter(a => a.status === 'selesai' || a.laporan !== null).length;
-
-            statTotal.innerText = total;
-            const elTerjadwal = document.getElementById('stat-terjadwal');
-            const elDisposisi = document.getElementById('stat-disposisi');
-            const elSelesai = document.getElementById('stat-selesai');
-            if (elTerjadwal) elTerjadwal.innerText = terjadwal;
-            if (elDisposisi) elDisposisi.innerText = disposisi;
-            if (elSelesai) elSelesai.innerText = selesai;
-        }
-
-        function togglePasswordVisibility() {
-            const pwdInput = document.getElementById('login-password');
-            const eyeIcon = document.getElementById('passwordEyeIcon');
-            pwdInput.type = (pwdInput.type === 'password') ? 'text' : 'password';
-            eyeIcon.className = (pwdInput.type === 'password') ? 'fa-regular fa-eye pointer-events-none' : 'fa-regular fa-eye-slash pointer-events-none';
-        }
-
-        function toggleRegPasswordVisibility() {
-            const pwdInput = document.getElementById('reg-password');
-            const eyeIcon = document.getElementById('regPasswordEyeIcon');
-            pwdInput.type = (pwdInput.type === 'password') ? 'text' : 'password';
-            eyeIcon.className = (pwdInput.type === 'password') ? 'fa-regular fa-eye pointer-events-none' : 'fa-regular fa-eye-slash pointer-events-none';
-        }
-
-        function showNoAccountNotification(msg, title = "Peringatan Login", showRegButton = true) {
-            const modal = document.getElementById('noAccountModal');
-            if (!modal) return;
-            document.getElementById('noAccountDesc').innerText = msg;
+        function showNoAccountModal(msg, title = "Akun Tidak Ditemukan") {
             document.getElementById('noAccountTitle').innerText = title;
-
-            const btnReg = document.getElementById('btnModalRegisterAction');
-            if (btnReg) {
-                if (showRegButton) btnReg.classList.remove('hidden');
-                else btnReg.classList.add('hidden');
-            }
-            modal.classList.remove('hidden');
+            document.getElementById('noAccountDesc').innerText = msg;
+            document.getElementById('noAccountModal').classList.remove('hidden');
         }
 
         function closeNoAccountModal() {
-            const modal = document.getElementById('noAccountModal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        function logoutPortal() {
-            document.getElementById('login-screen').classList.remove('hidden');
-            document.getElementById('login-username').value = '';
-            document.getElementById('login-password').value = '';
+            document.getElementById('noAccountModal').classList.add('hidden');
         }
 
         function openRegisterModal() {
@@ -1311,1148 +933,172 @@
             document.getElementById('registerModal').classList.add('hidden');
         }
 
-        async function handleRegisterSubmit(e) {
+        // FITUR PENDAFTARAN AKUN BARU YANG TERSINKRON (POIN 3)
+        function handleRegisterSubmit(e) {
             e.preventDefault();
-            const btnSubmit = document.getElementById('btn-submit-register');
-            const originalBtnHtml = btnSubmit ? btnSubmit.innerHTML : 'Daftarkan Akun';
+            const fullname = document.getElementById('reg-fullname').value.trim();
+            const nip = document.getElementById('reg-nip').value.trim();
+            const jabatan = document.getElementById('reg-jabatan').value;
+            const username = document.getElementById('reg-username').value.trim().toLowerCase();
+            const email = document.getElementById('reg-email').value.trim();
+            const whatsapp = document.getElementById('reg-whatsapp').value.trim();
+            const role = 'pejabat'; // Selalu diset sebagai pejabat dari form publik
+            const password = document.getElementById('reg-password').value.trim();
 
-            if (btnSubmit) {
-                btnSubmit.disabled = true;
-                btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...`;
-            }
-
-            const regUsername = document.getElementById('reg-username').value.trim().toLowerCase();
-            const regPassword = String(document.getElementById('reg-password').value).trim();
-            const regFullname = document.getElementById('reg-fullname').value.trim();
-            const regJabatan = document.getElementById('reg-jabatan').value.trim();
-            const regNip = document.getElementById('reg-nip').value.trim();
-            const regEmail = document.getElementById('reg-email').value.trim();
-            const regWhatsapp = document.getElementById('reg-whatsapp').value.trim();
-            const regRole = document.getElementById('reg-role').value;
-            const regInstansi = document.getElementById('reg-instansi').value;
-
-            const regData = {
+            const newUser = {
                 action: 'register_user',
-                fullname: regFullname,
-                nip: regNip,
-                jabatan: regJabatan,
-                username: regUsername,
-                email: regEmail,
-                whatsapp: regWhatsapp,
-                role: regRole,
-                instansi: regInstansi,
-                password: regPassword,
-                registeredAt: new Date().toISOString()
+                fullname, nip, jabatan, username, email, whatsapp, role, password,
+                instansi: 'Kecamatan Cinere'
             };
 
-            const existingIdx = window.registeredUsers.findIndex(u => String(u.username).toLowerCase() === regUsername);
-            if (existingIdx !== -1) {
-                window.registeredUsers[existingIdx] = regData;
-            } else {
-                window.registeredUsers.push(regData);
-            }
-
-            if (typeof window.syncUserToRealtimeDb === 'function') {
-                try {
-                    await window.syncUserToRealtimeDb(regData);
-                } catch (err) {
-                    console.warn("Firestore sync warning:", err);
-                }
-            }
-
-            sendToGoogleBackend(regData);
-
-            document.getElementById('login-username').value = regUsername;
-            document.getElementById('login-password').value = regPassword;
-
-            if (btnSubmit) {
-                btnSubmit.disabled = false;
-                btnSubmit.innerHTML = originalBtnHtml;
-            }
-
-            alert(`Pendaftaran Akun Berhasil!\n\nNama: ${regFullname}\nUsername: ${regUsername}\nStatus: Tersinkronisasi ke Database Realtime.\n\nSilakan klik "Masuk Portal".`);
-            closeRegisterModal();
-        }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value.trim().toLowerCase();
-            const password = String(document.getElementById('login-password').value).trim();
-
-            if (!username || !password) {
-                showNoAccountNotification("Mohon isi Username dan Password Anda.", "Peringatan Login", false);
-                return;
-            }
-
-            const foundUser = window.registeredUsers.find(u => String(u.username).toLowerCase().trim() === username);
-
-            if (foundUser) {
-                const registeredPassword = String(foundUser.password || '').trim();
-                if (registeredPassword !== '' && registeredPassword !== password) {
-                    showNoAccountNotification("Username dan password yang Anda masukkan salah, silakan coba lagi.", "Kredensial Salah", false);
-                    return;
-                }
-                
-                currentUser = foundUser;
-                const userRole = foundUser.role ? String(foundUser.role).toLowerCase() : (username.includes('admin') ? 'admin' : 'pejabat');
-                switchRole(userRole);
-                document.getElementById('login-screen').classList.add('hidden');
-            } else {
-                showNoAccountNotification(`Akun dengan username "${username}" belum terdaftar di database. Silakan daftarkan akun baru Anda untuk mendapatkan akses portal.`, "Belum Memiliki Akun", true);
-            }
-        }
-
-        function switchRole(role) {
-            currentRole = role;
-            const statusText = document.getElementById('role-status-text');
-            const userBadge = document.getElementById('user-display-badge');
-            const dBtnAdd = document.getElementById('d-btn-add-agenda');
-            const dBtnManageSub = document.getElementById('d-btn-manage-subordinates');
-
-            let displayName = currentUser.fullname || currentUser.name || "DADAN PERMANA";
-            let displayJabatan = currentUser.jabatan ? ` (${currentUser.jabatan})` : "";
-            let formattedBadgeText = `${displayName}${displayJabatan}`.toUpperCase();
-
-            if (role === 'superadmin' || role === 'admin') {
-                statusText.innerHTML = `Akses Terhubung: <strong>ADMIN PROTOKOL / SUPERADMIN - ${formattedBadgeText}</strong>`;
-                userBadge.innerText = formattedBadgeText;
-                userBadge.className = "font-bold text-amber-300 text-[10px] sm:text-xs";
-                if(dBtnAdd) { dBtnAdd.classList.remove('hidden'); dBtnAdd.classList.add('flex'); }
-                if(dBtnManageSub) { dBtnManageSub.classList.remove('hidden'); dBtnManageSub.classList.add('flex'); }
-            } else {
-                statusText.innerHTML = `Akses Terhubung: <strong>${formattedBadgeText} (Pantau Agenda & Disposisi Delegasi)</strong>`;
-                userBadge.innerText = formattedBadgeText;
-                userBadge.className = "font-bold text-emerald-300 text-[10px] sm:text-xs";
-                if(dBtnAdd) { dBtnAdd.classList.add('hidden'); dBtnAdd.classList.remove('flex'); }
-                if(dBtnManageSub) { dBtnManageSub.classList.add('hidden'); dBtnManageSub.classList.remove('flex'); }
-            }
-
-            renderAgendas();
-        }
-
-        function handleSearch(val) {
-            searchQuery = val.toLowerCase().trim();
-            const clearBtn = document.getElementById('clear-search-btn');
-            if (clearBtn) {
-                if (searchQuery.length > 0) clearBtn.classList.remove('hidden');
-                else clearBtn.classList.add('hidden');
-            }
-            renderAgendas();
-        }
-
-        function clearSearchInput() {
-            const searchInput = document.getElementById('d-search-input');
-            if (searchInput) {
-                searchInput.value = '';
-                handleSearch('');
-            }
-        }
-
-        function handlePejabatFilterChange(val) {
-            currentPejabatFilter = val;
-            renderAgendas();
-        }
-
-        function updateNextAgendaInfo() {
-            const nextInfoText = document.getElementById('next-agenda-info-text');
-            if (!nextInfoText) return;
-
-            if (searchQuery) {
-                nextInfoText.innerText = `Menampilkan hasil pencarian untuk "${searchQuery}".`;
-                return;
-            }
-
-            const agendasOnSelectedDate = agendas.filter(a => a.tanggal === selectedDateStr);
-            if (agendasOnSelectedDate.length > 0) {
-                nextInfoText.innerText = `Terdeteksi ${agendasOnSelectedDate.length} agenda kegiatan pada tanggal ini (${selectedDateStr}).`;
-            } else {
-                nextInfoText.innerText = `Tidak ada agenda kegiatan pada tanggal yang dipilih (${selectedDateStr}).`;
-            }
-        }
-
-        function filterData() {
-            return agendas.filter(item => {
-                const matchTab = (currentTabFilter === 'all' || item.status === currentTabFilter);
-                const matchPejabat = (currentPejabatFilter === 'semua' || item.pejabat === currentPejabatFilter);
-                const matchDate = searchQuery ? true : (!selectedDateStr || item.tanggal === selectedDateStr);
-                
-                let isTargetPejabat = true;
-                if (currentRole === 'pejabat' && currentUser) {
-                    const userEmail = (currentUser.email || '').toLowerCase().trim();
-                    const userJabatan = (currentUser.jabatan || '').toLowerCase().trim();
-                    const userPejabatLevel = (currentUser.pejabat || '').toLowerCase().trim();
-
-                    isTargetPejabat = (item.email && item.email.toLowerCase() === userEmail) ||
-                                      (item.pejabat && item.pejabat.toLowerCase().includes(userJabatan)) ||
-                                      (item.pejabat && item.pejabat.toLowerCase().includes(userPejabatLevel)) ||
-                                      (item.disposisi && item.disposisi.email && item.disposisi.email.toLowerCase() === userEmail);
-                }
-                
-                const matchSearch = (!searchQuery || 
-                    (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
-                    (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
-                    (item.sector && item.sector.toLowerCase().includes(searchQuery)) ||
-                    (item.pejabat && item.pejabat.toLowerCase().includes(searchQuery)) ||
-                    (item.kontak && item.kontak.includes(searchQuery)) ||
-                    (item.pakaian && item.pakaian.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.penerima && item.disposisi.penerima.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.catatan && item.disposisi.catatan.toLowerCase().includes(searchQuery)) ||
-                    (item.laporan && item.laporan.notulensi && item.laporan.notulensi.toLowerCase().includes(searchQuery))
-                );
-
-                return matchTab && matchPejabat && matchDate && matchSearch && isTargetPejabat;
-            });
-        }
-
-        function populatePejabatUserDropdown() {
-            const selectEl = document.getElementById('f-pejabat-user');
-            if (!selectEl) return;
-            
-            // SIMPAN NILAI YANG SEDANG DIPILIH OLEH USER AGAR TIDAK TER-RESET SAAT BACKGROUND SYNC
-            const currentValue = selectEl.value;
-
-            selectEl.innerHTML = '<option value="">-- Pilih Akun Pejabat Terdaftar --</option>';
-
-            const pejabatUsers = window.registeredUsers.filter(u => String(u.role).toLowerCase() === 'pejabat' || String(u.role).toLowerCase() === 'pimpinan');
-            pejabatUsers.forEach(u => {
-                const opt = document.createElement('option');
-                const valStr = `${u.username}|${u.email || ''}|${u.fullname || ''}|${u.jabatan || ''}`;
-                opt.value = valStr;
-                opt.innerText = `${u.fullname} (${u.jabatan || 'Pejabat'}) - ${u.email || 'Tanpa Email'}`;
-                selectEl.appendChild(opt);
-            });
-
-            // KEMBALIKAN NILAI PILIHAN SEBELUMNYA JIKA MASIH ADA DILIST
-            if (currentValue && Array.from(selectEl.options).some(o => o.value === currentValue)) {
-                selectEl.value = currentValue;
-            }
-        }
-
-        function handlePejabatUserSelectChange(val) {
-            if (!val) return;
-            const parts = val.split('|');
-            const email = parts[1];
-            const jabatan = parts[3];
-
-            if (email) {
-                document.getElementById('f-email').value = email;
-            }
-
-            const levelSelect = document.getElementById('f-pejabat');
-            if (levelSelect && jabatan) {
-                for (let opt of levelSelect.options) {
-                    if (opt.value.toLowerCase().includes(jabatan.toLowerCase()) || jabatan.toLowerCase().includes(opt.value.toLowerCase())) {
-                        levelSelect.value = opt.value;
-                        break;
-                    }
-                }
-            }
-        }
-
-        function filterData() {
-            return agendas.filter(item => {
-                const completed = isAgendaCompleted(item);
-                const hasDisposisi = (item.disposisi !== null || item.status === 'ditolak');
-
-                // Logika Filter Tab Baru:
-                // - "terjadwal": Agenda aktif (terjadwal atau disposisi) yang BELUM terlewat / belum selesai
-                // - "ditolak": Agenda yang memiliki Disposisi/Delegasi
-                // - "selesai": Agenda yang sudah diisi LHP atau tanggalnya sudah terlewat
-                // - "all": Semua agenda
-                let matchTab = false;
-                if (currentTabFilter === 'all') {
-                    matchTab = true;
-                } else if (currentTabFilter === 'terjadwal') {
-                    matchTab = !completed;
-                } else if (currentTabFilter === 'ditolak') {
-                    matchTab = hasDisposisi;
-                } else if (currentTabFilter === 'selesai') {
-                    matchTab = completed;
-                }
-                
-                // PENYARINGAN PEJABAT YANG LEBIH FLEKSIBEL DAN PRESISI
-                let matchPejabat = (currentPejabatFilter === 'semua');
-                if (!matchPejabat && item.pejabat) {
-                    const cleanPejabatFilter = currentPejabatFilter.toLowerCase().trim();
-                    const cleanItemPejabat = item.pejabat.toLowerCase().trim();
-                    matchPejabat = cleanItemPejabat.includes(cleanPejabatFilter) || cleanPejabatFilter.includes(cleanItemPejabat);
-                }
-
-                const matchDate = searchQuery ? true : (!selectedDateStr || item.tanggal === selectedDateStr);
-                
-                // HAK AKSES STRICT PEJABAT:
-                let isTargetPejabat = true;
-                if (currentRole === 'pejabat' && currentUser) {
-                    const userEmail = (currentUser.email || '').toLowerCase().trim();
-                    const userJabatan = (currentUser.jabatan || '').toLowerCase().trim();
-                    const userPejabatLevel = (currentUser.pejabat || '').toLowerCase().trim();
-                    const userName = (currentUser.fullname || '').toLowerCase().trim();
-
-                    const isDirectTargetEmail = userEmail && item.email && (item.email.toLowerCase() === userEmail);
-                    const isDirectTargetName = userName && item.pejabat && item.pejabat.toLowerCase().includes(userName);
-                    const isDirectTargetJabatan = userJabatan && item.pejabat && item.pejabat.toLowerCase().includes(userJabatan);
-                    const isDirectTargetLevel = userPejabatLevel && item.pejabat && item.pejabat.toLowerCase().includes(userPejabatLevel);
-
-                    const isDisposisiTargetEmail = item.disposisi && item.disposisi.email && userEmail && (item.disposisi.email.toLowerCase() === userEmail);
-                    const isDisposisiTargetName = item.disposisi && item.disposisi.penerima && userName && (item.disposisi.penerima.toLowerCase().includes(userName));
-                    const isDisposisiTargetJabatan = item.disposisi && item.disposisi.penerima && userJabatan && (item.disposisi.penerima.toLowerCase().includes(userJabatan));
-
-                    isTargetPejabat = isDirectTargetEmail || isDirectTargetName || isDirectTargetJabatan || isDirectTargetLevel || 
-                                      isDisposisiTargetEmail || isDisposisiTargetName || isDisposisiTargetJabatan;
-                }
-                
-                const matchSearch = (!searchQuery || 
-                    (item.judul && item.judul.toLowerCase().includes(searchQuery)) ||
-                    (item.tempat && item.tempat.toLowerCase().includes(searchQuery)) ||
-                    (item.sector && item.sector.toLowerCase().includes(searchQuery)) ||
-                    (item.pejabat && item.pejabat.toLowerCase().includes(searchQuery)) ||
-                    (item.kontak && item.kontak.includes(searchQuery)) ||
-                    (item.pakaian && item.pakaian.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.penerima && item.disposisi.penerima.toLowerCase().includes(searchQuery)) ||
-                    (item.disposisi && item.disposisi.catatan && item.disposisi.catatan.toLowerCase().includes(searchQuery)) ||
-                    (item.laporan && item.laporan.notulensi && item.laporan.notulensi.toLowerCase().includes(searchQuery))
-                );
-
-                return matchTab && matchPejabat && matchDate && matchSearch && isTargetPejabat;
-            });
-        }
-
-        function openSubordinateManagerModal() {
-            renderSubordinateManagerList();
-            document.getElementById('modal-subordinate-manager').classList.remove('hidden');
-        }
-
-        function closeSubordinateManagerModal() {
-            document.getElementById('modal-subordinate-manager').classList.add('hidden');
-        }
-
-        async function handleAddSubordinateSubmit(e) {
-            e.preventDefault();
-            const nama = document.getElementById('sub-add-nama').value.trim();
-            const email = document.getElementById('sub-add-email').value.trim();
-
-            const subData = { nama, email, instansi: 'Kecamatan Cinere' };
-            window.subordinatesList.push(subData);
-            renderSubordinateOptions();
-
-            if (typeof window.syncSubordinateToRealtimeDb === 'function') {
-                await window.syncSubordinateToRealtimeDb(subData);
-            }
-            sendToGoogleBackend({ action: 'add_subordinate', ...subData });
-
-            document.getElementById('sub-add-nama').value = '';
-            document.getElementById('sub-add-email').value = '';
-            alert(`Bawahan "${nama}" berhasil ditambahkan.`);
-        }
-
-        async function deleteSubordinateDirect(nama) {
-            if (confirm(`Hapus bawahan "${nama}" dari daftar?`)) {
-                window.subordinatesList = window.subordinatesList.filter(s => s.nama !== nama);
-                renderSubordinateOptions();
-
-                if (typeof window.deleteSubordinateFromRealtimeDb === 'function') {
-                    await window.deleteSubordinateFromRealtimeDb(nama);
-                }
-                sendToGoogleBackend({ action: 'delete_subordinate', nama });
-            }
-        }
-
-        function initSignaturePad() {
-            signatureCanvas = document.getElementById('signature-pad');
-            if (!signatureCanvas) return;
-            signatureCtx = signatureCanvas.getContext('2d');
-            signatureCtx.strokeStyle = "#0f172a";
-            signatureCtx.lineWidth = 2;
-
-            function getPos(e) {
-                const rect = signatureCanvas.getBoundingClientRect();
-                return {
-                    x: (e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0)) - rect.left,
-                    y: (e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0)) - rect.top
-                };
-            }
-
-            signatureCanvas.addEventListener('mousedown', (e) => { isDrawingSig = true; const pos = getPos(e); signatureCtx.beginPath(); signatureCtx.moveTo(pos.x, pos.y); });
-            signatureCanvas.addEventListener('mousemove', (e) => { if (!isDrawingSig) return; const pos = getPos(e); signatureCtx.lineTo(pos.x, pos.y); signatureCtx.stroke(); });
-            signatureCanvas.addEventListener('mouseup', () => isDrawingSig = false);
-
-            signatureCanvas.addEventListener('touchstart', (e) => { isDrawingSig = true; const pos = getPos(e); signatureCtx.beginPath(); signatureCtx.moveTo(pos.x, pos.y); });
-            signatureCanvas.addEventListener('touchmove', (e) => { if (!isDrawingSig) return; const pos = getPos(e); signatureCtx.lineTo(pos.x, pos.y); signatureCtx.stroke(); e.preventDefault(); });
-            signatureCanvas.addEventListener('touchend', () => isDrawingSig = false);
-        }
-
-        function clearSignature() {
-            if (signatureCtx && signatureCanvas) {
-                signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
-            }
-        }
-
-        function openDetailModal(id) {
-            selectedAgendaId = id;
-            const item = agendas.find(a => a.id === id);
-            if (!item) return;
-
-            const isAdmin = (currentRole === 'superadmin' || currentRole === 'admin');
-
-            document.getElementById('mdetail-judul').innerText = item.judul;
-            document.getElementById('mdetail-tanggal').innerText = item.tanggal;
-            document.getElementById('mdetail-waktu').innerText = `${formatCleanTimeWib(item.waktu)} WIB`;
-            document.getElementById('mdetail-tempat').innerText = item.tempat;
-            document.getElementById('mdetail-pakaian').innerText = item.pakaian || 'PDH Harian';
-            document.getElementById('mdetail-email-text').innerText = item.email || 'pejabat@gmail.com';
-            document.getElementById('mdetail-sector').innerText = item.sector;
-            document.getElementById('mdetail-pejabat').innerText = item.pejabat;
-
-            // Memastikan nomor telepon diawali angka 0 dan tidak terkonversi menjadi angka tanpa 0
-            const rawKontak = String(item.kontak || '081234567890').trim();
-            const cleanKontak = rawKontak.startsWith('0') || rawKontak.startsWith('+') ? rawKontak : '0' + rawKontak;
-            document.getElementById('mdetail-kontak').innerText = cleanKontak;
-            
-            document.getElementById('mdetail-pdf-filename').innerText = item.pdfName || 'Surat_Undangan.pdf';
-
-            // Tampilkan kontrol edit PDF khusus Admin
-            const adminPdfBox = document.getElementById('admin-pdf-reupload-box');
-            const btnEditAgenda = document.getElementById('btn-modal-edit-agenda');
-            const reuploadInput = document.getElementById('mdetail-reupload-pdf');
-            if (reuploadInput) reuploadInput.value = '';
-
-            if (isAdmin) {
-                if (adminPdfBox) adminPdfBox.classList.remove('hidden');
-                if (btnEditAgenda) btnEditAgenda.classList.remove('hidden');
-            } else {
-                if (adminPdfBox) adminPdfBox.classList.add('hidden');
-                if (btnEditAgenda) btnEditAgenda.classList.add('hidden');
-            }
-
-            const badgeStatus = document.getElementById('mdetail-badge-status');
-            badgeStatus.innerText = item.status.toUpperCase();
-
-            const dispBox = document.getElementById('mdetail-disposisi-box');
-            if (item.disposisi) {
-                dispBox.classList.remove('hidden');
-                document.getElementById('mdetail-disposisi-text').innerText = `[${item.disposisi.penerima}] - ${item.disposisi.catatan}`;
-            } else {
-                dispBox.classList.add('hidden');
-            }
-
-            const btnDisposisi = document.getElementById('btn-modal-disposisi');
-            const lockBadge = document.getElementById('mdetail-disposisi-locked-badge');
-
-            if (item.disposisi) {
-                if (isAdmin) {
-                    if (btnDisposisi) {
-                        btnDisposisi.classList.remove('hidden');
-                        btnDisposisi.innerHTML = `<i class="fa-solid fa-pen-to-square text-base"></i><span>Ubah Disposisi (Akses Admin)</span>`;
-                    }
-                    if (lockBadge) lockBadge.classList.add('hidden');
-                } else {
-                    if (btnDisposisi) btnDisposisi.classList.add('hidden');
-                    if (lockBadge) lockBadge.classList.remove('hidden');
-                }
-            } else {
-                if (btnDisposisi) {
-                    btnDisposisi.classList.remove('hidden');
-                    btnDisposisi.innerHTML = `<i class="fa-solid fa-share-nodes text-base"></i><span>Disposisikan Ke Bawahan (Sekdis / Sekban / Kabid)</span>`;
-                }
-                if (lockBadge) lockBadge.classList.add('hidden');
-            }
-
-            const lapBox = document.getElementById('mdetail-laporan-box');
-            if (item.laporan) {
-                lapBox.classList.remove('hidden');
-                document.getElementById('mdetail-laporan-notulensi').innerText = item.laporan.notulensi;
-                const fotowrap = document.getElementById('mdetail-laporan-fotowrap');
-                if (item.laporan.linkFoto) {
-                    fotowrap.innerHTML = `<a href="${item.laporan.linkFoto}" target="_blank" class="text-sky-600 font-bold hover:underline"><i class="fa-solid fa-link mr-1"></i>Buka Foto Dokumentasi Kegiatan</a>`;
-                } else {
-                    fotowrap.innerHTML = '';
-                }
-            } else {
-                lapBox.classList.add('hidden');
-            }
-
-            const btnDelete = document.getElementById('btn-modal-delete');
-            if (isAdmin) btnDelete.classList.remove('hidden');
-            else btnDelete.classList.add('hidden');
-
-            document.getElementById('modal-detail-agenda').classList.remove('hidden');
-        }
-
-        // Fungsi Khusus Admin untuk Mengunggah Ulang PDF dari Modal Detail
-        function saveAdminAgendaEdit() {
-            if (currentRole !== 'admin' && currentRole !== 'superadmin') {
-                alert("Fitur ini hanya dapat digunakan oleh Admin.");
-                return;
-            }
-
-            const item = agendas.find(a => a.id === selectedAgendaId);
-            if (!item) return;
-
-            const fileInput = document.getElementById('mdetail-reupload-pdf');
-            if (fileInput && fileInput.files && fileInput.files[0]) {
-                const file = fileInput.files[0];
-                if (file.size > 5 * 1024 * 1024) {
-                    alert("Ukuran file PDF melebihi 5MB. Silakan unggah file PDF yang lebih kecil.");
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    item.pdfData = evt.target.result;
-                    item.pdfName = file.name;
-                    item.updatedAt = new Date().toISOString();
-
-                    saveAndSyncUpdatedAgenda(item);
-                    alert(`File PDF baru "${file.name}" berhasil diunggah!`);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                alert("Agenda telah diperbarui.");
-                closeDetailModal();
-            }
-        }
-
-        function saveAndSyncUpdatedAgenda(item) {
-            renderAgendas();
-            sendToGoogleBackend(item);
-            if (typeof window.syncAgendaToRealtimeDb === 'function') {
-                window.syncAgendaToRealtimeDb(item);
-            }
-            closeDetailModal();
-        }
-
-        function closeDetailModal() {
-            document.getElementById('modal-detail-agenda').classList.add('hidden');
-        }
-
-        function closeFormModal() {
-            document.getElementById('modal-form-agenda').classList.add('hidden');
-        }
-
-        function showSaveNotification(agenda) {
-            const modal = document.getElementById('saveNotificationModal');
-            const emailText = document.getElementById('saveNotificationEmail');
-            if (emailText) {
-                emailText.innerHTML = `<i class="fa-solid fa-envelope text-sky-500 mr-1"></i>Pejabat Target: <strong>${agenda.email || 'pejabat@gmail.com'}</strong>`;
-            }
-            if (modal) modal.classList.remove('hidden');
-        }
-
-        function closeSaveNotificationModal() {
-            const modal = document.getElementById('saveNotificationModal');
-            if (modal) modal.classList.add('hidden');
-        }
-
-        function openDisposisiModalCurrent() {
-            closeDetailModal();
-            clearSignature();
-            renderSubordinateOptions();
-
-            const selectEl = document.getElementById('disp-penerima');
-            const dispEmailInput = document.getElementById('disp-email');
-            if (selectEl && selectEl.value) {
-                const parts = selectEl.value.split('|');
-                if (parts.length > 1 && dispEmailInput) {
-                    dispEmailInput.value = parts[1];
-                }
-            }
-
-            document.getElementById('modal-disposisi').classList.remove('hidden');
-        }
-
-        function closeDisposisiModal() {
-            document.getElementById('modal-disposisi').classList.add('hidden');
-        }
-
-        function openLaporanModalCurrent() {
-            closeDetailModal();
-            document.getElementById('modal-laporan').classList.remove('hidden');
-        }
-
-        function closeLaporanModal() {
-            document.getElementById('modal-laporan').classList.add('hidden');
-        }
-
-        function handlePenerimaDisposisiChange(val) {
-            const parts = val.split('|');
-            if (parts.length > 1) {
-                document.getElementById('disp-email').value = parts[1];
-            }
-        }
-
-        function previewPDFInModal() {
-            const item = agendas.find(a => a.id === selectedAgendaId);
-            if (!item) return;
-
-            const pdfViewerTitle = document.getElementById('pdf-viewer-title');
-            const pdfIframe = document.getElementById('pdf-iframe');
-            const btnDownload = document.getElementById('btn-download-pdf-direct');
-
-            const fileName = item.pdfName || 'Surat_Undangan.pdf';
-            if (pdfViewerTitle) pdfViewerTitle.innerText = fileName;
-
-            if (item.pdfData && item.pdfData.startsWith('data:application/pdf')) {
-                if (pdfIframe) pdfIframe.src = item.pdfData;
-                if (btnDownload) {
-                    btnDownload.href = item.pdfData;
-                    btnDownload.download = fileName;
-                }
-                document.getElementById('modal-pdf-viewer').classList.remove('hidden');
-            } else {
-                // Fallback PDF Generator jika file belum terunggah dalam format base64
-                const dummyPdfContent = `%PDF-1.4
-1 0 obj <</Type /Catalog /Pages 2 0 R>> endobj
-2 0 obj <</Type /Pages /Kids [3 0 R] /Count 1>> endobj
-3 0 obj <</Type /Page /Parent 2 0 R /Resources <<>> /MediaBox [0 0 612 792] /Contents 4 0 R>> endobj
-4 0 obj <</Length 120>> stream
-BT
-/F1 12 Tf
-50 700 Td
-(SURAT UNDANGAN AGENDA PEJABAT - RAKORBAE) Tj
-0 -20 Td
-(Perihal: ${item.judul.replace(/[()]/g, '')}) Tj
-0 -20 Td
-(Tanggal: ${item.tanggal} | Waktu: ${item.waktu} WIB) Tj
-0 -20 Td
-(Tempat: ${item.tempat.replace(/[()]/g, '')}) Tj
-ET
-endstream endobj
-xref
-0 5
-0000000000 65535 f 
-0000000009 00000 n 
-0000000058 00000 n 
-0000000115 00000 n 
-0000000222 00000 n 
-trailer <</Size 5 /Root 1 0 R>>
-startxref
-393
-%%EOF`;
-                const blob = new Blob([dummyPdfContent], { type: 'application/pdf' });
-                const blobUrl = URL.createObjectURL(blob);
-
-                if (pdfIframe) pdfIframe.src = blobUrl;
-                if (btnDownload) {
-                    btnDownload.href = blobUrl;
-                    btnDownload.download = fileName;
-                }
-                document.getElementById('modal-pdf-viewer').classList.remove('hidden');
-            }
-        }
-
-        function closePdfViewerModal() {
-            const pdfIframe = document.getElementById('pdf-iframe');
-            if (pdfIframe) pdfIframe.src = 'about:blank';
-            document.getElementById('modal-pdf-viewer').classList.add('hidden');
-        }
-
-        function sendWhatsAppAgendaDirect() {
-            const item = agendas.find(a => a.id === selectedAgendaId);
-            if (!item) return;
-
-            let text = `📌 *AGENDA KEGIATAN PEJABAT - RAKORBAE*\n\n`;
-            text += `📝 *Perihal:* ${item.judul}\n`;
-            text += `📅 *Hari/Tgl:* ${item.tanggal}\n`;
-            text += `⏰ *Waktu:* ${formatCleanTimeWib(item.waktu)} WIB\n`;
-            text += `📍 *Tempat:* ${item.tempat}\n`;
-            text += `👔 *Pakaian:* ${item.pakaian}\n`;
-            text += `👥 *Dihadiri:* ${item.pejabat}\n`;
-            text += `🏢 *Penyelenggara:* ${item.sector}\n`;
-            text += `📞 *Kontak:* ${item.kontak}\n`;
-
-            if (item.disposisi) {
-                text += `\n--- *DISPOSISI / DELEGASI* ---\n`;
-                text += `👉 *Kepada:* ${item.disposisi.penerima}\n`;
-                text += `💬 *Instruksi:* "${item.disposisi.catatan}"\n`;
-            }
-
-            if (item.laporan) {
-                text += `\n--- *LAPORAN HASIL KEGIATAN* ---\n`;
-                text += `📝 *Notulensi:* ${item.laporan.notulensi}\n`;
-            }
-
-            text += `\n_Dikirim via Portal Website RaKorBae_`;
-
-            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-            window.open(url, '_blank');
-        }
-
-        function handleFormSubmit(e) {
-            e.preventDefault();
-
-            const pdfInput = document.getElementById('f-pdf');
-            if (pdfInput.files && pdfInput.files[0]) {
-                const file = pdfInput.files[0];
-                if (file.size > 5 * 1024 * 1024) {
-                    alert("Ukuran file PDF melebihi 5MB. Silakan unggah file PDF yang lebih kecil.");
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    saveNewAgenda(file.name, evt.target.result);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                saveNewAgenda('Surat_Undangan.pdf', null);
-            }
-        }
-
-        function saveNewAgenda(pdfName, pdfData) {
-            let rawKontak = String(document.getElementById('f-kontak').value || '081234567890').trim();
-            if (rawKontak && !rawKontak.startsWith('0') && !rawKontak.startsWith('+')) {
-                rawKontak = '0' + rawKontak;
-            }
-
-            const newAgenda = {
-                id: 'RKB-' + Math.floor(1000 + Math.random() * 9000),
-                judul: document.getElementById('f-judul').value,
-                tanggal: document.getElementById('f-tanggal').value,
-                waktu: formatCleanTimeWib(document.getElementById('f-waktu').value),
-                tempat: document.getElementById('f-tempat').value,
-                email: document.getElementById('f-email').value,
-                pakaian: document.getElementById('f-pakaian').value || 'PDH Harian',
-                kontak: rawKontak,
-                pejabat: document.getElementById('f-pejabat').value,
-                sector: document.getElementById('f-sector').value || 'KECAMATAN CINERE',
-                status: 'terjadwal',
-                disposisi: null,
-                laporan: null,
-                pdfData: pdfData,
-                pdfName: pdfName,
-                createdAt: new Date().toISOString()
-            };
-
-            agendas.unshift(newAgenda);
-            
-            if (newAgenda.tanggal) {
-                selectedDateStr = newAgenda.tanggal;
-                const [y, m] = newAgenda.tanggal.split('-').map(Number);
-                currentDisplayedMonthDate = new Date(y, m - 1, 1);
-                initCalendarAndHeader();
-            }
-
-            closeFormModal();
-            renderAgendas();
-
-            sendToGoogleBackend(newAgenda);
-            if (typeof window.syncAgendaToRealtimeDb === 'function') {
-                window.syncAgendaToRealtimeDb(newAgenda);
-            }
-
-            showSaveNotification(newAgenda);
-        }
-
-        function handleLaporanSubmit(e) {
-            e.preventDefault();
-            const item = agendas.find(a => a.id === selectedAgendaId);
-            if (!item) return;
-
-            const notulensi = document.getElementById('lap-notulensi').value;
-            const linkFoto = document.getElementById('lap-foto').value;
-
-            item.status = 'selesai';
-            item.laporan = {
-                notulensi: notulensi,
-                linkFoto: linkFoto,
-                reportedAt: new Date().toISOString()
-            };
-
-            closeLaporanModal();
-            renderAgendas();
-
-            sendToGoogleBackend(item);
-            if (typeof window.syncAgendaToRealtimeDb === 'function') {
-                window.syncAgendaToRealtimeDb(item);
-            }
-
-            alert("Laporan Hasil Kegiatan berhasil disimpan.");
-        }
-
-        function deleteCurrentAgenda() {
-            if (!selectedAgendaId) return;
-            const item = agendas.find(a => a.id === selectedAgendaId);
-            if (!item) return;
-
-            if (confirm(`Apakah Anda yakin ingin menghapus agenda "${item.judul}"?`)) {
-                agendas = agendas.filter(a => a.id !== selectedAgendaId);
-                closeDetailModal();
-                renderAgendas();
-
-                sendToGoogleBackend({ action: 'delete_agenda', id: selectedAgendaId });
-                if (typeof window.deleteAgendaFromRealtimeDb === 'function') {
-                    window.deleteAgendaFromRealtimeDb(selectedAgendaId);
-                }
-            }
-        }
-
-        function exportToCSV() {
-            let csv = "ID Agenda,Judul,Tanggal,Waktu,Tempat,Email,Pejabat,Sector,Status,Penerima Disposisi,Catatan Disposisi,Notulensi Laporan\n";
-            agendas.forEach(a => {
-                const pDisp = a.disposisi ? a.disposisi.penerima : "";
-                const cDisp = a.disposisi ? a.disposisi.catatan.replace(/"/g, '""') : "";
-                const pNotulensi = a.laporan ? a.laporan.notulensi.replace(/"/g, '""') : "";
-                csv += `"${a.id}","${a.judul}","${a.tanggal}","${formatCleanTimeWib(a.waktu)}","${a.tempat}","${a.email}","${a.pejabat}","${a.sector}","${a.status}","${pDisp}","${cDisp}","${pNotulensi}"\n`;
-            });
-
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', `Rekap_Agenda_RaKorBae_${selectedDateStr}.csv`);
-            a.click();
-        }
-
-        function sendToGoogleBackend(data) {
-            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
+            window.registeredUsers.push(newUser);
 
             fetch(APPS_SCRIPT_WEB_APP_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...data, role: currentRole })
-            }).then(() => {
-                console.log('Data tersimpan ke Google Sheets & Google Calendar/Gmail');
-                setTimeout(loadAgendasFromGoogleSheets, 1200);
-            }).catch(err => console.error('Error Google Sync:', err));
-        }
+                body: JSON.stringify(newUser)
+            }).catch(err => console.log('Register sync notice:', err));
 
-        window.syncAndRenderAllUI = function() {
-            renderDateStrip(currentDisplayedMonthDate);
-            renderAgendas();
-            updateDashboardStats();
+            alert(`Pendaftaran Akun Berhasil!\n\nNama: ${fullname}\nUsername: ${username}\nSilakan login menggunakan akun baru Anda.`);
+            closeRegisterModal();
 
-            // LAKUKAN POPULATE DROPDOWN HANYA JIKA MODAL TIDAK SEDANG DIBUKA UNTUK MENCEGAH FLICKER/RESET INPUT USER
-            const isModalOpen = !document.getElementById('modal-form-agenda').classList.contains('hidden');
-            if (!isModalOpen) {
-                populatePejabatUserDropdown();
-            }
-        };
-
-        window.onload = function() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            selectedDateStr = `${yyyy}-${mm}-${dd}`;
-            currentDisplayedMonthDate = new Date(today.getFullYear(), today.getMonth(), 1);
-
-            agendas.forEach(a => { 
-                if(!a.tanggal) a.tanggal = selectedDateStr; 
-                a.waktu = formatCleanTimeWib(a.waktu);
-            });
-
-            initCalendarAndHeader();
-            renderSubordinateOptions();
-            syncAndRenderAllUI();
-            startLiveClock();
-            
-            // CEK DAN RESTORE SESI LOGIN DARI LOCAL STORAGE SAAT REFRESH
-            checkExistingSession();
-
-            loadAgendasFromGoogleSheets();
-            initSignaturePad();
-
-            setInterval(() => {
-                loadAgendasFromGoogleSheets();
-            }, 5000);
-        };
-
-        // CEK APAKAH USER SUDAH LOGIN SEBELUMNYA (PERSISTENCE REFRESH)
-        function checkExistingSession() {
-            try {
-                const savedUser = localStorage.getItem('rakorbae_active_user');
-                const savedRole = localStorage.getItem('rakorbae_active_role');
-                
-                if (savedUser) {
-                    currentUser = JSON.parse(savedUser);
-                    currentRole = savedRole || currentUser.role || 'pejabat';
-                    
-                    switchRole(currentRole);
-                    
-                    const loginScreen = document.getElementById('login-screen');
-                    if (loginScreen) loginScreen.classList.add('hidden');
-                }
-            } catch (err) {
-                console.warn("Gagal merestore sesi login:", err);
-            }
-        }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value.trim().toLowerCase();
-            const password = String(document.getElementById('login-password').value).trim();
-
-            if (!username || !password) {
-                showNoAccountNotification("Mohon isi Username dan Password Anda.", "Peringatan Login", false);
-                return;
-            }
-
-            const foundUser = window.registeredUsers.find(u => String(u.username).toLowerCase().trim() === username);
-
-            if (foundUser) {
-                const registeredPassword = String(foundUser.password || '').trim();
-                if (registeredPassword !== '' && registeredPassword !== password) {
-                    showNoAccountNotification("Username dan password yang Anda masukkan salah, silakan coba lagi.", "Kredensial Salah", false);
-                    return;
-                }
-                
-                currentUser = foundUser;
-                const userRole = foundUser.role ? String(foundUser.role).toLowerCase() : (username.includes('admin') ? 'admin' : 'pejabat');
-                
-                // SIMPAN SESI AKUN KE LOCAL STORAGE
-                localStorage.setItem('rakorbae_active_user', JSON.stringify(currentUser));
-                localStorage.setItem('rakorbae_active_role', userRole);
-
-                switchRole(userRole);
-                document.getElementById('login-screen').classList.add('hidden');
-            } else {
-                showNoAccountNotification(`Akun dengan username "${username}" belum terdaftar di database. Silakan daftarkan akun baru Anda untuk mendapatkan akses portal.`, "Belum Memiliki Akun", true);
-            }
+            document.getElementById('login-username').value = username;
+            document.getElementById('login-password').value = password;
         }
 
         function logoutPortal() {
-            if (confirm("Apakah Anda yakin ingin keluar dari Portal RaKorBae?")) {
-                // HAPUS SESI LOGIN DARI LOCAL STORAGE HANYA SAAT TANDAI LOGOUT
-                localStorage.removeItem('rakorbae_active_user');
-                localStorage.removeItem('rakorbae_active_role');
-                
-                const loginScreen = document.getElementById('login-screen');
-                if (loginScreen) loginScreen.classList.remove('hidden');
-                
-                document.getElementById('login-username').value = '';
-                document.getElementById('login-password').value = '';
-            }
+            currentUser = null;
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
         }
 
-        function selectDatePill(dateVal) {
-            selectedDateStr = dateVal;
-            const pastWarn = document.getElementById('past-date-warning');
-            
-            if (isPastDate(dateVal)) {
-                if (pastWarn) pastWarn.classList.remove('hidden');
-            } else {
-                if (pastWarn) pastWarn.classList.add('hidden');
-            }
+        function openFormModal() { document.getElementById('modal-form-agenda').classList.remove('hidden'); }
+        function closeFormModal() { document.getElementById('modal-form-agenda').classList.add('hidden'); }
+        function openSuratMasukModal() { renderSuratMasukTable(); document.getElementById('modal-surat-masuk').classList.remove('hidden'); }
+        function closeSuratMasukModal() { document.getElementById('modal-surat-masuk').classList.add('hidden'); }
+        function openSubordinateManagerModal() { document.getElementById('modal-subordinate-manager').classList.remove('hidden'); }
+        function closeSubordinateManagerModal() { document.getElementById('modal-subordinate-manager').classList.add('hidden'); }
+        function previewPDFInModal() { alert("Membuka Dokumen PDF"); }
 
-            renderDateStrip(currentDisplayedMonthDate);
-            renderAgendas();
-        }
+        function renderSuratMasukTable() {
+            const tbody = document.getElementById('surat-masuk-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
 
-        function selectToday() {
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            selectedDateStr = `${yyyy}-${mm}-${dd}`;
-            currentDisplayedMonthDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            const tipeFilter = document.getElementById('sm-tipe-filter').value;
+            const searchVal = document.getElementById('sm-search').value.toLowerCase();
 
-            const pastWarn = document.getElementById('past-date-warning');
-            if (pastWarn) pastWarn.classList.add('hidden');
+            const filtered = window.agendas.filter(item => {
+                if (tipeFilter !== 'semua' && item.tipe !== tipeFilter) return false;
+                if (searchVal && !item.judul.toLowerCase().includes(searchVal) && !item.tempat.toLowerCase().includes(searchVal)) return false;
+                return true;
+            });
 
-            initCalendarAndHeader();
-            renderAgendas();
-
-            const targetPill = document.getElementById(`pill-date-${selectedDateStr}`);
-            if (targetPill) {
-                targetPill.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
-        }
-
-        function openFormModal() {
-            if (selectedDateStr && isPastDate(selectedDateStr)) {
-                alert(`Tanggal ${selectedDateStr} telah terlewat. Pembuatan agenda baru hanya dapat dilakukan untuk Hari Ini atau Tanggal Mendatang.`);
-                return;
-            }
-            populatePejabatUserDropdown();
-            if (selectedDateStr) {
-                const dateInput = document.getElementById('f-tanggal');
-                if (dateInput) dateInput.value = selectedDateStr;
-            }
-            document.getElementById('modal-form-agenda').classList.remove('hidden');
-        }
-
-        function renderAgendas() {
-            const filtered = filterData();
-            const dGrid = document.getElementById('d-agenda-grid');
-            if (!dGrid) return;
-            dGrid.innerHTML = '';
-            updateNextAgendaInfo();
-
-            if (filtered.length === 0) {
-                dGrid.innerHTML = `
-                    <div class="col-span-full py-12 bg-white rounded-3xl border border-slate-200 text-center text-slate-400 space-y-3 shadow-sm px-4">
-                        <i class="fa-regular fa-calendar-xmark text-4xl text-slate-300"></i>
-                        <p class="font-bold text-xs sm:text-sm">Tidak ada agenda kegiatan ditemukan pada tanggal / filter ini (${selectedDateStr || 'Semua'}).</p>
-                        ${(currentRole === 'superadmin' || currentRole === 'admin') && !isPastDate(selectedDateStr) ? '<button onclick="openFormModal()" class="px-4 py-2 bg-sky-600 text-white font-bold rounded-xl text-xs hover:bg-sky-700 shadow">+ Tambah Agenda Baru</button>' : ''}
-                    </div>
-                `;
-                return;
-            }
-
-            filtered.forEach(item => {
-                const isDisposisi = (item.disposisi !== null || item.status === 'ditolak');
-                const isSelesai = isAgendaCompleted(item);
-
-                let badgeColor = "bg-sky-100 text-sky-800 border-sky-300";
-                let borderLeft = "border-sky-500";
-                let statusLabel = "TERJADWAL";
-
-                if (isSelesai) {
-                    badgeColor = "bg-emerald-700 text-white border-emerald-800";
-                    borderLeft = "border-emerald-600";
-                    statusLabel = "SELESAI (LHP)";
-                } else if (isDisposisi) {
-                    badgeColor = "bg-amber-100 text-amber-900 border-amber-300 ring-1 ring-amber-300";
-                    borderLeft = "border-amber-500";
-                    statusLabel = "TERJADWAL (DISPOSISI)";
-                }
-
-                const cleanWaktu = formatCleanTimeWib(item.waktu);
-
-                dGrid.innerHTML += `
-                    <div onclick="openDetailModal('${item.id}')" class="card-agenda bg-white p-4 sm:p-5 rounded-3xl border-l-4 ${borderLeft} border-t border-r border-b border-slate-200 shadow-sm hover:shadow-xl transition cursor-pointer flex flex-col justify-between space-y-3.5 relative overflow-hidden">
-                        ${isDisposisi ? '<div class="absolute top-0 right-0 w-12 h-12 overflow-hidden pointer-events-none"><div class="bg-amber-500 text-white text-[8px] font-black text-center py-0.5 w-16 absolute top-2 -right-4 rotate-45 shadow">DISP</div></div>' : ''}
-                        
-                        <div class="space-y-2.5">
-                            <div class="flex justify-between items-center pr-4">
-                                <span class="bg-slate-100 text-slate-800 font-black px-2.5 py-1 rounded-xl text-[11px] flex items-center gap-1.5 border border-slate-200">
-                                    <i class="fa-regular fa-clock text-sky-600"></i> ${cleanWaktu} WIB
-                                </span>
-                                <span class="${badgeColor} text-[9px] sm:text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border uppercase tracking-wider">
-                                    ${statusLabel}
-                                </span>
-                            </div>
-                            <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm leading-snug line-clamp-2">${item.judul}</h4>
-                            <div class="space-y-1 text-xs text-slate-600">
-                                <p class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-rose-500 w-3.5"></i> <span class="font-semibold truncate">${item.tempat}</span></p>
-                                <p class="flex items-center gap-2"><i class="fa-solid fa-user-tie text-amber-500 w-3.5"></i> <span class="font-semibold truncate">${item.pejabat}</span></p>
-                                <p class="flex items-center gap-2"><i class="fa-solid fa-building text-sky-500 w-3.5"></i> <span class="font-semibold truncate">${item.sector}</span></p>
-                            </div>
-                        </div>
-
-                        ${item.disposisi ? `
-                            <div class="bg-amber-50/90 p-2 sm:p-2.5 rounded-2xl text-xs text-amber-950 font-semibold border border-amber-300 space-y-0.5 shadow-inner">
-                                <p class="font-extrabold flex items-center gap-1 text-[10px] text-amber-900"><i class="fa-solid fa-share-nodes text-amber-600"></i> Didelegasikan Kepada Akun:</p>
-                                <p class="text-[11px] font-black text-amber-950">${item.disposisi.penerima}</p>
-                                <p class="text-[10px] text-amber-800 italic line-clamp-1">"${item.disposisi.catatan}"</p>
-                            </div>
-                        ` : ''}
-
-                        ${item.laporan ? `
-                            <div class="bg-emerald-50/90 p-2 sm:p-2.5 rounded-2xl text-xs text-emerald-950 font-semibold border border-emerald-300 shadow-inner">
-                                <p class="font-bold flex items-center gap-1 text-[10px] text-emerald-900"><i class="fa-solid fa-clipboard-check text-emerald-600"></i> Notulensi Hasil Kegiatan:</p>
-                                <p class="text-[11px] font-medium text-emerald-950 truncate">${item.laporan.notulensi}</p>
-                            </div>
-                        ` : ''}
-
-                        <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400 font-bold">
-                            <span class="truncate max-w-[140px]"><i class="fa-solid fa-paperclip text-slate-400 mr-1"></i> ${item.pdfName || 'Surat_Undangan.pdf'}</span>
-                            <span class="text-sky-600 hover:text-sky-800 font-extrabold flex items-center gap-1 text-xs whitespace-nowrap">Lihat Detail <i class="fa-solid fa-arrow-right"></i></span>
-                        </div>
-                    </div>
+            filtered.forEach((item, idx) => {
+                tbody.innerHTML += `
+                    <tr class="hover:bg-slate-50 border-b">
+                        <td class="p-2.5 font-bold">${idx + 1}</td>
+                        <td class="p-2.5 font-bold text-sky-700">${item.tipe || 'Agenda Kegiatan'}</td>
+                        <td class="p-2.5 font-semibold">${item.judul}</td>
+                        <td class="p-2.5">${item.tanggal} (${formatCleanTimeWib(item.waktu)} WIB)</td>
+                        <td class="p-2.5">${item.tempat}</td>
+                        <td class="p-2.5 font-extrabold text-amber-700">${item.folderDrive || 'Agenda'}</td>
+                    </tr>
                 `;
             });
+            document.getElementById('sm-count-info').innerText = `Total: ${filtered.length} Surat Masuk`;
         }
 
-        function setTabFilter(tab) {
-            currentTabFilter = tab;
-            ['all', 'terjadwal', 'ditolak', 'selesai'].forEach(t => {
-                const dBtn = document.getElementById(`d-tab-${t}`);
-                if (dBtn) {
-                    if (t === tab) {
-                        dBtn.className = "flex-1 py-1 px-2 rounded-xl bg-sky-600 text-white shadow text-center font-extrabold";
-                    } else {
-                        dBtn.className = "flex-1 py-1 px-2 rounded-xl text-slate-600 hover:bg-slate-200 text-center";
-                    }
-                }
+        function exportSuratMasukCSV() {
+            let csv = "No,Tipe Dokumen,Judul / Perihal,Tanggal & Waktu,Tempat,Folder Google Drive\n";
+            window.agendas.forEach((a, idx) => {
+                csv += `"${idx+1}","${a.tipe || 'Agenda'}","${a.judul.replace(/"/g, '""')}","${a.tanggal} ${formatCleanTimeWib(a.waktu)}","${a.tempat}","${a.folderDrive || 'Agenda'}"\n`;
             });
-            renderAgendas();
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Rekap_Surat_Masuk_RaKorBae.csv';
+            link.click();
         }
 
-        function handleDisposisiSubmit(e) {
+        function addDateRow() {
+            const container = document.getElementById('dynamic-date-container');
+            if (!container) return;
+            const newRow = document.createElement('div');
+            newRow.className = "date-time-row grid grid-cols-1 sm:grid-cols-12 gap-2 items-end bg-slate-50 p-2.5 rounded-2xl border mt-2";
+            newRow.innerHTML = `
+                <div class="sm:col-span-6">
+                    <label class="block font-bold text-slate-700 mb-1">Tanggal</label>
+                    <input type="date" name="f-tanggal[]" required class="w-full p-2 bg-white border rounded-xl font-semibold">
+                </div>
+                <div class="sm:col-span-5">
+                    <label class="block font-bold text-slate-700 mb-1">Waktu (WIB)</label>
+                    <input type="time" name="f-waktu[]" required class="w-full p-2 bg-white border rounded-xl font-semibold">
+                </div>
+                <div class="sm:col-span-1 flex justify-center pb-1">
+                    <button type="button" onclick="this.closest('.date-time-row').remove()" class="text-rose-500 font-bold"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `;
+            container.appendChild(newRow);
+        }
+
+        function handlePejabatUserSelect(val) {
+            if (!val) return;
+            document.getElementById('f-email').value = val;
+        }
+
+        function handleFormSubmit(e) {
             e.preventDefault();
-            const item = agendas.find(a => a.id === selectedAgendaId);
-            if (!item) return;
+            const tipe = document.getElementById('f-tipe').value;
+            const judul = document.getElementById('f-judul').value;
+            const tempat = document.getElementById('f-tempat').value;
+            const email = document.getElementById('f-email').value;
+            const pakaian = document.getElementById('f-pakaian').value || 'Batik Harian / PDH';
+            const kontak = document.getElementById('f-kontak').value || '081234567890';
+            const pejabat = document.getElementById('f-pejabat').value;
+            const sector = document.getElementById('f-sector').value || 'Kecamatan Cinere';
+            const folderDrive = tipe === 'Surat Edaran' ? 'Surat Edaran' : 'Agenda';
 
-            const penerimaVal = document.getElementById('disp-penerima').value.split('|')[0];
-            const emailVal = document.getElementById('disp-email').value;
-            const catatanVal = document.getElementById('disp-catatan').value;
+            const dateInputs = document.querySelectorAll('input[name="f-tanggal[]"]');
+            const timeInputs = document.querySelectorAll('input[name="f-waktu[]"]');
 
-            item.status = 'ditolak'; 
-            item.disposisi = {
-                penerima: penerimaVal,
-                email: emailVal,
-                catatan: catatanVal,
-                disposedAt: new Date().toISOString()
-            };
+            for (let i = 0; i < dateInputs.length; i++) {
+                const tgl = dateInputs[i].value;
+                const wkt = timeInputs[i].value;
+                if (!tgl || !wkt) continue;
 
-            closeDisposisiModal();
-            renderAgendas();
+                const newData = {
+                    id: 'RKB-' + Math.floor(1000 + Math.random() * 9000),
+                    tipe,
+                    judul: dateInputs.length > 1 ? `${judul} (Hari ke-${i+1})` : judul,
+                    tanggal: tgl,
+                    waktu: formatCleanTimeWib(wkt),
+                    tempat,
+                    email,
+                    pakaian,
+                    kontak,
+                    pejabat,
+                    sector,
+                    status: 'terjadwal',
+                    folderDrive
+                };
 
-            sendToGoogleBackend(item);
-            if (typeof window.syncAgendaToRealtimeDb === 'function') {
-                window.syncAgendaToRealtimeDb(item);
+                window.agendas.unshift(newData);
+
+                fetch(APPS_SCRIPT_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newData)
+                }).catch(err => console.log('Sync notice:', err));
             }
 
-            sendWhatsAppAgendaDirect();
-        }
-
-        function loadAgendasFromGoogleSheets() {
-            if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT_ID_HERE')) return;
-
-            fetch(APPS_SCRIPT_WEB_APP_URL)
-                .then(res => res.json())
-                .then(resData => {
-                    if (resData.result === 'success') {
-                        let shouldReRender = false;
-
-                        if (resData.data && Array.isArray(resData.data)) {
-                            resData.data.forEach(fetchedItem => {
-                                if (!fetchedItem.id) return;
-                                fetchedItem.waktu = formatCleanTimeWib(fetchedItem.waktu);
-                                const idx = agendas.findIndex(a => String(a.id).trim() === String(fetchedItem.id).trim());
-                                if (idx !== -1) {
-                                    agendas[idx] = { ...agendas[idx], ...fetchedItem };
-                                } else {
-                                    agendas.push(fetchedItem);
-                                }
-                            });
-                            shouldReRender = true;
-                        }
-
-                        if (resData.subordinates && Array.isArray(resData.subordinates)) {
-                            window.subordinatesList = resData.subordinates;
-                            renderSubordinateOptions();
-                        }
-
-                        if (resData.users && Array.isArray(resData.users)) {
-                            resData.users.forEach(u => {
-                                if (!u.username) return;
-                                const normUsername = String(u.username).toLowerCase().trim();
-                                const idx = window.registeredUsers.findIndex(existing => String(existing.username).toLowerCase().trim() === normUsername);
-                                
-                                if (idx !== -1) {
-                                    window.registeredUsers[idx] = { ...window.registeredUsers[idx], ...u };
-                                } else {
-                                    window.registeredUsers.push(u);
-                                }
-
-                                if (currentUser && String(currentUser.username).toLowerCase().trim() === normUsername) {
-                                    currentUser = { ...currentUser, ...u };
-                                    if (typeof switchRole === 'function') {
-                                        switchRole(currentUser.role || currentRole);
-                                    }
-                                }
-                            });
-                        }
-
-                        if (shouldReRender) {
-                            syncAndRenderAllUI();
-                        }
-                    }
-                })
-                .catch(err => console.log('Google Sheets fetch bypass (demo mode)'));
+            closeFormModal();
+            syncAndRenderAllUI();
+            alert(`Berhasil! Data ${tipe} tersimpan, masuk ke Surat Masuk, dan diunggah ke Google Drive (Folder: ${folderDrive})!`);
         }
     </script>
 </body>
