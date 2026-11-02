@@ -1073,10 +1073,34 @@
             const currentMonth = currentDateObj.getMonth();
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-            // Peta status agenda per tanggal
+            // Peta status agenda per tanggal BERDASARKAN HAK AKSES PEJABAT LOGIN
             const dateStatusMap = {};
             agendas.forEach(a => {
-                if (a.tanggal) {
+                if (!a.tanggal) return;
+
+                // Terapkan Aturan Akses Strict Pejabat yang Sama dengan filterData()
+                let isTargetPejabat = true;
+                if (currentRole === 'pejabat' && currentUser) {
+                    const userEmail = (currentUser.email || '').toLowerCase().trim();
+                    const userJabatan = (currentUser.jabatan || '').toLowerCase().trim();
+                    const userPejabatLevel = (currentUser.pejabat || '').toLowerCase().trim();
+                    const userName = (currentUser.fullname || '').toLowerCase().trim();
+
+                    const isDirectTargetEmail = userEmail && a.email && (a.email.toLowerCase() === userEmail);
+                    const isDirectTargetName = userName && a.pejabat && a.pejabat.toLowerCase().includes(userName);
+                    const isDirectTargetJabatan = userJabatan && a.pejabat && a.pejabat.toLowerCase().includes(userJabatan);
+                    const isDirectTargetLevel = userPejabatLevel && a.pejabat && a.pejabat.toLowerCase().includes(userPejabatLevel);
+
+                    const isDisposisiTargetEmail = a.disposisi && a.disposisi.email && userEmail && (a.disposisi.email.toLowerCase() === userEmail);
+                    const isDisposisiTargetName = a.disposisi && a.disposisi.penerima && userName && (a.disposisi.penerima.toLowerCase().includes(userName));
+                    const isDisposisiTargetJabatan = a.disposisi && a.disposisi.penerima && userJabatan && (a.disposisi.penerima.toLowerCase().includes(userJabatan));
+
+                    isTargetPejabat = isDirectTargetEmail || isDirectTargetName || isDirectTargetJabatan || isDirectTargetLevel || 
+                                      isDisposisiTargetEmail || isDisposisiTargetName || isDisposisiTargetJabatan;
+                }
+
+                // Hanya catat tanggal untuk kalender jika agenda tersebut adalah hak akses akun pejabat login
+                if (isTargetPejabat) {
                     const t = a.tanggal.trim();
                     if (!dateStatusMap[t]) dateStatusMap[t] = { hasActive: false, hasSelesai: false };
                     if (a.status === 'selesai' || a.laporan !== null) {
@@ -1509,6 +1533,11 @@
 
                 const matchDate = searchQuery ? true : (!selectedDateStr || item.tanggal === selectedDateStr);
                 
+                // HAK AKSES STRICT PEJABAT:
+                // Pejabat HANYA dapat melihat agenda jika:
+                // 1. Email sasaran agenda cocok dengan email akun login pejabat
+                // 2. Nama / Jabatan pejabat terdaftar pada target agenda
+                // 3. Agenda tersebut di-DISPOSISIKAN (email/nama penerima disposisi cocok dengan pejabat login)
                 let isTargetPejabat = true;
                 if (currentRole === 'pejabat' && currentUser) {
                     const userEmail = (currentUser.email || '').toLowerCase().trim();
@@ -1516,11 +1545,17 @@
                     const userPejabatLevel = (currentUser.pejabat || '').toLowerCase().trim();
                     const userName = (currentUser.fullname || '').toLowerCase().trim();
 
-                    isTargetPejabat = (item.email && item.email.toLowerCase() === userEmail) ||
-                                      (item.pejabat && item.pejabat.toLowerCase().includes(userJabatan)) ||
-                                      (item.pejabat && item.pejabat.toLowerCase().includes(userPejabatLevel)) ||
-                                      (userName && item.pejabat && item.pejabat.toLowerCase().includes(userName)) ||
-                                      (item.disposisi && item.disposisi.email && item.disposisi.email.toLowerCase() === userEmail);
+                    const isDirectTargetEmail = userEmail && item.email && (item.email.toLowerCase() === userEmail);
+                    const isDirectTargetName = userName && item.pejabat && item.pejabat.toLowerCase().includes(userName);
+                    const isDirectTargetJabatan = userJabatan && item.pejabat && item.pejabat.toLowerCase().includes(userJabatan);
+                    const isDirectTargetLevel = userPejabatLevel && item.pejabat && item.pejabat.toLowerCase().includes(userPejabatLevel);
+
+                    const isDisposisiTargetEmail = item.disposisi && item.disposisi.email && userEmail && (item.disposisi.email.toLowerCase() === userEmail);
+                    const isDisposisiTargetName = item.disposisi && item.disposisi.penerima && userName && (item.disposisi.penerima.toLowerCase().includes(userName));
+                    const isDisposisiTargetJabatan = item.disposisi && item.disposisi.penerima && userJabatan && (item.disposisi.penerima.toLowerCase().includes(userJabatan));
+
+                    isTargetPejabat = isDirectTargetEmail || isDirectTargetName || isDirectTargetJabatan || isDirectTargetLevel || 
+                                      isDisposisiTargetEmail || isDisposisiTargetName || isDisposisiTargetJabatan;
                 }
                 
                 const matchSearch = (!searchQuery || 
