@@ -273,7 +273,7 @@
                     <button onclick="openLogoutModal()" id="btn-logout-portal" title="Keluar" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold border border-rose-500/30 transition flex items-center justify-center space-x-1 cursor-pointer z-50">
                         <i class="fa-solid fa-power-off text-xs pointer-events-none"></i><span class="hidden md:inline pointer-events-none">Keluar</span>
                     </button>
-                    <!-- Tombol Tambah Agenda (Hanya untuk Admin / Camat) -->
+                    <!-- Tombol Tambah Agenda (Hanya untuk Admin / Camat sejati, Sekcam dan pejabat lain disembunyikan) -->
                     <button id="d-btn-add-agenda" onclick="openFormModal()" class="hidden bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl shadow-md items-center space-x-1 transition">
                         <i class="fa-solid fa-plus text-xs"></i><span class="hidden sm:inline">Tambah Agenda</span>
                     </button>
@@ -358,15 +358,18 @@
                     <button onclick="closeSuratMasukModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold hover:bg-slate-200">&times;</button>
                 </div>
             </div>
-            <div class="flex justify-between items-center bg-indigo-50 p-3 rounded-2xl border border-indigo-200 text-xs text-indigo-950">
-                <div class="flex items-center space-x-2">
-                    <i class="fa-solid fa-robot text-indigo-600 text-base"></i>
-                    <span>Pencatatan otomatis & terklasifikasi via AI (Gemini) saat unggah dokumen PDF.</span>
+            <!-- PENCARIAN & FILTER SURAT MASUK -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 bg-indigo-50 p-3 rounded-2xl border border-indigo-200 text-xs text-indigo-950">
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <i class="fa-solid fa-magnifying-glass text-indigo-600"></i>
+                    <input type="text" id="sm-search-input" onkeyup="handleSuratMasukSearch(this.value)" placeholder="Cari nomor, perihal, atau instansi..." class="w-full sm:w-64 px-3 py-1.5 bg-white border border-indigo-200 rounded-xl font-semibold text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600">
                 </div>
-                <div class="flex space-x-1">
-                    <button onclick="setSuratMasukFilter('semua')" id="sm-filter-semua" class="px-3 py-1 bg-indigo-600 text-white rounded-lg font-extrabold">Semua</button>
-                    <button onclick="setSuratMasukFilter('Agenda Kegiatan')" id="sm-filter-agenda" class="px-3 py-1 bg-white text-slate-700 rounded-lg font-bold border">Agenda</button>
-                    <button onclick="setSuratMasukFilter('Surat Edaran')" id="sm-filter-edaran" class="px-3 py-1 bg-white text-slate-700 rounded-lg font-bold border">Edaran</button>
+                <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                    <select id="sm-type-filter" onchange="handleSuratMasukTypeFilter(this.value)" class="bg-white px-3 py-1.5 border border-indigo-200 rounded-xl font-bold text-xs">
+                        <option value="semua">Semua Tipe</option>
+                        <option value="Agenda Kegiatan">Agenda Kegiatan</option>
+                        <option value="Surat Edaran">Surat Edaran</option>
+                    </select>
                 </div>
             </div>
             <div class="flex-1 overflow-auto custom-scrollbar border rounded-2xl">
@@ -383,6 +386,15 @@
                     </thead>
                     <tbody id="surat-masuk-table-body" class="divide-y font-medium"></tbody>
                 </table>
+            </div>
+            <!-- PAGINASI SURAT MASUK (10 per slide) -->
+            <div class="flex justify-between items-center pt-2 border-t text-xs font-bold text-slate-600">
+                <span id="sm-pagination-info">Menampilkan 0 dari 0 data</span>
+                <div class="flex space-x-1">
+                    <button onclick="changeSuratMasukPage(-1)" id="btn-sm-prev" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg disabled:opacity-40">Sebelumnya</button>
+                    <span id="sm-page-number" class="px-3 py-1 bg-indigo-50 text-indigo-900 rounded-lg">1 / 1</span>
+                    <button onclick="changeSuratMasukPage(1)" id="btn-sm-next" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 rounded-lg disabled:opacity-40">Selanjutnya</button>
+                </div>
             </div>
         </div>
     </div>
@@ -686,13 +698,16 @@
             userBadge.innerText = `${displayName}${displayJabatan}`.toUpperCase();
 
             const isAdmin = (role === 'admin' || role === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-            const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat');
+            const jabLower = String(currentUser.jabatan || '').toLowerCase();
+            
+            // Cek apakah akun adalah Camat (bukan Sekcam / Sekretaris Camat)
+            const isCamatTrue = jabLower.includes('camat') && !jabLower.includes('sekcam') && !jabLower.includes('sekretaris camat');
 
             if (isAdmin) {
                 statusText.innerHTML = `Akses Terhubung: <strong>ADMIN PROTOKOL</strong>`;
                 if(dBtnAdd) dBtnAdd.classList.remove('hidden');
                 if(dBtnSurat) dBtnSurat.classList.remove('hidden');
-            } else if (isCamat) {
+            } else if (isCamatTrue) {
                 statusText.innerHTML = `Akses Terhubung: <strong>CAMAT / PIMPINAN</strong>`;
                 if(dBtnAdd) dBtnAdd.classList.remove('hidden');
                 if(dBtnSurat) dBtnSurat.classList.add('hidden');
@@ -774,9 +789,9 @@
                     const dispPenerima = item.disposisi && item.disposisi.penerima ? item.disposisi.penerima.toLowerCase().trim() : '';
 
                     if (item.disposisi) {
-                        // Strict isolation: only the exact delegated recipient can see it. Other subordinates are completely excluded.
+                        // Strict isolation: if delegated, ONLY the exact delegated recipient can see it. Other subordinates are completely excluded.
                         const isMatchEmail = dispEmail && uEmail && dispEmail === uEmail;
-                        const isMatchName = dispPenerima && uName && (dispPenerima.toLowerCase().includes(uName) || uName.includes(dispPenerima.toLowerCase()));
+                        const isMatchName = dispPenerima && uName && (dispPenerima.toLowerCase() === uName || dispPenerima.toLowerCase().includes(uName) || uName.includes(dispPenerima.toLowerCase()));
                         return isMatchEmail || isMatchName;
                     }
                     return (targetEmail && uEmail && targetEmail === uEmail);
@@ -841,7 +856,7 @@
                     if (item.disposisi) {
                         // Strict isolation: if delegated, ONLY the exact delegated account sees it. Other officials cannot see it.
                         const isMatchEmail = dispEmail && uEmail && dispEmail === uEmail;
-                        const isMatchName = dispPenerima && uName && (dispPenerima.toLowerCase().includes(uName) || uName.includes(dispPenerima.toLowerCase()));
+                        const isMatchName = dispPenerima && uName && (dispPenerima.toLowerCase() === uName || dispPenerima.toLowerCase().includes(uName) || uName.includes(dispPenerima.toLowerCase()));
                         isAllowed = isMatchEmail || isMatchName;
                     } else {
                         // If not disposed, only the initial target email sees it.
@@ -882,7 +897,7 @@
                                 <p><i class="fa-solid fa-building text-sky-500 mr-1.5"></i>${item.sector}</p>
                             </div>
                         </div>
-                        ${item.disposisi ? `<div class="bg-amber-50 p-2 rounded-xl text-[11px] font-bold text-amber-900"><i class="fa-solid fa-share-nodes mr-1"></i>Delegasi: ${item.disposisi.penerima}</div>` : ''}
+                        ${item.disposisi ? `<div class="bg-amber-50 p-2 rounded-xl text-[11px] font-bold text-amber-900 border border-amber-200 flex items-center space-x-1.5"><i class="fa-solid fa-share-nodes text-amber-600"></i><span>Delegasi Kepada: <strong>${item.disposisi.penerima}</strong></span></div>` : ''}
                         <div class="pt-2 border-t flex justify-between items-center text-xs text-sky-600 font-bold">
                             <span><i class="fa-solid fa-file-pdf text-rose-500 mr-1"></i>${item.pdfName || 'Dokumen.pdf'}</span>
                             <span>Lihat Detail <i class="fa-solid fa-arrow-right"></i></span>
@@ -897,24 +912,73 @@
         function handlePejabatFilterChange(val) { currentPejabatFilter = val; renderAgendas(); }
 
         let suratMasukFilter = 'semua';
-        function openSuratMasukModal() { renderSuratMasukList(); document.getElementById('modal-surat-masuk').classList.remove('hidden'); }
+        let suratMasukSearchQuery = '';
+        let suratMasukCurrentPage = 1;
+        const suratMasukPerPage = 10;
+
+        function openSuratMasukModal() { 
+            suratMasukCurrentPage = 1;
+            renderSuratMasukList(); 
+            document.getElementById('modal-surat-masuk').classList.remove('hidden'); 
+        }
         function closeSuratMasukModal() { document.getElementById('modal-surat-masuk').classList.add('hidden'); }
-        function setSuratMasukFilter(t) { suratMasukFilter = t; renderSuratMasukList(); }
+        
+        function handleSuratMasukSearch(val) {
+            suratMasukSearchQuery = val.toLowerCase().trim();
+            suratMasukCurrentPage = 1;
+            renderSuratMasukList();
+        }
+
+        function handleSuratMasukTypeFilter(val) {
+            suratMasukFilter = val;
+            suratMasukCurrentPage = 1;
+            renderSuratMasukList();
+        }
+
+        function changeSuratMasukPage(dir) {
+            suratMasukCurrentPage += dir;
+            renderSuratMasukList();
+        }
 
         function renderSuratMasukList() {
             const tbody = document.getElementById('surat-masuk-table-body');
             if(!tbody) return;
             tbody.innerHTML = '';
-            const list = window.agendas.filter(a => suratMasukFilter === 'semua' || a.tipe === suratMasukFilter);
-            if(list.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-xs text-slate-400 py-6 font-bold">Belum ada data Surat Masuk.</td></tr>`;
+
+            let list = window.agendas.filter(a => {
+                const matchType = (suratMasukFilter === 'semua' || a.tipe === suratMasukFilter);
+                const matchSearch = !suratMasukSearchQuery || 
+                    String(a.judul || '').toLowerCase().includes(suratMasukSearchQuery) ||
+                    String(a.nomorSurat || '').toLowerCase().includes(suratMasukSearchQuery) ||
+                    String(a.sector || '').toLowerCase().includes(suratMasukSearchQuery) ||
+                    String(a.tempat || '').toLowerCase().includes(suratMasukSearchQuery);
+                return matchType && matchSearch;
+            });
+
+            const totalData = list.length;
+            const totalPages = Math.ceil(totalData / suratMasukPerPage) || 1;
+            if (suratMasukCurrentPage > totalPages) suratMasukCurrentPage = totalPages;
+            if (suratMasukCurrentPage < 1) suratMasukCurrentPage = 1;
+
+            const startIndex = (suratMasukCurrentPage - 1) * suratMasukPerPage;
+            const paginatedList = list.slice(startIndex, startIndex + suratMasukPerPage);
+
+            document.getElementById('sm-pagination-info').innerText = `Menampilkan ${paginatedList.length ? startIndex + 1 : 0} - ${startIndex + paginatedList.length} dari ${totalData} data`;
+            document.getElementById('sm-page-number').innerText = `${suratMasukCurrentPage} / ${totalPages}`;
+            document.getElementById('btn-sm-prev').disabled = (suratMasukCurrentPage <= 1);
+            document.getElementById('btn-sm-next').disabled = (suratMasukCurrentPage >= totalPages);
+
+            if(paginatedList.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-xs text-slate-400 py-6 font-bold">Tidak ada data Surat Masuk yang ditemukan.</td></tr>`;
                 return;
             }
-            list.forEach((item, idx) => {
-                const suratNo = item.nomorSurat || `00${idx+1}/RKB/2026`;
+
+            paginatedList.forEach((item, idx) => {
+                const globalIdx = startIndex + idx + 1;
+                const suratNo = item.nomorSurat || `00${globalIdx}/RKB/2026`;
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">
-                        <td class="p-2.5 border text-center font-bold text-slate-500">${idx + 1}</td>
+                        <td class="p-2.5 border text-center font-bold text-slate-500">${globalIdx}</td>
                         <td class="p-2.5 border font-bold text-slate-900">${item.sector || 'Kecamatan Cinere'}</td>
                         <td class="p-2.5 border"><p class="font-bold">${suratNo}</p><p class="text-[10px] text-slate-500">${item.tanggal}</p></td>
                         <td class="p-2.5 border"><span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded ${item.tipe==='Surat Edaran'?'bg-indigo-100 text-indigo-900':'bg-amber-100 text-amber-900'} mr-1">${item.tipe}</span><strong>${item.judul}</strong><br><span class="text-[11px] text-slate-600">Tempat: ${item.tempat}</span></td>
@@ -1038,7 +1102,14 @@
             const dispBox = document.getElementById('mdetail-disposisi-box');
             if(item.disposisi) {
                 dispBox.classList.remove('hidden');
-                document.getElementById('mdetail-disposisi-text').innerText = `[${item.disposisi.penerima}] - ${item.disposisi.catatan}`;
+                dispBox.innerHTML = `
+                    <div class="flex items-center space-x-2 pb-1 border-b border-amber-200">
+                        <i class="fa-solid fa-share-nodes text-amber-600 text-sm"></i>
+                        <span class="font-extrabold text-amber-900 text-xs">STATUS DELEGASI & DISPOSISI</span>
+                    </div>
+                    <p class="text-amber-900 text-xs font-bold pt-1">Didelegasikan Kepada: <span class="text-amber-950 underline">${item.disposisi.penerima}</span></p>
+                    <p class="text-amber-800 text-xs">Instruksi: ${item.disposisi.catatan}</p>
+                `;
             } else { dispBox.classList.add('hidden'); }
 
             document.getElementById('modal-detail-agenda').classList.remove('hidden');
@@ -1050,9 +1121,19 @@
             closeDetailModal();
             const sel = document.getElementById('disp-penerima');
             sel.innerHTML = '';
-            window.subordinatesList.forEach(s => {
-                sel.innerHTML += `<option value="${s.nama}|${s.email}">${s.nama} (${s.email})</option>`;
-            });
+            
+            // Populate exclusively from registered database users who are not admin
+            const eligibleUsers = window.registeredUsers.filter(u => String(u.role || '').toLowerCase() !== 'admin' && String(u.username || '').toLowerCase() !== 'admin');
+            
+            if (eligibleUsers.length > 0) {
+                eligibleUsers.forEach(u => {
+                    sel.innerHTML += `<option value="${u.fullname}|${u.email}">${u.fullname} (${u.email})</option>`;
+                });
+            } else {
+                window.subordinatesList.forEach(s => {
+                    sel.innerHTML += `<option value="${s.nama}|${s.email}">${s.nama} (${s.email})</option>`;
+                });
+            }
             handlePenerimaDisposisiChange(sel.value);
             document.getElementById('modal-disposisi').classList.remove('hidden');
         }
