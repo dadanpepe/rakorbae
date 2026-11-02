@@ -1213,6 +1213,13 @@
             return targetDate < today;
         }
 
+        // Helper untuk mengecek apakah kegiatan agenda sudah selesai (baik diinput LHP atau tanggalnya terlewat)
+        function isAgendaCompleted(item) {
+            if (!item) return false;
+            if (item.status === 'selesai' || item.laporan !== null) return true;
+            return isPastDate(item.tanggal);
+        }
+
         function startLiveClock() {
             function updateClock() {
                 const now = new Date();
@@ -1544,7 +1551,24 @@
 
         function filterData() {
             return agendas.filter(item => {
-                const matchTab = (currentTabFilter === 'all' || item.status === currentTabFilter);
+                const completed = isAgendaCompleted(item);
+                const hasDisposisi = (item.disposisi !== null || item.status === 'ditolak');
+
+                // Logika Filter Tab Baru:
+                // - "terjadwal": Agenda aktif (terjadwal atau disposisi) yang BELUM terlewat / belum selesai
+                // - "ditolak": Agenda yang memiliki Disposisi/Delegasi
+                // - "selesai": Agenda yang sudah diisi LHP atau tanggalnya sudah terlewat
+                // - "all": Semua agenda
+                let matchTab = false;
+                if (currentTabFilter === 'all') {
+                    matchTab = true;
+                } else if (currentTabFilter === 'terjadwal') {
+                    matchTab = !completed;
+                } else if (currentTabFilter === 'ditolak') {
+                    matchTab = hasDisposisi;
+                } else if (currentTabFilter === 'selesai') {
+                    matchTab = completed;
+                }
                 
                 // PENYARINGAN PEJABAT YANG LEBIH FLEKSIBEL DAN PRESISI
                 let matchPejabat = (currentPejabatFilter === 'semua');
@@ -1557,10 +1581,6 @@
                 const matchDate = searchQuery ? true : (!selectedDateStr || item.tanggal === selectedDateStr);
                 
                 // HAK AKSES STRICT PEJABAT:
-                // Pejabat HANYA dapat melihat agenda jika:
-                // 1. Email sasaran agenda cocok dengan email akun login pejabat
-                // 2. Nama / Jabatan pejabat terdaftar pada target agenda
-                // 3. Agenda tersebut di-DISPOSISIKAN (email/nama penerima disposisi cocok dengan pejabat login)
                 let isTargetPejabat = true;
                 if (currentRole === 'pejabat' && currentUser) {
                     const userEmail = (currentUser.email || '').toLowerCase().trim();
@@ -2272,11 +2292,11 @@ startxref
 
             filtered.forEach(item => {
                 const isDisposisi = (item.disposisi !== null || item.status === 'ditolak');
-                const isSelesai = (item.status === 'selesai' || item.laporan !== null);
+                const isSelesai = isAgendaCompleted(item);
 
                 let badgeColor = "bg-sky-100 text-sky-800 border-sky-300";
                 let borderLeft = "border-sky-500";
-                let statusLabel = "AGENDA UTAMA";
+                let statusLabel = "TERJADWAL";
 
                 if (isSelesai) {
                     badgeColor = "bg-emerald-700 text-white border-emerald-800";
@@ -2285,7 +2305,7 @@ startxref
                 } else if (isDisposisi) {
                     badgeColor = "bg-amber-100 text-amber-900 border-amber-300 ring-1 ring-amber-300";
                     borderLeft = "border-amber-500";
-                    statusLabel = "DISPOSISI DELEGASI";
+                    statusLabel = "TERJADWAL (DISPOSISI)";
                 }
 
                 const cleanWaktu = formatCleanTimeWib(item.waktu);
