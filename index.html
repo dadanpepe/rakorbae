@@ -669,18 +669,27 @@
                         <div id="mdetail-kontak" class="bg-white p-2 rounded-xl text-slate-800 font-semibold border border-slate-200">-</div>
                     </div>
 
-                    <div id="mdetail-pdf-box" class="bg-sky-50 p-2.5 rounded-2xl border border-sky-200 space-y-1.5">
+                    <!-- PDF Box with Edit capability for Admin -->
+                    <div id="mdetail-pdf-box" class="bg-sky-50 p-2.5 rounded-2xl border border-sky-200 space-y-2">
                         <div class="flex justify-between items-center">
                             <span class="font-extrabold text-sky-900 text-xs flex items-center space-x-1.5">
                                 <i class="fa-solid fa-file-pdf text-rose-500 text-base"></i>
                                 <span>Surat Undangan (PDF):</span>
                             </span>
-                            <span id="mdetail-pdf-filename" class="text-[10px] text-sky-700 font-bold truncate max-w-[130px]">Surat_Undangan.pdf</span>
+                            <span id="mdetail-pdf-filename" class="text-[10px] text-sky-700 font-bold truncate max-w-[150px]">Surat_Undangan.pdf</span>
                         </div>
                         <button onclick="previewPDFInModal()" class="w-full py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 transition">
                             <i class="fa-solid fa-eye text-xs"></i>
                             <span>Buka / Unduh Surat Undangan (PDF)</span>
                         </button>
+
+                        <!-- Admin Re-upload PDF Option -->
+                        <div id="admin-pdf-reupload-box" class="hidden pt-1 border-t border-sky-200">
+                            <label class="block font-bold text-sky-950 text-[11px] mb-1">
+                                <i class="fa-solid fa-upload text-sky-600 mr-1"></i>Unggah Ulang File PDF (Khusus Admin):
+                            </label>
+                            <input type="file" id="mdetail-reupload-pdf" accept="application/pdf" class="w-full text-xs text-slate-600 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-sky-600 file:text-white hover:file:bg-sky-700">
+                        </div>
                     </div>
 
                     <div id="mdetail-disposisi-box" class="hidden bg-amber-50 p-2.5 rounded-2xl border border-amber-200 space-y-1.5">
@@ -703,6 +712,12 @@
 
             <!-- Action Buttons -->
             <div class="pt-2 border-t border-slate-100 flex flex-col space-y-2">
+                <!-- Admin Edit & Update Button -->
+                <button id="btn-modal-edit-agenda" onclick="saveAdminAgendaEdit()" class="hidden w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 transition">
+                    <i class="fa-solid fa-pen-to-square text-sm"></i>
+                    <span>Simpan Perubahan & PDF Baru (Akses Admin)</span>
+                </button>
+
                 <button id="btn-modal-disposisi" onclick="openDisposisiModalCurrent()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow-lg flex items-center justify-center space-x-2 transition transform active:scale-95">
                     <i class="fa-solid fa-share-nodes text-base"></i>
                     <span>Disposisikan Ke Bawahan (Sekdis / Sekban / Kabid)</span>
@@ -1008,6 +1023,11 @@
         function renderSubordinateOptions() {
             const selectEl = document.getElementById('disp-penerima');
             if (!selectEl) return;
+
+            // Simpan nilai pilihan user saat ini agar tidak ter-reset saat polling/background sync
+            const currentValue = selectEl.value;
+            const isDisposisiModalOpen = !document.getElementById('modal-disposisi').classList.contains('hidden');
+
             selectEl.innerHTML = '';
 
             window.subordinatesList.forEach(sub => {
@@ -1017,7 +1037,10 @@
                 selectEl.appendChild(opt);
             });
 
-            if (window.subordinatesList.length > 0 && window.subordinatesList[0].email) {
+            // Jika sebelumnya user sudah memilih nilai tertentu atau modal sedang terbuka, pertahankan nilainya
+            if (currentValue && Array.from(selectEl.options).some(o => o.value === currentValue)) {
+                selectEl.value = currentValue;
+            } else if (!isDisposisiModalOpen && window.subordinatesList.length > 0 && window.subordinatesList[0].email) {
                 const dispEmailInput = document.getElementById('disp-email');
                 if (dispEmailInput) dispEmailInput.value = window.subordinatesList[0].email;
             }
@@ -1649,6 +1672,8 @@
             const item = agendas.find(a => a.id === id);
             if (!item) return;
 
+            const isAdmin = (currentRole === 'superadmin' || currentRole === 'admin');
+
             document.getElementById('mdetail-judul').innerText = item.judul;
             document.getElementById('mdetail-tanggal').innerText = item.tanggal;
             document.getElementById('mdetail-waktu').innerText = `${formatCleanTimeWib(item.waktu)} WIB`;
@@ -1657,8 +1682,27 @@
             document.getElementById('mdetail-email-text').innerText = item.email || 'pejabat@gmail.com';
             document.getElementById('mdetail-sector').innerText = item.sector;
             document.getElementById('mdetail-pejabat').innerText = item.pejabat;
-            document.getElementById('mdetail-kontak').innerText = item.kontak;
+
+            // Memastikan nomor telepon diawali angka 0 dan tidak terkonversi menjadi angka tanpa 0
+            const rawKontak = String(item.kontak || '081234567890').trim();
+            const cleanKontak = rawKontak.startsWith('0') || rawKontak.startsWith('+') ? rawKontak : '0' + rawKontak;
+            document.getElementById('mdetail-kontak').innerText = cleanKontak;
+            
             document.getElementById('mdetail-pdf-filename').innerText = item.pdfName || 'Surat_Undangan.pdf';
+
+            // Tampilkan kontrol edit PDF khusus Admin
+            const adminPdfBox = document.getElementById('admin-pdf-reupload-box');
+            const btnEditAgenda = document.getElementById('btn-modal-edit-agenda');
+            const reuploadInput = document.getElementById('mdetail-reupload-pdf');
+            if (reuploadInput) reuploadInput.value = '';
+
+            if (isAdmin) {
+                if (adminPdfBox) adminPdfBox.classList.remove('hidden');
+                if (btnEditAgenda) btnEditAgenda.classList.remove('hidden');
+            } else {
+                if (adminPdfBox) adminPdfBox.classList.add('hidden');
+                if (btnEditAgenda) btnEditAgenda.classList.add('hidden');
+            }
 
             const badgeStatus = document.getElementById('mdetail-badge-status');
             badgeStatus.innerText = item.status.toUpperCase();
@@ -1673,7 +1717,6 @@
 
             const btnDisposisi = document.getElementById('btn-modal-disposisi');
             const lockBadge = document.getElementById('mdetail-disposisi-locked-badge');
-            const isAdmin = (currentRole === 'superadmin' || currentRole === 'admin');
 
             if (item.disposisi) {
                 if (isAdmin) {
@@ -1715,6 +1758,49 @@
             document.getElementById('modal-detail-agenda').classList.remove('hidden');
         }
 
+        // Fungsi Khusus Admin untuk Mengunggah Ulang PDF dari Modal Detail
+        function saveAdminAgendaEdit() {
+            if (currentRole !== 'admin' && currentRole !== 'superadmin') {
+                alert("Fitur ini hanya dapat digunakan oleh Admin.");
+                return;
+            }
+
+            const item = agendas.find(a => a.id === selectedAgendaId);
+            if (!item) return;
+
+            const fileInput = document.getElementById('mdetail-reupload-pdf');
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                if (file.size > 5 * 1024 * 1024) {
+                    alert("Ukuran file PDF melebihi 5MB. Silakan unggah file PDF yang lebih kecil.");
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    item.pdfData = evt.target.result;
+                    item.pdfName = file.name;
+                    item.updatedAt = new Date().toISOString();
+
+                    saveAndSyncUpdatedAgenda(item);
+                    alert(`File PDF baru "${file.name}" berhasil diunggah!`);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert("Agenda telah diperbarui.");
+                closeDetailModal();
+            }
+        }
+
+        function saveAndSyncUpdatedAgenda(item) {
+            renderAgendas();
+            sendToGoogleBackend(item);
+            if (typeof window.syncAgendaToRealtimeDb === 'function') {
+                window.syncAgendaToRealtimeDb(item);
+            }
+            closeDetailModal();
+        }
+
         function closeDetailModal() {
             document.getElementById('modal-detail-agenda').classList.add('hidden');
         }
@@ -1740,6 +1826,17 @@
         function openDisposisiModalCurrent() {
             closeDetailModal();
             clearSignature();
+            renderSubordinateOptions();
+
+            const selectEl = document.getElementById('disp-penerima');
+            const dispEmailInput = document.getElementById('disp-email');
+            if (selectEl && selectEl.value) {
+                const parts = selectEl.value.split('|');
+                if (parts.length > 1 && dispEmailInput) {
+                    dispEmailInput.value = parts[1];
+                }
+            }
+
             document.getElementById('modal-disposisi').classList.remove('hidden');
         }
 
@@ -1882,6 +1979,11 @@ startxref
         }
 
         function saveNewAgenda(pdfName, pdfData) {
+            let rawKontak = String(document.getElementById('f-kontak').value || '081234567890').trim();
+            if (rawKontak && !rawKontak.startsWith('0') && !rawKontak.startsWith('+')) {
+                rawKontak = '0' + rawKontak;
+            }
+
             const newAgenda = {
                 id: 'RKB-' + Math.floor(1000 + Math.random() * 9000),
                 judul: document.getElementById('f-judul').value,
@@ -1890,7 +1992,7 @@ startxref
                 tempat: document.getElementById('f-tempat').value,
                 email: document.getElementById('f-email').value,
                 pakaian: document.getElementById('f-pakaian').value || 'PDH Harian',
-                kontak: document.getElementById('f-kontak').value || '081234567890',
+                kontak: rawKontak,
                 pejabat: document.getElementById('f-pejabat').value,
                 sector: document.getElementById('f-sector').value || 'KECAMATAN CINERE',
                 status: 'terjadwal',
