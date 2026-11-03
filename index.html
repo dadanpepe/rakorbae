@@ -481,12 +481,12 @@
 
     <!-- MODAL DETAIL AGENDA -->
     <div id="modal-detail-agenda" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-white rounded-3xl w-full max-w-lg p-5 space-y-3.5 shadow-2xl border max-h-[90vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-3xl w-full max-w-lg p-5 space-y-3.5 shadow-2xl border max-h-[90vh] flex flex-col overflow-hidden relative z-50 pointer-events-auto">
             <div class="flex justify-between items-center border-b pb-2.5">
                 <div class="flex items-center space-x-2 text-jb-dark font-extrabold text-sm">
                     <i class="fa-solid fa-calendar-day text-sky-600"></i><span id="mdetail-title-head">Detail Agenda Kegiatan</span>
                 </div>
-                <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold hover:bg-slate-200">&times;</button>
+                <button type="button" onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold hover:bg-slate-200 cursor-pointer flex items-center justify-center relative z-50 pointer-events-auto">&times;</button>
             </div>
             <div class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
                 <!-- TAMPILAN SESUAI GAMBAR REFERENSI ADMIN -->
@@ -548,26 +548,26 @@
             </div>
 
             <!-- TOMBOL AKSI KHUSUS ADMIN SESUAI GAMBAR -->
-            <div id="mdetail-actions-container" class="pt-2 border-t flex flex-col space-y-2">
+            <div id="mdetail-actions-container" class="pt-2 border-t flex flex-col space-y-2 relative z-50">
                 <!-- Tombol Simpan Perubahan -->
-                <button onclick="saveAdminAgendaChanges()" class="w-full py-3 bg-[#0284c7] hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-pen-to-square"></i><span>Simpan Perubahan & PDF Baru (Akses Admin)</span>
+                <button type="button" onclick="saveAdminAgendaChanges()" class="w-full py-3 bg-[#0284c7] hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
+                    <i class="fa-solid fa-pen-to-square pointer-events-none"></i><span class="pointer-events-none">Simpan Perubahan & PDF Baru (Akses Admin)</span>
                 </button>
                 <!-- Tombol Ubah Disposisi -->
-                <button onclick="openDisposisiModalCurrent()" class="w-full py-3 bg-[#f59e0b] hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-share-nodes"></i><span>Ubah Disposisi (Akses Admin)</span>
+                <button type="button" onclick="openDisposisiModalCurrent()" class="w-full py-3 bg-[#f59e0b] hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
+                    <i class="fa-solid fa-share-nodes pointer-events-none"></i><span class="pointer-events-none">Ubah Disposisi (Akses Admin)</span>
                 </button>
                 <!-- Tombol Input Laporan / Selesai -->
-                <button onclick="markAgendaFinished()" class="w-full py-3 bg-[#059669] hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-circle-check"></i><span>Input Laporan Hasil Kegiatan / Selesai</span>
+                <button type="button" onclick="markAgendaFinished()" class="w-full py-3 bg-[#059669] hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
+                    <i class="fa-solid fa-circle-check pointer-events-none"></i><span class="pointer-events-none">Input Laporan Hasil Kegiatan / Selesai</span>
                 </button>
                 <!-- Tombol Kirim Ke WhatsApp -->
-                <button onclick="sendWhatsAppAgendaDirect()" class="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5">
-                    <i class="fa-brands fa-whatsapp text-sm"></i><span>Kirim Ke WhatsApp</span>
+                <button type="button" onclick="sendWhatsAppAgendaDirect()" class="w-full py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
+                    <i class="fa-brands fa-whatsapp text-sm pointer-events-none"></i><span class="pointer-events-none">Kirim Ke WhatsApp</span>
                 </button>
                 <!-- Tombol Hapus Agenda -->
-                <button onclick="deleteCurrentAgenda()" class="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs rounded-xl border border-rose-200 flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-trash"></i><span>Hapus Agenda</span>
+                <button type="button" onclick="deleteCurrentAgenda()" class="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs rounded-xl border border-rose-200 flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
+                    <i class="fa-solid fa-trash pointer-events-none"></i><span class="pointer-events-none">Hapus Agenda</span>
                 </button>
             </div>
         </div>
@@ -575,10 +575,10 @@
 
     <!-- MODAL DISPOSISI -->
     <div id="modal-disposisi" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl border">
+        <div class="bg-white rounded-3xl w-full max-w-md p-5 space-y-4 shadow-2xl border relative z-50 pointer-events-auto">
             <div class="flex justify-between items-center border-b pb-3">
                 <div class="flex items-center space-x-2 text-amber-600 font-extrabold text-sm"><i class="fa-solid fa-share-nodes"></i><span>Form Disposisi & Delegasi</span></div>
-                <button onclick="closeDisposisiModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold">&times;</button>
+                <button type="button" onclick="closeDisposisiModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold cursor-pointer relative z-50 pointer-events-auto">&times;</button>
             </div>
             <form onsubmit="handleDisposisiSubmit(event)" class="space-y-3 text-xs">
                 <div>
@@ -594,8 +594,8 @@
                     <textarea id="disp-catatan" rows="2" required placeholder="Tindak lanjuti..." class="w-full p-2.5 border rounded-xl"></textarea>
                 </div>
                 <div class="pt-2 flex space-x-2">
-                    <button type="button" onclick="closeDisposisiModal()" class="flex-1 py-2 bg-slate-100 font-bold rounded-xl">Batal</button>
-                    <button type="submit" class="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold rounded-xl shadow">Simpan & Kirim WA</button>
+                    <button type="button" onclick="closeDisposisiModal()" class="flex-1 py-2 bg-slate-100 font-bold rounded-xl cursor-pointer">Batal</button>
+                    <button type="submit" class="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold rounded-xl shadow cursor-pointer">Simpan & Kirim WA</button>
                 </div>
             </form>
         </div>
@@ -1176,6 +1176,10 @@
             document.getElementById('modal-detail-agenda').classList.remove('hidden');
         }
 
+        function closeDetailModal() { 
+            document.getElementById('modal-detail-agenda').classList.add('hidden'); 
+        }
+
         async function saveAdminAgendaChanges() {
             const item = agendas.find(a => a.id === selectedAgendaId);
             if(!item) return;
@@ -1243,20 +1247,20 @@
         function openDisposisiModalCurrent() {
             closeDetailModal();
             const sel = document.getElementById('disp-penerima');
-            sel.innerHTML = '';
-            
-            const eligibleUsers = window.registeredUsers.filter(u => String(u.role || '').toLowerCase() !== 'admin' && String(u.username || '').toLowerCase() !== 'admin');
-            
-            if (eligibleUsers.length > 0) {
-                eligibleUsers.forEach(u => {
-                    sel.innerHTML += `<option value="${u.fullname}|${u.email}">${u.fullname} (${u.email})</option>`;
-                });
-            } else {
-                window.subordinatesList.forEach(s => {
-                    sel.innerHTML += `<option value="${s.nama}|${s.email}">${s.nama} (${s.email})</option>`;
-                });
+            if (sel) {
+                sel.innerHTML = '';
+                const eligibleUsers = window.registeredUsers.filter(u => String(u.role || '').toLowerCase() !== 'admin' && String(u.username || '').toLowerCase() !== 'admin');
+                if (eligibleUsers.length > 0) {
+                    eligibleUsers.forEach(u => {
+                        sel.innerHTML += `<option value="${u.fullname}|${u.email}">${u.fullname} (${u.email})</option>`;
+                    });
+                } else {
+                    window.subordinatesList.forEach(s => {
+                        sel.innerHTML += `<option value="${s.nama}|${s.email}">${s.nama} (${s.email})</option>`;
+                    });
+                }
+                handlePenerimaDisposisiChange(sel.value);
             }
-            handlePenerimaDisposisiChange(sel.value);
             document.getElementById('modal-disposisi').classList.remove('hidden');
         }
 
