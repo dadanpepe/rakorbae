@@ -194,7 +194,7 @@
     </div>
 
     <!-- Apps Script URL -->
-    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxbCMfsFZzMQnK3Ux7GNNQcSH9GjBpFOSPC-1Jd5mQSUS15D-rgSyt6tJa4yTUqe1tn/exec';</script>
+    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';</script>
 
     <!-- Firebase Realtime Sync -->
     <script type="module">
@@ -775,26 +775,24 @@
                 const dStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
                 const isSel = (dStr === selectedDateStr);
                 
-                // Strict check: if an item has a disposition/delegation, ONLY the admin, camat, or the exact delegated person can see it on the calendar date.
+                // Strict check: if an item has a disposition/delegation, ONLY the admin, camat, or the exact delegated person can see it.
                 const hasItemOnDate = window.agendas.some(item => {
                     if (item.tanggal !== dStr) return false;
                     const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-                    const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat');
+                    const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat') && !String(currentUser.jabatan || '').toLowerCase().includes('sekcam');
                     if (isAdmin || isCamat) return true;
 
                     const uEmail = (currentUser.email || '').toLowerCase().trim();
                     const uName = (currentUser.fullname || '').toLowerCase().trim();
-                    const targetEmail = (item.email || '').toLowerCase().trim();
                     const dispEmail = item.disposisi && item.disposisi.email ? item.disposisi.email.toLowerCase().trim() : '';
                     const dispPenerima = item.disposisi && item.disposisi.penerima ? item.disposisi.penerima.toLowerCase().trim() : '';
 
                     if (item.disposisi) {
-                        // Strict isolation: if delegated, ONLY the exact delegated recipient can see it. Other subordinates are completely excluded.
                         const isMatchEmail = dispEmail && uEmail && dispEmail === uEmail;
                         const isMatchName = dispPenerima && uName && (dispPenerima.toLowerCase() === uName || dispPenerima.toLowerCase().includes(uName) || uName.includes(dispPenerima.toLowerCase()));
                         return isMatchEmail || isMatchName;
                     }
-                    return (targetEmail && uEmail && targetEmail === uEmail);
+                    return false;
                 });
 
                 let indicator = '';
@@ -842,25 +840,22 @@
                 
                 let isAllowed = false;
                 const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-                const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat');
+                const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat') && !String(currentUser.jabatan || '').toLowerCase().includes('sekcam');
 
                 if (isAdmin || isCamat) {
                     isAllowed = true;
                 } else {
                     const uEmail = (currentUser.email || '').toLowerCase().trim();
                     const uName = (currentUser.fullname || '').toLowerCase().trim();
-                    const targetEmail = (item.email || '').toLowerCase().trim();
                     const dispEmail = item.disposisi && item.disposisi.email ? item.disposisi.email.toLowerCase().trim() : '';
                     const dispPenerima = item.disposisi && item.disposisi.penerima ? item.disposisi.penerima.toLowerCase().trim() : '';
 
                     if (item.disposisi) {
-                        // Strict isolation: if delegated, ONLY the exact delegated account sees it. Other officials cannot see it.
                         const isMatchEmail = dispEmail && uEmail && dispEmail === uEmail;
                         const isMatchName = dispPenerima && uName && (dispPenerima.toLowerCase() === uName || dispPenerima.toLowerCase().includes(uName) || uName.includes(dispPenerima.toLowerCase()));
                         isAllowed = isMatchEmail || isMatchName;
                     } else {
-                        // If not disposed, only the initial target email sees it.
-                        isAllowed = (targetEmail && uEmail && targetEmail === uEmail);
+                        isAllowed = false;
                     }
                 }
 
