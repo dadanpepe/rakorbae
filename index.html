@@ -194,7 +194,7 @@
     </div>
 
     <!-- Apps Script URL -->
-    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';</script>
+    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwQI9k_aw73GBwFVX6FSb7nHovO5ISM8y_IL_qcydT8muUJMcvkhZVSxPh5MmsUS78L/exec';</script>
 
     <!-- Firebase Realtime Sync -->
     <script type="module">
@@ -1370,7 +1370,7 @@
                     iframePrev.classList.remove('hidden');
                     try {
                         const arr = item.pdfData.split(',');
-                        const mime = arr[0].match(/:(.*?);/)[1];
+                        const mime = arr[0].match(/:(.*?);/)[1] || 'application/pdf';
                         const bstr = atob(arr[1]);
                         let n = bstr.length;
                         const u8arr = new Uint8Array(n);
@@ -1386,7 +1386,7 @@
                 }
             } else {
                 emptyState.classList.remove('hidden');
-                emptyState.innerText = `File "${item.pdfName || 'Dokumen.pdf'}" tersimpan di Google Drive folder "${item.folderDrive || 'Agenda'}".`;
+                emptyState.innerHTML = `<i class="fa-solid fa-folder-open text-3xl text-sky-500 mb-2"></i><p>File "${item.pdfName || 'Dokumen.pdf'}" tersimpan di Google Drive folder <strong>"${item.folderDrive || 'Agenda'}"</strong>.</p><p class="text-[10px] text-slate-500 mt-1">Unggah ulang file dokumen pada detail agenda untuk melihat pratinjau langsung di aplikasi.</p>`;
                 downloadBtn.href = '#';
             }
             document.getElementById('modal-pdf-viewer').classList.remove('hidden');
@@ -1407,7 +1407,12 @@
 
         function sendToGoogleBackend(data) {
             if (!APPS_SCRIPT_WEB_APP_URL || APPS_SCRIPT_WEB_APP_URL.includes('YOUR_SCRIPT')) return;
-            fetch(APPS_SCRIPT_WEB_APP_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).catch(e=>{});
+            fetch(APPS_SCRIPT_WEB_APP_URL, { 
+                method: 'POST', 
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }, 
+                body: JSON.stringify(data) 
+            }).catch(e=>{});
         }
 
         function loadAgendasFromGoogleSheets() {
@@ -1417,7 +1422,18 @@
                 .then(resData => {
                     if(resData.result === 'success') {
                         if(resData.data && Array.isArray(resData.data)) {
-                            window.agendas = resData.data;
+                            // Merge without overwriting local base64 files if existing in memory
+                            resData.data.forEach(remoteItem => {
+                                const localIndex = window.agendas.findIndex(a => a.id === remoteItem.id);
+                                if (localIndex !== -1) {
+                                    if (!remoteItem.pdfData && window.agendas[localIndex].pdfData) {
+                                        remoteItem.pdfData = window.agendas[localIndex].pdfData;
+                                    }
+                                    window.agendas[localIndex] = { ...window.agendas[localIndex], ...remoteItem };
+                                } else {
+                                    window.agendas.push(remoteItem);
+                                }
+                            });
                         }
                         if(resData.users && Array.isArray(resData.users)) {
                             resData.users.forEach(u => {
