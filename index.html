@@ -192,7 +192,7 @@
     </div>
 
     <!-- Apps Script URL -->
-    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzk2I57Z5QjNhm7saZlQLaYku8KD8Hlfw1eKc9AGWLoBZ-Vn16o3OruNcuve_6iSVxG/exec';</script>
+    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';</script>
 
     <!-- Firebase Realtime Sync -->
     <script type="module">
@@ -263,11 +263,11 @@
                         <span id="user-display-badge" class="font-bold text-slate-200 text-[10px] sm:text-xs">PEJABAT</span>
                     </div>
 
-                    <!-- Tombol Sinkron Manual (Tersedia untuk Admin maupun opsi darurat gagal sinkron) -->
+                    <!-- Tombol Sinkron Manual -->
                     <button id="d-btn-manual-sync" onclick="manualSyncDatabase()" class="hidden bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition" title="Sinkronisasi Manual Database & Spreadsheet">
                         <i class="fa-solid fa-rotate text-xs"></i><span class="hidden md:inline">Sinkron Data</span>
                     </button>
-                    <!-- Tombol Surat Masuk (Hanya untuk Admin) -->
+                    <!-- Tombol Surat Masuk -->
                     <button id="d-btn-surat-masuk" onclick="openSuratMasukModal()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition">
                         <i class="fa-solid fa-book-open text-xs"></i><span class="hidden md:inline">Surat Masuk</span>
                     </button>
@@ -275,7 +275,7 @@
                     <button onclick="openLogoutModal()" id="btn-logout-portal" title="Keluar" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold border border-rose-500/30 transition flex items-center justify-center space-x-1 cursor-pointer z-50">
                         <i class="fa-solid fa-power-off text-xs pointer-events-none"></i><span class="hidden md:inline pointer-events-none">Keluar</span>
                     </button>
-                    <!-- Tombol Tambah Agenda (Hanya untuk Admin) -->
+                    <!-- Tombol Tambah Agenda -->
                     <button id="d-btn-add-agenda" onclick="openFormModal()" class="hidden bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl shadow-md items-center space-x-1 transition">
                         <i class="fa-solid fa-plus text-xs"></i><span class="hidden sm:inline">Tambah Agenda</span>
                     </button>
@@ -331,7 +331,7 @@
                 </div>
             </div>
 
-            <!-- Kalender (Nama bulan & tahun saja) -->
+            <!-- Kalender -->
             <div class="pt-2 border-t space-y-2">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-2">
@@ -350,7 +350,7 @@
 
     <!-- MODAL BUKU AGENDA SURAT MASUK 2026 -->
     <div id="modal-surat-masuk" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4">
-        <div class="bg-white rounded-3xl w-full max-w-6xl p-5 space-y-3.5 shadow-2xl border max-h-[92vh] flex flex-col overflow-hidden">
+        <div class="bg-white rounded-3xl w-full max-w-7xl p-5 space-y-3.5 shadow-2xl border max-h-[92vh] flex flex-col overflow-hidden">
             <div class="flex justify-between items-center border-b pb-2.5">
                 <div class="flex items-center space-x-2 text-indigo-900 font-extrabold text-sm">
                     <i class="fa-solid fa-book-open"></i><span>BUKU AGENDA SURAT MASUK 2026</span>
@@ -368,7 +368,6 @@
                     <input type="text" id="sm-search-input" onkeyup="handleSuratMasukSearch(this.value)" placeholder="Cari nomor, perihal, atau instansi..." class="w-full sm:w-64 px-3 py-1.5 bg-white border border-indigo-200 rounded-xl font-semibold text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600">
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-                    <!-- Tombol Sinkron Khusus Tabel Surat Masuk Apabila Gagal -->
                     <button onclick="manualSyncDatabase()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow flex items-center space-x-1" title="Sinkronkan data ke Database">
                         <i class="fa-solid fa-rotate"></i><span>Sinkron Data</span>
                     </button>
@@ -385,11 +384,13 @@
                     <thead>
                         <tr class="bg-slate-900 text-white text-[11px] uppercase tracking-wider">
                             <th class="p-2.5 border text-center w-12">No.</th>
-                            <th class="p-2.5 border">Nama Instansi / Pengirim</th>
-                            <th class="p-2.5 border">Nomor & Tanggal Surat (Edit Langsung)</th>
-                            <th class="p-2.5 border">Perihal / Isi Surat</th>
-                            <th class="p-2.5 border">Penanggung Jawab</th>
-                            <th class="p-2.5 border">Keterangan</th>
+                            <th class="p-2.5 border w-36">Instansi / Pengirim</th>
+                            <th class="p-2.5 border w-36">Nomor & Tanggal Surat</th>
+                            <th class="p-2.5 border">Perihal / Isi Surat & Agenda</th>
+                            <th class="p-2.5 border w-44">Tempat & Waktu Kegiatan</th>
+                            <th class="p-2.5 border w-44">Penanggung Jawab Utama</th>
+                            <th class="p-2.5 border w-44">Disposisi & Delegasi Akun Pejabat</th>
+                            <th class="p-2.5 border w-32">Status / Dokumen</th>
                         </tr>
                     </thead>
                     <tbody id="surat-masuk-table-body" class="divide-y font-medium"></tbody>
@@ -433,7 +434,6 @@
                     <label class="block font-bold text-slate-700 mb-1">Nama Acara / Perihal Kegiatan / Surat</label>
                     <input type="text" id="f-judul" required placeholder="Masukkan Nama Kegiatan / Surat" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
-                <!-- Tanggal & Waktu Dinamis -->
                 <div id="f-tanggal-waktu-container" class="space-y-2">
                     <div class="grid grid-cols-2 gap-2 tanggal-waktu-row">
                         <div>
@@ -596,12 +596,21 @@
             </div>
             <form onsubmit="handleDisposisiSubmit(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="font-bold text-slate-700 mb-1 block">Didelegasikan Kepada Bawahan</label>
+                    <label class="font-bold text-slate-700 mb-1 block">Disposisi</label>
                     <select id="disp-penerima" onchange="handlePenerimaDisposisiChange(this.value)" required class="w-full p-2.5 bg-amber-50 border rounded-xl font-bold"></select>
                 </div>
+                
+                <div id="container-delegasi-lanjutan" class="space-y-2 hidden">
+                    <label class="font-bold text-slate-700 block">Disposisi Lanjutan (Akun Pejabat Tambahan)</label>
+                    <div id="list-delegasi-tambahan" class="space-y-2"></div>
+                </div>
+                <button type="button" onclick="tambahBarisDisposisiLanjutan()" class="w-full py-2 bg-sky-50 text-sky-700 border border-sky-300 font-extrabold rounded-xl text-xs hover:bg-sky-100 transition flex items-center justify-center space-x-1">
+                    <i class="fa-solid fa-plus"></i><span>Tambah Disposisi Lanjutan Lainnya</span>
+                </button>
+
                 <div>
-                    <label class="font-bold text-slate-700 mb-1 block">Email Gmail Penerima</label>
-                    <input type="email" id="disp-email" required class="w-full p-2.5 bg-sky-50 border rounded-xl font-bold">
+                    <label class="font-bold text-slate-700 mb-1 block">Email Gmail Penerima Utama (Otomatis)</label>
+                    <input type="email" id="disp-email" required readonly class="w-full p-2.5 bg-slate-100 border rounded-xl font-bold text-slate-600 cursor-not-allowed">
                 </div>
                 <div>
                     <label class="font-bold text-slate-700 mb-1 block">Instruksi Pimpinan</label>
@@ -616,13 +625,25 @@
     </div>
 
     <!-- MODAL PDF/IMAGE VIEWER -->
-    <div id="modal-pdf-viewer" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
-        <div class="bg-white rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl border overflow-hidden">
-            <div class="flex justify-between items-center p-3 bg-slate-900 text-white">
-                <span id="pdf-viewer-title" class="font-extrabold text-xs">Dokumen</span>
-                <button onclick="closePdfViewerModal()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 font-bold">&times;</button>
+    <div id="modal-pdf-viewer" class="hidden fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-2 sm:p-4">
+        <div class="bg-slate-900 rounded-3xl w-full max-w-5xl h-[92vh] flex flex-col shadow-2xl border border-slate-700 overflow-hidden">
+            <!-- Google Drive Style Top Header -->
+            <div class="flex justify-between items-center px-4 py-3 bg-slate-900 border-b border-slate-800 text-white">
+                <div class="flex items-center space-x-2.5 min-w-0">
+                    <div class="w-7 h-7 bg-rose-600 rounded-lg flex items-center justify-center text-white text-xs font-black flex-shrink-0">PDF</div>
+                    <span id="pdf-viewer-title" class="font-bold text-xs sm:text-sm truncate text-slate-200">Dokumen.pdf</span>
+                </div>
+                <div class="flex items-center space-x-2 flex-shrink-0">
+                    <button onclick="zoomPdfViewer(0.2)" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs" title="Zoom In"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+                    <button onclick="zoomPdfViewer(-0.2)" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs" title="Zoom Out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                    <button onclick="printPdfViewer()" class="w-8 h-8 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center text-xs" title="Cetak"><i class="fa-solid fa-print"></i></button>
+                    <button onclick="closePdfViewerModal()" class="w-8 h-8 rounded-xl bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white flex items-center justify-center text-sm font-bold transition">&times;</button>
+                </div>
             </div>
-            <div class="flex-1 bg-slate-100 p-2"><iframe id="pdf-iframe" class="w-full h-full rounded-2xl border" src="about:blank"></iframe></div>
+            <!-- Viewer Body -->
+            <div class="flex-1 bg-slate-950 p-2 sm:p-4 overflow-auto flex justify-center items-start relative custom-scrollbar">
+                <iframe id="pdf-iframe" class="w-full h-full rounded-2xl border border-slate-800 bg-white shadow-2xl transition-all duration-200" src="about:blank"></iframe>
+            </div>
         </div>
     </div>
 
@@ -656,7 +677,7 @@
         function renderSubordinateOptions() {
             const selectEl = document.getElementById('disp-penerima');
             if (!selectEl) return;
-            selectEl.innerHTML = '';
+            selectEl.innerHTML = '<option value="">-- Pilih Pejabat Disposisi --</option>';
             
             const eligibleUsers = window.registeredUsers.filter(u => String(u.role || '').toLowerCase() !== 'admin' && String(u.username || '').toLowerCase() !== 'admin');
             
@@ -664,7 +685,7 @@
                 eligibleUsers.forEach(u => {
                     const opt = document.createElement('option');
                     opt.value = `${u.fullname}|${u.email}`;
-                    opt.innerText = `${u.fullname} (${u.email})`;
+                    opt.innerText = `${u.fullname} - ${u.jabatan || 'Pejabat'} (${u.email})`;
                     selectEl.appendChild(opt);
                 });
             } else {
@@ -675,6 +696,32 @@
                     selectEl.appendChild(opt);
                 });
             }
+            const firstOpt = selectEl.querySelector('option:not([value=""])');
+            if (firstOpt) {
+                selectEl.value = firstOpt.value;
+                handlePenerimaDisposisiChange(firstOpt.value);
+            }
+        }
+
+        function tambahBarisDisposisiLanjutan() {
+            const container = document.getElementById('container-delegasi-lanjutan');
+            const listContainer = document.getElementById('list-delegasi-tambahan');
+            container.classList.remove('hidden');
+
+            const div = document.createElement('div');
+            div.className = "flex space-x-2 items-center delegasi-tambahan-row";
+            
+            let optionsHtml = '<option value="">-- Pilih Pejabat Tambahan --</option>';
+            const eligibleUsers = window.registeredUsers.filter(u => String(u.role || '').toLowerCase() !== 'admin' && String(u.username || '').toLowerCase() !== 'admin');
+            eligibleUsers.forEach(u => {
+                optionsHtml += `<option value="${u.fullname}|${u.email}">${u.fullname} - ${u.jabatan || 'Pejabat'} (${u.email})</option>`;
+            });
+
+            div.innerHTML = `
+                <select class="w-full p-2.5 bg-sky-50 border rounded-xl font-bold text-sky-950 disp-lanjutan-select">${optionsHtml}</select>
+                <button type="button" onclick="this.parentElement.remove()" class="px-3 py-2 bg-rose-100 text-rose-700 rounded-xl font-bold hover:bg-rose-200"><i class="fa-solid fa-trash"></i></button>
+            `;
+            listContainer.appendChild(div);
         }
 
         window.onload = function() {
@@ -921,13 +968,17 @@
         function formatTimeWib(w) {
             if(!w) return "08:00 WIB";
             let s = String(w).trim();
-            if (s.includes("GMT") || s.includes("T") || s.length > 8 || s.includes("1899")) {
+            if (s.includes("GMT") || s.includes("T") || s.length > 8 || s.includes("1899") || s.includes("1900")) {
                 try {
                     const d = new Date(s);
                     if (!isNaN(d.getTime())) {
                         s = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
                     }
                 } catch(e) {}
+            }
+            if (s.includes(":")) {
+                const parts = s.split(":");
+                s = `${String(parts[0]).padStart(2,'0')}:${String(parts[1]).padStart(2,'0')}`;
             }
             if(!s.includes("WIB")) s += " WIB";
             return s;
@@ -1059,13 +1110,14 @@
             tbody.innerHTML = '';
 
             let list = window.agendas.filter(a => {
+                const isAgendaKegiatan = String(a.tipe || '').toLowerCase() === 'agenda kegiatan';
                 const matchType = (suratMasukFilter === 'semua' || a.tipe === suratMasukFilter);
                 const matchSearch = !suratMasukSearchQuery || 
                     String(a.judul || '').toLowerCase().includes(suratMasukSearchQuery) ||
                     String(a.nomorSurat || '').toLowerCase().includes(suratMasukSearchQuery) ||
                     String(a.sector || '').toLowerCase().includes(suratMasukSearchQuery) ||
                     String(a.tempat || '').toLowerCase().includes(suratMasukSearchQuery);
-                return matchType && matchSearch;
+                return isAgendaKegiatan && matchType && matchSearch;
             });
 
             const totalData = list.length;
@@ -1076,36 +1128,63 @@
             const startIndex = (suratMasukCurrentPage - 1) * suratMasukPerPage;
             const paginatedList = list.slice(startIndex, startIndex + suratMasukPerPage);
 
-            document.getElementById('sm-pagination-info').innerText = `Menampilkan ${paginatedList.length ? startIndex + 1 : 0} - ${startIndex + paginatedList.length} dari ${totalData} data`;
+            document.getElementById('sm-pagination-info').innerText = `Menampilkan ${paginatedList.length ? startIndex + 1 : 0} - ${startIndex + paginatedList.length} dari ${totalData} Agenda Kegiatan`;
             document.getElementById('sm-page-number').innerText = `${suratMasukCurrentPage} / ${totalPages}`;
             document.getElementById('btn-sm-prev').disabled = (suratMasukCurrentPage <= 1);
             document.getElementById('btn-sm-next').disabled = (suratMasukCurrentPage >= totalPages);
 
             if(paginatedList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-xs text-slate-400 py-6 font-bold">Tidak ada data Surat Masuk yang ditemukan.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" class="text-center text-xs text-slate-400 py-6 font-bold">Tidak ada data Agenda Kegiatan yang ditemukan.</td></tr>`;
                 return;
             }
 
             paginatedList.forEach((item, idx) => {
                 const globalIdx = startIndex + idx + 1;
-                const suratNo = item.nomorSurat || `00${globalIdx}/RKB/2026`;
+                const suratNo = item.nomorSurat && item.nomorSurat.trim() !== '' ? item.nomorSurat : `00${globalIdx}/RKB/2026`;
                 const cleanDate = cleanDateDisplay(item.tanggal);
-                const typeBadgeClass = item.tipe === 'Surat Edaran' ? 'bg-indigo-100 text-indigo-900' : (item.tipe === 'Surat Umum' ? 'bg-purple-100 text-purple-900' : 'bg-amber-100 text-amber-900');
+                const formattedTime = formatTimeWib(item.waktu);
+                const typeBadgeClass = 'bg-amber-100 text-amber-900';
                 
+                let statusBadgeStr = item.status === 'selesai' ? '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Selesai</span>' : '<span class="bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full font-bold">Terjadwal</span>';
+                let pjStr = item.pejabat || 'Camat / Pimpinan';
+                let dispStr = item.disposisi && item.disposisi.penerima ? `<span class="text-xs text-amber-900 font-black bg-amber-100 px-2 py-1 rounded-lg border border-amber-300 inline-block"><i class="fa-solid fa-user-check mr-1 text-amber-700"></i>${item.disposisi.penerima}</span>` : '<span class="text-slate-400 italic">Belum Disposisi</span>';
+
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-2.5 border text-center font-bold text-slate-500">${globalIdx}</td>
                         <td class="p-2.5 border font-bold text-slate-900" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">${item.sector || 'Kecamatan Cinere'}</td>
                         <td class="p-2.5 border space-y-1.5">
-                            <input type="text" value="${suratNo}" onchange="updateInlineNomorSurat('${item.id}', this.value)" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg font-bold text-xs" title="Edit Nomor Surat">
-                            <input type="date" value="${cleanDate}" onchange="updateInlineTanggalSurat('${item.id}', this.value)" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-700" title="Edit Tanggal Surat">
+                            <input type="text" value="${suratNo}" onchange="updateInlineNomorSurat('${item.id}', this.value)" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg font-bold text-xs" title="Nomor Surat">
+                            <input type="date" value="${cleanDate}" onchange="updateInlineTanggalSurat('${item.id}', this.value)" class="w-full px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-xs font-semibold text-slate-700" title="Tanggal Surat">
                         </td>
-                        <td class="p-2.5 border" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')"><span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded ${typeBadgeClass} mr-1">${item.tipe}</span><strong>${item.judul}</strong><br><span class="text-[11px] text-slate-600">Tempat: ${item.tempat}</span></td>
-                        <td class="p-2.5 border font-semibold text-slate-700" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">${item.pejabat || 'Camat'}</td>
-                        <td class="p-2.5 border text-[11px] text-slate-600" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">${item.disposisi ? 'Disposisi: ' + item.disposisi.penerima : 'Terjadwal'}</td>
+                        <td class="p-2.5 border" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">
+                            <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded ${typeBadgeClass} mr-1">${item.tipe}</span>
+                            <strong>${item.judul}</strong>
+                        </td>
+                        <td class="p-2.5 border" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">
+                            <span class="font-bold text-slate-800"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i>${item.tempat}</span><br>
+                            <span class="text-[11px] text-slate-600"><i class="fa-regular fa-clock text-sky-600 mr-1"></i>${formattedTime}</span>
+                        </td>
+                        <td class="p-2.5 border font-semibold text-slate-800" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">${pjStr}</td>
+                        <td class="p-2.5 border" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">${dispStr}</td>
+                        <td class="p-2.5 border text-center space-y-1" onclick="closeSuratMasukModal(); openDetailModal('${item.id}')">
+                            ${statusBadgeStr}<br>
+                            <span class="text-sky-600 font-bold text-[10px]"><i class="fa-solid fa-file-pdf mr-1"></i>${item.pdfName || 'Dokumen.pdf'}</span>
+                        </td>
                     </tr>
                 `;
             });
+        }
+
+        function exportToExcelSuratMasuk() {
+            let csv = "No,Instansi Pengirim,Nomor Surat,Tanggal Surat,Perihal Kegiatan,Tempat Kegiatan,Waktu,Penanggung Jawab Utama,Disposisi Akun Pejabat,Status\n";
+            window.agendas.filter(a => String(a.tipe || '').toLowerCase() === 'agenda kegiatan').forEach((a, idx) => { 
+                const sNo = a.nomorSurat && a.nomorSurat.trim() !== '' ? a.nomorSurat : `00${idx+1}/RKB/2026`;
+                csv += `"${idx+1}","${a.sector || ''}","${sNo}","${cleanDateDisplay(a.tanggal)}","${a.judul}","${a.tempat}","${formatTimeWib(a.waktu)}","${a.pejabat || ''}","${a.disposisi ? a.disposisi.penerima : 'Belum Disposisi'}","${a.status}"\n`; 
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'Buku_Agenda_Kegiatan_2026.csv'; link.click();
+            showActionPopup("Export Berhasil", "Buku Agenda Kegiatan 2026 berhasil di-export ke Excel.");
         }
 
         function updateInlineNomorSurat(id, newNomor) {
@@ -1354,21 +1433,12 @@
             }
 
             closeDetailModal();
-            const sel = document.getElementById('disp-penerima');
-            if (sel) {
-                sel.innerHTML = '';
-                const eligibleUsers = window.registeredUsers.filter(u => String(u.role || '').toLowerCase() !== 'admin' && String(u.username || '').toLowerCase() !== 'admin');
-                if (eligibleUsers.length > 0) {
-                    eligibleUsers.forEach(u => {
-                        sel.innerHTML += `<option value="${u.fullname}|${u.email}">${u.fullname} (${u.email})</option>`;
-                    });
-                } else {
-                    window.subordinatesList.forEach(s => {
-                        sel.innerHTML += `<option value="${s.nama}|${s.email}">${s.nama} (${s.email})</option>`;
-                    });
-                }
-                handlePenerimaDisposisiChange(sel.value);
-            }
+            renderSubordinateOptions();
+            const listContainer = document.getElementById('list-delegasi-tambahan');
+            if(listContainer) listContainer.innerHTML = '';
+            const containerLanjutan = document.getElementById('container-delegasi-lanjutan');
+            if(containerLanjutan) containerLanjutan.classList.add('hidden');
+
             document.getElementById('modal-disposisi').classList.remove('hidden');
         }
 
@@ -1386,11 +1456,22 @@
             const emailVal = document.getElementById('disp-email').value;
             const catatanVal = document.getElementById('disp-catatan').value;
 
-            item.disposisi = { penerima: penerimaVal, email: emailVal, catatan: catatanVal };
+            let listPenerima = [penerimaVal];
+            const extraSelects = document.querySelectorAll('.disp-lanjutan-select');
+            extraSelects.forEach(sel => {
+                if(sel.value) {
+                    const namePart = sel.value.split('|')[0];
+                    if(namePart && !listPenerima.includes(namePart)) listPenerima.push(namePart);
+                }
+            });
+
+            const finalPenerimaStr = listPenerima.join(' & ');
+
+            item.disposisi = { penerima: finalPenerimaStr, email: emailVal, catatan: catatanVal };
             closeDisposisiModal();
             renderAgendas();
             sendToGoogleBackend(item);
-            showActionPopup("Disposisi Tersimpan", "Delegasi surat & agenda berhasil dikirim.");
+            showActionPopup("Disposisi Tersimpan", "Delegasi surat & agenda berhasil disimpan ke database secara realtime.");
             sendWhatsAppAgendaDirect();
         }
 
@@ -1424,15 +1505,44 @@
             window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
         }
 
+        let currentScale = 1.0;
+
         function previewPDFInModal() {
             const item = agendas.find(a => a.id === selectedAgendaId);
             if(!item) return;
             const iframe = document.getElementById('pdf-iframe');
-            if(item.pdfData) iframe.src = item.pdfData;
-            else iframe.src = 'about:blank';
+            document.getElementById('pdf-viewer-title').innerText = item.pdfName || 'Dokumen.pdf';
+            
+            if (item.pdfData) {
+                iframe.src = item.pdfData;
+            } else if (item.pdfUrl) {
+                iframe.src = item.pdfUrl;
+            } else {
+                iframe.src = 'about:blank';
+            }
             document.getElementById('modal-pdf-viewer').classList.remove('hidden');
         }
-        function closePdfViewerModal() { document.getElementById('modal-pdf-viewer').classList.add('hidden'); }
+
+        function zoomPdfViewer(delta) {
+            currentScale = Math.max(0.6, Math.min(1.8, currentScale + delta));
+            const iframe = document.getElementById('pdf-iframe');
+            if (iframe) {
+                iframe.style.transform = `scale(${currentScale})`;
+                iframe.style.transformOrigin = 'top center';
+            }
+        }
+
+        function printPdfViewer() {
+            const iframe = document.getElementById('pdf-iframe');
+            if (iframe && iframe.contentWindow) {
+                iframe.contentWindow.print();
+            }
+        }
+
+        function closePdfViewerModal() { 
+            document.getElementById('modal-pdf-viewer').classList.add('hidden'); 
+            currentScale = 1.0;
+        }
 
         function exportToExcel() {
             let csv = "ID,Tipe,Nomor Surat,Judul,Tanggal,Waktu,Tempat,Email,Pejabat,Sector\n";
@@ -1440,14 +1550,6 @@
             const blob = new Blob([csv], { type: 'text/csv' });
             const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Rekap_Agenda_RaKorBae_2026.csv'; a.click();
             showActionPopup("Export Berhasil", "File Excel rekap agenda berhasil diunduh.");
-        }
-
-        function exportToExcelSuratMasuk() {
-            let csv = "No,Instansi Pengirim,Nomor Surat,Tanggal Surat,Perihal Surat,Tipe,Penanggung Jawab,Keterangan\n";
-            agendas.forEach((a, idx) => { csv += `"${idx+1}","${a.sector || ''}","${a.nomorSurat || ''}","${cleanDateDisplay(a.tanggal)}","${a.judul}","${a.tipe}","${a.pejabat || ''}","${a.disposisi ? 'Disposisi: ' + a.disposisi.penerima : 'Terjadwal'}"\n`; });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = 'Buku_Agenda_Surat_Masuk_2026.csv'; link.click();
-            showActionPopup("Export Berhasil", "Buku Agenda Surat Masuk 2026 berhasil di-export ke Excel.");
         }
 
         function sendToGoogleBackend(data) {
