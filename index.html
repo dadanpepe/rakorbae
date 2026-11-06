@@ -1106,7 +1106,7 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', null, nomorSurat);
+                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', '', nomorSurat);
             }
         }
 
@@ -1317,8 +1317,21 @@
             if(!item) return;
             const iframe = document.getElementById('pdf-iframe');
             
-            if(item.pdfData && item.pdfData.startsWith('data:')) {
-                iframe.src = item.pdfData;
+            if (item.pdfData && item.pdfData.includes("base64,")) {
+                try {
+                    const parts = item.pdfData.split(',');
+                    const contentType = parts[0].split(';')[0].replace('data:', '') || 'application/pdf';
+                    const raw = atob(parts[1]);
+                    const arr = new Uint8Array(raw.length);
+                    for (let i = 0; i < raw.length; i++) {
+                        arr[i] = raw.charCodeAt(i);
+                    }
+                    const blob = new Blob([arr], { type: contentType });
+                    const blobUrl = URL.createObjectURL(blob);
+                    iframe.src = blobUrl;
+                } catch (err) {
+                    iframe.src = item.pdfData;
+                }
             } else {
                 iframe.srcdoc = `
                     <div style="font-family: sans-serif; text-align: center; padding: 40px; color: #334155;">
