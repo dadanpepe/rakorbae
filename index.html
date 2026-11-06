@@ -78,6 +78,7 @@
                     <p class="text-xs text-slate-600 font-medium">Belum punya akun? <a href="#" onclick="openRegisterModal(); return false;" class="text-emerald-600 font-bold hover:underline">Daftar Akun Baru</a></p>
                 </div>
             </div>
+
             <div class="w-full bg-white/95 backdrop-blur-sm rounded-xl py-2 px-3 shadow-md border flex items-center justify-around text-slate-700 text-[9px] font-bold">
                 <div class="flex items-center space-x-1"><i class="fa-solid fa-building-columns text-sky-700 text-xs"></i><span>KOTA DEPOK</span></div>
                 <div class="flex items-center space-x-1 border-l pl-2"><i class="fa-solid fa-building text-emerald-600 text-xs"></i><span>KECAMATAN CINERE</span></div>
@@ -191,7 +192,51 @@
     </div>
 
     <!-- Apps Script URL -->
-    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyvL-e2Mp0fFWXpQrWzS6OTclsRLfGNKXxhpSEOZ97vFjKGZu25_H4cXhj5iCE2ZeqM/exec';</script>
+    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';</script>
+
+    <!-- Firebase Realtime Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "demo", projectId: "rakorbae" };
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rakorbae-app';
+        window.app = initializeApp(firebaseConfig);
+        window.db = getFirestore(window.app);
+        window.auth = getAuth(window.app);
+
+        async function initRealtimeDatabase() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(window.auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(window.auth);
+                }
+            } catch (err) {}
+
+            onAuthStateChanged(window.auth, (user) => {
+                if (!user) return;
+                onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'agendas'), (snapshot) => {
+                    const fetched = [];
+                    snapshot.forEach(d => fetched.push(d.data()));
+                    if (fetched.length > 0) window.agendas = fetched;
+                    if (typeof window.syncAndRenderAllUI === 'function') window.syncAndRenderAllUI();
+                });
+                onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'users'), (snapshot) => {
+                    snapshot.forEach(d => {
+                        const u = d.data();
+                        if (u && u.username) {
+                            if (!window.registeredUsers.some(x => String(x.username).toLowerCase() === String(u.username).toLowerCase())) {
+                                window.registeredUsers.push(u);
+                            }
+                        }
+                    });
+                });
+            });
+        }
+        window.addEventListener('load', () => { initRealtimeDatabase(); });
+    </script>
 
     <!-- Top Navigation Header -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800 shadow-md">
@@ -218,15 +263,19 @@
                         <span id="user-display-badge" class="font-bold text-slate-200 text-[10px] sm:text-xs">PEJABAT</span>
                     </div>
 
+                    <!-- Tombol Sinkron Manual (Tersedia untuk Admin maupun opsi darurat gagal sinkron) -->
                     <button id="d-btn-manual-sync" onclick="manualSyncDatabase()" class="hidden bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition" title="Sinkronisasi Manual Database & Spreadsheet">
                         <i class="fa-solid fa-rotate text-xs"></i><span class="hidden md:inline">Sinkron Data</span>
                     </button>
+                    <!-- Tombol Surat Masuk (Hanya untuk Admin) -->
                     <button id="d-btn-surat-masuk" onclick="openSuratMasukModal()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition">
                         <i class="fa-solid fa-book-open text-xs"></i><span class="hidden md:inline">Surat Masuk</span>
                     </button>
+                    <!-- Tombol Keluar -->
                     <button onclick="openLogoutModal()" id="btn-logout-portal" title="Keluar" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold border border-rose-500/30 transition flex items-center justify-center space-x-1 cursor-pointer z-50">
                         <i class="fa-solid fa-power-off text-xs pointer-events-none"></i><span class="hidden md:inline pointer-events-none">Keluar</span>
                     </button>
+                    <!-- Tombol Tambah Agenda (Hanya untuk Admin) -->
                     <button id="d-btn-add-agenda" onclick="openFormModal()" class="hidden bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl shadow-md items-center space-x-1 transition">
                         <i class="fa-solid fa-plus text-xs"></i><span class="hidden sm:inline">Tambah Agenda</span>
                     </button>
@@ -282,7 +331,7 @@
                 </div>
             </div>
 
-            <!-- Kalender -->
+            <!-- Kalender (Nama bulan & tahun saja) -->
             <div class="pt-2 border-t space-y-2">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-2">
@@ -312,12 +361,14 @@
                     <button onclick="closeSuratMasukModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold hover:bg-slate-200">&times;</button>
                 </div>
             </div>
+            <!-- PENCARIAN & FILTER SURAT MASUK -->
             <div class="flex flex-col sm:flex-row justify-between items-center gap-2 bg-indigo-50 p-3 rounded-2xl border border-indigo-200 text-xs text-indigo-950">
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <i class="fa-solid fa-magnifying-glass text-indigo-600"></i>
                     <input type="text" id="sm-search-input" onkeyup="handleSuratMasukSearch(this.value)" placeholder="Cari nomor, perihal, atau instansi..." class="w-full sm:w-64 px-3 py-1.5 bg-white border border-indigo-200 rounded-xl font-semibold text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600">
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                    <!-- Tombol Sinkron Khusus Tabel Surat Masuk Apabila Gagal -->
                     <button onclick="manualSyncDatabase()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow flex items-center space-x-1" title="Sinkronkan data ke Database">
                         <i class="fa-solid fa-rotate"></i><span>Sinkron Data</span>
                     </button>
@@ -344,6 +395,7 @@
                     <tbody id="surat-masuk-table-body" class="divide-y font-medium"></tbody>
                 </table>
             </div>
+            <!-- PAGINASI SURAT MASUK -->
             <div class="flex justify-between items-center pt-2 border-t text-xs font-bold text-slate-600">
                 <span id="sm-pagination-info">Menampilkan 0 dari 0 data</span>
                 <div class="flex space-x-1">
@@ -381,6 +433,7 @@
                     <label class="block font-bold text-slate-700 mb-1">Nama Acara / Perihal Kegiatan / Surat</label>
                     <input type="text" id="f-judul" required placeholder="Masukkan Nama Kegiatan / Surat" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
+                <!-- Tanggal & Waktu Dinamis -->
                 <div id="f-tanggal-waktu-container" class="space-y-2">
                     <div class="grid grid-cols-2 gap-2 tanggal-waktu-row">
                         <div>
@@ -451,7 +504,7 @@
             <div class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
                 <div class="space-y-3">
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1">Tipe Agenda / Surat Umum:</label>
+                        <label class="block font-bold text-slate-700 mb-1">Tipe Agenda / Surat Umum (Hanya Admin yang dapat mengubah):</label>
                         <select id="edit-f-tipe" class="w-full p-2.5 bg-slate-50 border rounded-xl font-bold text-slate-800">
                             <option value="Agenda Kegiatan">Agenda Kegiatan</option>
                             <option value="Surat Edaran">Surat Edaran</option>
@@ -492,10 +545,10 @@
                             <span id="mdetail-pdf-filename" class="text-[10px] text-sky-700 font-bold truncate max-w-[150px]">Dokumen.pdf</span>
                         </div>
                         <button onclick="previewPDFInModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1">
-                            <i class="fa-solid fa-eye"></i><span>Buka / Pratinjau Dokumen (PDF/JPG)</span>
+                            <i class="fa-solid fa-eye"></i><span>Buka / Unduh Dokumen (PDF/JPG)</span>
                         </button>
-                        <div class="pt-1">
-                            <label class="block font-bold text-slate-700 mb-1 text-[11px]">Unggah Ulang File ke Google Drive:</label>
+                        <div class="pt-1 admin-only-field">
+                            <label class="block font-bold text-slate-700 mb-1 text-[11px]">Unggah Ulang File ke Google Drive (Khusus Admin):</label>
                             <input type="file" id="m-reupload-pdf" accept="application/pdf,image/jpeg,image/jpg" class="w-full p-1.5 bg-white border rounded-xl text-xs">
                         </div>
                     </div>
@@ -516,10 +569,10 @@
 
             <div id="mdetail-actions-container" class="pt-2 border-t flex flex-col space-y-2 relative z-50">
                 <button type="button" id="btn-admin-save" onclick="saveAdminAgendaChanges()" class="w-full py-3 bg-[#0284c7] hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
-                    <i class="fa-solid fa-pen-to-square pointer-events-none"></i><span class="pointer-events-none">Simpan Perubahan Detail & File</span>
+                    <i class="fa-solid fa-pen-to-square pointer-events-none"></i><span class="pointer-events-none">Simpan Perubahan Detail & File (Khusus Admin)</span>
                 </button>
                 <button type="button" id="btn-admin-disp" onclick="openDisposisiModalCurrent()" class="w-full py-3 bg-[#f59e0b] hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
-                    <i class="fa-solid fa-share-nodes pointer-events-none"></i><span class="pointer-events-none">Ubah Disposisi</span>
+                    <i class="fa-solid fa-share-nodes pointer-events-none"></i><span class="pointer-events-none">Ubah Disposisi (Khusus Admin)</span>
                 </button>
                 <button type="button" onclick="markAgendaFinished()" class="w-full py-3 bg-[#059669] hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
                     <i class="fa-solid fa-circle-check pointer-events-none"></i><span class="pointer-events-none">Input Laporan Hasil Kegiatan / Selesai</span>
@@ -528,7 +581,7 @@
                     <i class="fa-brands fa-whatsapp text-sm pointer-events-none"></i><span class="pointer-events-none">Kirim Ke WhatsApp</span>
                 </button>
                 <button type="button" id="btn-admin-delete" onclick="deleteCurrentAgenda()" class="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs rounded-xl border border-rose-200 flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
-                    <i class="fa-solid fa-trash pointer-events-none"></i><span class="pointer-events-none">Hapus Agenda</span>
+                    <i class="fa-solid fa-trash pointer-events-none"></i><span class="pointer-events-none">Hapus Agenda (Khusus Admin)</span>
                 </button>
             </div>
         </div>
@@ -728,14 +781,21 @@
             userBadge.innerText = `${displayName}${displayJabatan}`.toUpperCase();
 
             const isAdmin = (role === 'admin' || role === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
+            const jabLower = String(currentUser.jabatan || '').toLowerCase();
+            const isCamatTrue = jabLower.includes('camat') && !jabLower.includes('sekcam');
 
             if (isAdmin) {
                 statusText.innerHTML = `Akses Terhubung: <strong>ADMIN PROTOKOL (Penuh & Drive RaKorBae_Storage_2026)</strong>`;
                 if(dBtnAdd) dBtnAdd.classList.remove('hidden');
                 if(dBtnSurat) dBtnSurat.classList.remove('hidden');
                 if(dBtnSync) dBtnSync.classList.remove('hidden');
+            } else if (isCamatTrue) {
+                statusText.innerHTML = `Akses Terhubung: <strong>CAMAT / PIMPINAN</strong>`;
+                if(dBtnAdd) dBtnAdd.classList.add('hidden');
+                if(dBtnSurat) dBtnSurat.classList.add('hidden');
+                if(dBtnSync) dBtnSync.classList.remove('hidden');
             } else {
-                statusText.innerHTML = `Akses Terhubung: <strong>PEJABAT / PIMPINAN</strong>`;
+                statusText.innerHTML = `Akses Terhubung: <strong>PEJABAT / BAWAHAN</strong>`;
                 if(dBtnAdd) dBtnAdd.classList.add('hidden');
                 if(dBtnSurat) dBtnSurat.classList.add('hidden');
                 if(dBtnSync) dBtnSync.classList.remove('hidden');
@@ -807,7 +867,7 @@
                 const hasItemOnDate = window.agendas.some(item => {
                     if (item.tanggal !== dStr) return false;
                     const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-                    const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat');
+                    const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat') && !String(currentUser.jabatan || '').toLowerCase().includes('sekcam');
                     if (isAdmin || isCamat) return true;
 
                     const uEmail = (currentUser.email || '').toLowerCase().trim();
@@ -880,7 +940,7 @@
                 
                 let isAllowed = false;
                 const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-                const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat');
+                const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat') && !String(currentUser.jabatan || '').toLowerCase().includes('sekcam');
 
                 if (isAdmin || isCamat) {
                     isAllowed = true;
@@ -1106,7 +1166,7 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', '', nomorSurat);
+                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', null, nomorSurat);
             }
         }
 
@@ -1167,6 +1227,40 @@
                 dispBox.classList.add('hidden'); 
             }
 
+            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
+            
+            const btnAdminSave = document.getElementById('btn-admin-save');
+            const btnAdminDisp = document.getElementById('btn-admin-disp');
+            const btnAdminDelete = document.getElementById('btn-admin-delete');
+            const editTipeSelect = document.getElementById('edit-f-tipe');
+            const editEmailInput = document.getElementById('edit-f-email');
+            const editSectorInput = document.getElementById('edit-f-sector');
+            const editPejabatInput = document.getElementById('edit-f-pejabat');
+            const editKontakInput = document.getElementById('edit-f-kontak');
+            const reuploadInput = document.getElementById('m-reupload-pdf');
+
+            if (isAdmin) {
+                if(btnAdminSave) btnAdminSave.classList.remove('hidden');
+                if(btnAdminDisp) btnAdminDisp.classList.remove('hidden');
+                if(btnAdminDelete) btnAdminDelete.classList.remove('hidden');
+                if(editTipeSelect) editTipeSelect.disabled = false;
+                if(editEmailInput) editEmailInput.disabled = false;
+                if(editSectorInput) editSectorInput.disabled = false;
+                if(editPejabatInput) editPejabatInput.disabled = false;
+                if(editKontakInput) editKontakInput.disabled = false;
+                if(reuploadInput) reuploadInput.disabled = false;
+            } else {
+                if(btnAdminSave) btnAdminSave.classList.add('hidden');
+                if(btnAdminDisp) btnAdminDisp.classList.add('hidden');
+                if(btnAdminDelete) btnAdminDelete.classList.add('hidden');
+                if(editTipeSelect) editTipeSelect.disabled = true;
+                if(editEmailInput) editEmailInput.disabled = true;
+                if(editSectorInput) editSectorInput.disabled = true;
+                if(editPejabatInput) editPejabatInput.disabled = true;
+                if(editKontakInput) editKontakInput.disabled = true;
+                if(reuploadInput) reuploadInput.disabled = true;
+            }
+
             document.getElementById('modal-detail-agenda').classList.remove('hidden');
         }
 
@@ -1175,6 +1269,12 @@
         }
 
         async function saveAdminAgendaChanges() {
+            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
+            if (!isAdmin) {
+                showActionPopup("Akses Ditolak", "Fitur perubahan detail agenda hanya tersedia untuk akun admin saja.", false);
+                return;
+            }
+
             const item = agendas.find(a => a.id === selectedAgendaId);
             if(!item) return;
 
@@ -1228,6 +1328,12 @@
         }
 
         function deleteCurrentAgenda() {
+            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
+            if (!isAdmin) {
+                showActionPopup("Akses Ditolak", "Penghapusan agenda hanya tersedia untuk akun admin saja.", false);
+                return;
+            }
+
             if(!confirm("Apakah Anda yakin ingin menghapus agenda ini dari database?")) return;
             const idx = agendas.findIndex(a => a.id === selectedAgendaId);
             if (idx !== -1) {
@@ -1241,6 +1347,12 @@
         }
 
         function openDisposisiModalCurrent() {
+            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
+            if (!isAdmin) {
+                showActionPopup("Akses Ditolak", "Fitur disposisi hanya tersedia untuk akun admin saja.", false);
+                return;
+            }
+
             closeDetailModal();
             const sel = document.getElementById('disp-penerima');
             if (sel) {
@@ -1316,37 +1428,10 @@
             const item = agendas.find(a => a.id === selectedAgendaId);
             if(!item) return;
             const iframe = document.getElementById('pdf-iframe');
-            
-            // Langsung arahkan ke Google Drive URL / Preview jika tersedia
-            if (item.pdfUrl && item.pdfUrl.startsWith('http')) {
-                let viewerUrl = item.pdfUrl;
-                if (viewerUrl.includes('/view')) {
-                    viewerUrl = viewerUrl.replace('/view?usp=drivesdk', '/preview').replace('/view', '/preview');
-                } else if (!viewerUrl.includes('/preview')) {
-                    viewerUrl += (viewerUrl.includes('?') ? '&' : '?') + 'usp=sharing';
-                }
-                iframe.src = viewerUrl;
-            } else if (item.pdfData && item.pdfData.includes("base64,")) {
-                try {
-                    const parts = item.pdfData.split(',');
-                    const contentType = parts[0].split(';')[0].replace('data:', '') || 'application/pdf';
-                    const raw = atob(parts[1]);
-                    const arr = new Uint8Array(raw.length);
-                    for (let i = 0; i < raw.length; i++) {
-                        arr[i] = raw.charCodeAt(i);
-                    }
-                    const blob = new Blob([arr], { type: contentType });
-                    iframe.src = URL.createObjectURL(blob);
-                } catch (err) {
-                    iframe.src = item.pdfData;
-                }
-            } else {
-                // Fallback otomatis membuka link Google Drive jika ada atau menghapus teks fallback
-                iframe.src = "about:blank";
-            }
+            if(item.pdfData) iframe.src = item.pdfData;
+            else iframe.src = 'about:blank';
             document.getElementById('modal-pdf-viewer').classList.remove('hidden');
         }
-
         function closePdfViewerModal() { document.getElementById('modal-pdf-viewer').classList.add('hidden'); }
 
         function exportToExcel() {
