@@ -191,51 +191,7 @@
     </div>
 
     <!-- Apps Script URL -->
-    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOWS3eEWCc9jgN_B2ig1WOtVPZb5CqcwoECCG7iUIHiagL-9ulpZSy0ELUiLbde8Nb/exec';</script>
-
-    <!-- Firebase Realtime Sync -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "demo", projectId: "rakorbae" };
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rakorbae-app';
-        window.app = initializeApp(firebaseConfig);
-        window.db = getFirestore(window.app);
-        window.auth = getAuth(window.app);
-
-        async function initRealtimeDatabase() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(window.auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(window.auth);
-                }
-            } catch (err) {}
-
-            onAuthStateChanged(window.auth, (user) => {
-                if (!user) return;
-                onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'agendas'), (snapshot) => {
-                    const fetched = [];
-                    snapshot.forEach(d => fetched.push(d.data()));
-                    if (fetched.length > 0) window.agendas = fetched;
-                    if (typeof window.syncAndRenderAllUI === 'function') window.syncAndRenderAllUI();
-                });
-                onSnapshot(collection(window.db, 'artifacts', appId, 'public', 'data', 'users'), (snapshot) => {
-                    snapshot.forEach(d => {
-                        const u = d.data();
-                        if (u && u.username) {
-                            if (!window.registeredUsers.some(x => String(x.username).toLowerCase() === String(u.username).toLowerCase())) {
-                                window.registeredUsers.push(u);
-                            }
-                        }
-                    });
-                });
-            });
-        }
-        window.addEventListener('load', () => { initRealtimeDatabase(); });
-    </script>
+    <script>const APPS_SCRIPT_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyvL-e2Mp0fFWXpQrWzS6OTclsRLfGNKXxhpSEOZ97vFjKGZu25_H4cXhj5iCE2ZeqM/exec';</script>
 
     <!-- Top Navigation Header -->
     <header class="bg-slate-900 text-white sticky top-0 z-40 border-b border-slate-800 shadow-md">
@@ -262,19 +218,15 @@
                         <span id="user-display-badge" class="font-bold text-slate-200 text-[10px] sm:text-xs">PEJABAT</span>
                     </div>
 
-                    <!-- Tombol Sinkron Manual -->
                     <button id="d-btn-manual-sync" onclick="manualSyncDatabase()" class="hidden bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition" title="Sinkronisasi Manual Database & Spreadsheet">
                         <i class="fa-solid fa-rotate text-xs"></i><span class="hidden md:inline">Sinkron Data</span>
                     </button>
-                    <!-- Tombol Surat Masuk -->
                     <button id="d-btn-surat-masuk" onclick="openSuratMasukModal()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition">
                         <i class="fa-solid fa-book-open text-xs"></i><span class="hidden md:inline">Surat Masuk</span>
                     </button>
-                    <!-- Tombol Keluar -->
                     <button onclick="openLogoutModal()" id="btn-logout-portal" title="Keluar" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold border border-rose-500/30 transition flex items-center justify-center space-x-1 cursor-pointer z-50">
                         <i class="fa-solid fa-power-off text-xs pointer-events-none"></i><span class="hidden md:inline pointer-events-none">Keluar</span>
                     </button>
-                    <!-- Tombol Tambah Agenda -->
                     <button id="d-btn-add-agenda" onclick="openFormModal()" class="hidden bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl shadow-md items-center space-x-1 transition">
                         <i class="fa-solid fa-plus text-xs"></i><span class="hidden sm:inline">Tambah Agenda</span>
                     </button>
@@ -499,7 +451,7 @@
             <div class="flex-1 overflow-y-auto space-y-3 custom-scrollbar text-xs pr-1">
                 <div class="space-y-3">
                     <div>
-                        <label class="block font-bold text-slate-700 mb-1">Tipe Agenda / Surat Umum (Hanya Admin yang dapat mengubah):</label>
+                        <label class="block font-bold text-slate-700 mb-1">Tipe Agenda / Surat Umum:</label>
                         <select id="edit-f-tipe" class="w-full p-2.5 bg-slate-50 border rounded-xl font-bold text-slate-800">
                             <option value="Agenda Kegiatan">Agenda Kegiatan</option>
                             <option value="Surat Edaran">Surat Edaran</option>
@@ -539,11 +491,11 @@
                             <span class="font-extrabold text-sky-900 text-xs flex items-center"><i class="fa-solid fa-file-pdf text-rose-500 mr-1.5"></i>Dokumen Surat (PDF/JPG):</span>
                             <span id="mdetail-pdf-filename" class="text-[10px] text-sky-700 font-bold truncate max-w-[150px]">Dokumen.pdf</span>
                         </div>
-                        <button type="button" onclick="previewPDFInModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1 cursor-pointer">
-                            <i class="fa-solid fa-eye pointer-events-none"></i><span class="pointer-events-none">Buka / Unduh Dokumen (PDF/JPG)</span>
+                        <button onclick="previewPDFInModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1">
+                            <i class="fa-solid fa-eye"></i><span>Buka / Pratinjau Dokumen (PDF/JPG)</span>
                         </button>
-                        <div class="pt-1 admin-only-field">
-                            <label class="block font-bold text-slate-700 mb-1 text-[11px]">Unggah Ulang File ke Google Drive (Khusus Admin):</label>
+                        <div class="pt-1">
+                            <label class="block font-bold text-slate-700 mb-1 text-[11px]">Unggah Ulang File ke Google Drive:</label>
                             <input type="file" id="m-reupload-pdf" accept="application/pdf,image/jpeg,image/jpg" class="w-full p-1.5 bg-white border rounded-xl text-xs">
                         </div>
                     </div>
@@ -564,10 +516,10 @@
 
             <div id="mdetail-actions-container" class="pt-2 border-t flex flex-col space-y-2 relative z-50">
                 <button type="button" id="btn-admin-save" onclick="saveAdminAgendaChanges()" class="w-full py-3 bg-[#0284c7] hover:bg-sky-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
-                    <i class="fa-solid fa-pen-to-square pointer-events-none"></i><span class="pointer-events-none">Simpan Perubahan Detail & File (Khusus Admin)</span>
+                    <i class="fa-solid fa-pen-to-square pointer-events-none"></i><span class="pointer-events-none">Simpan Perubahan Detail & File</span>
                 </button>
                 <button type="button" id="btn-admin-disp" onclick="openDisposisiModalCurrent()" class="w-full py-3 bg-[#f59e0b] hover:bg-amber-600 text-slate-950 font-black text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
-                    <i class="fa-solid fa-share-nodes pointer-events-none"></i><span class="pointer-events-none">Ubah Disposisi (Khusus Admin)</span>
+                    <i class="fa-solid fa-share-nodes pointer-events-none"></i><span class="pointer-events-none">Ubah Disposisi</span>
                 </button>
                 <button type="button" onclick="markAgendaFinished()" class="w-full py-3 bg-[#059669] hover:bg-emerald-700 text-white font-extrabold text-xs rounded-xl shadow flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
                     <i class="fa-solid fa-circle-check pointer-events-none"></i><span class="pointer-events-none">Input Laporan Hasil Kegiatan / Selesai</span>
@@ -576,7 +528,7 @@
                     <i class="fa-brands fa-whatsapp text-sm pointer-events-none"></i><span class="pointer-events-none">Kirim Ke WhatsApp</span>
                 </button>
                 <button type="button" id="btn-admin-delete" onclick="deleteCurrentAgenda()" class="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-xs rounded-xl border border-rose-200 flex items-center justify-center space-x-1.5 cursor-pointer relative z-50 pointer-events-auto">
-                    <i class="fa-solid fa-trash pointer-events-none"></i><span class="pointer-events-none">Hapus Agenda (Khusus Admin)</span>
+                    <i class="fa-solid fa-trash pointer-events-none"></i><span class="pointer-events-none">Hapus Agenda</span>
                 </button>
             </div>
         </div>
@@ -776,21 +728,14 @@
             userBadge.innerText = `${displayName}${displayJabatan}`.toUpperCase();
 
             const isAdmin = (role === 'admin' || role === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-            const jabLower = String(currentUser.jabatan || '').toLowerCase();
-            const isCamatTrue = jabLower.includes('camat') && !jabLower.includes('sekcam');
 
             if (isAdmin) {
                 statusText.innerHTML = `Akses Terhubung: <strong>ADMIN PROTOKOL (Penuh & Drive RaKorBae_Storage_2026)</strong>`;
                 if(dBtnAdd) dBtnAdd.classList.remove('hidden');
                 if(dBtnSurat) dBtnSurat.classList.remove('hidden');
                 if(dBtnSync) dBtnSync.classList.remove('hidden');
-            } else if (isCamatTrue) {
-                statusText.innerHTML = `Akses Terhubung: <strong>CAMAT / PIMPINAN</strong>`;
-                if(dBtnAdd) dBtnAdd.classList.add('hidden');
-                if(dBtnSurat) dBtnSurat.classList.add('hidden');
-                if(dBtnSync) dBtnSync.classList.remove('hidden');
             } else {
-                statusText.innerHTML = `Akses Terhubung: <strong>PEJABAT / BAWAHAN</strong>`;
+                statusText.innerHTML = `Akses Terhubung: <strong>PEJABAT / PIMPINAN</strong>`;
                 if(dBtnAdd) dBtnAdd.classList.add('hidden');
                 if(dBtnSurat) dBtnSurat.classList.add('hidden');
                 if(dBtnSync) dBtnSync.classList.remove('hidden');
@@ -862,7 +807,7 @@
                 const hasItemOnDate = window.agendas.some(item => {
                     if (item.tanggal !== dStr) return false;
                     const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-                    const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat') && !String(currentUser.jabatan || '').toLowerCase().includes('sekcam');
+                    const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat');
                     if (isAdmin || isCamat) return true;
 
                     const uEmail = (currentUser.email || '').toLowerCase().trim();
@@ -935,7 +880,7 @@
                 
                 let isAllowed = false;
                 const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-                const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat') && !String(currentUser.jabatan || '').toLowerCase().includes('sekcam');
+                const isCamat = String(currentUser.jabatan || '').toLowerCase().includes('camat');
 
                 if (isAdmin || isCamat) {
                     isAllowed = true;
@@ -1161,7 +1106,7 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', '', nomorSurat);
+                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', null, nomorSurat);
             }
         }
 
@@ -1222,40 +1167,6 @@
                 dispBox.classList.add('hidden'); 
             }
 
-            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-            
-            const btnAdminSave = document.getElementById('btn-admin-save');
-            const btnAdminDisp = document.getElementById('btn-admin-disp');
-            const btnAdminDelete = document.getElementById('btn-admin-delete');
-            const editTipeSelect = document.getElementById('edit-f-tipe');
-            const editEmailInput = document.getElementById('edit-f-email');
-            const editSectorInput = document.getElementById('edit-f-sector');
-            const editPejabatInput = document.getElementById('edit-f-pejabat');
-            const editKontakInput = document.getElementById('edit-f-kontak');
-            const reuploadInput = document.getElementById('m-reupload-pdf');
-
-            if (isAdmin) {
-                if(btnAdminSave) btnAdminSave.classList.remove('hidden');
-                if(btnAdminDisp) btnAdminDisp.classList.remove('hidden');
-                if(btnAdminDelete) btnAdminDelete.classList.remove('hidden');
-                if(editTipeSelect) editTipeSelect.disabled = false;
-                if(editEmailInput) editEmailInput.disabled = false;
-                if(editSectorInput) editSectorInput.disabled = false;
-                if(editPejabatInput) editPejabatInput.disabled = false;
-                if(editKontakInput) editKontakInput.disabled = false;
-                if(reuploadInput) reuploadInput.disabled = false;
-            } else {
-                if(btnAdminSave) btnAdminSave.classList.add('hidden');
-                if(btnAdminDisp) btnAdminDisp.classList.add('hidden');
-                if(btnAdminDelete) btnAdminDelete.classList.add('hidden');
-                if(editTipeSelect) editTipeSelect.disabled = true;
-                if(editEmailInput) editEmailInput.disabled = true;
-                if(editSectorInput) editSectorInput.disabled = true;
-                if(editPejabatInput) editPejabatInput.disabled = true;
-                if(editKontakInput) editKontakInput.disabled = true;
-                if(reuploadInput) reuploadInput.disabled = true;
-            }
-
             document.getElementById('modal-detail-agenda').classList.remove('hidden');
         }
 
@@ -1264,12 +1175,6 @@
         }
 
         async function saveAdminAgendaChanges() {
-            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-            if (!isAdmin) {
-                showActionPopup("Akses Ditolak", "Fitur perubahan detail agenda hanya tersedia untuk akun admin saja.", false);
-                return;
-            }
-
             const item = agendas.find(a => a.id === selectedAgendaId);
             if(!item) return;
 
@@ -1323,12 +1228,6 @@
         }
 
         function deleteCurrentAgenda() {
-            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-            if (!isAdmin) {
-                showActionPopup("Akses Ditolak", "Penghapusan agenda hanya tersedia untuk akun admin saja.", false);
-                return;
-            }
-
             if(!confirm("Apakah Anda yakin ingin menghapus agenda ini dari database?")) return;
             const idx = agendas.findIndex(a => a.id === selectedAgendaId);
             if (idx !== -1) {
@@ -1342,12 +1241,6 @@
         }
 
         function openDisposisiModalCurrent() {
-            const isAdmin = (currentRole === 'admin' || currentRole === 'superadmin' || String(currentUser.username).toLowerCase() === 'admin');
-            if (!isAdmin) {
-                showActionPopup("Akses Ditolak", "Fitur disposisi hanya tersedia untuk akun admin saja.", false);
-                return;
-            }
-
             closeDetailModal();
             const sel = document.getElementById('disp-penerima');
             if (sel) {
@@ -1423,15 +1316,21 @@
             const item = agendas.find(a => a.id === selectedAgendaId);
             if(!item) return;
             const iframe = document.getElementById('pdf-iframe');
-            if(item.pdfData) {
+            
+            if(item.pdfData && item.pdfData.startsWith('data:')) {
                 iframe.src = item.pdfData;
             } else {
-                alert("Dokumen PDF/JPG untuk agenda ini belum tersedia atau belum tersimpan.");
-                iframe.src = 'about:blank';
-                return;
+                iframe.srcdoc = `
+                    <div style="font-family: sans-serif; text-align: center; padding: 40px; color: #334155;">
+                        <h3 style="color: #0284c7; margin-bottom: 10px;">Dokumen: ${item.pdfName || 'Dokumen.pdf'}</h3>
+                        <p style="font-size: 14px; margin-bottom: 20px;">File tersimpan di folder Google Drive <b>RaKorBae_Storage_2026 / ${item.folderDrive || 'Agenda Kegiatan'}</b>.</p>
+                        <p style="font-size: 12px; color: #64748b;">Silakan lakukan unggah ulang file melalui tombol <b>"Unggah Ulang File ke Google Drive"</b> di menu detail jika pratinjau belum termuat.</p>
+                    </div>
+                `;
             }
             document.getElementById('modal-pdf-viewer').classList.remove('hidden');
         }
+
         function closePdfViewerModal() { document.getElementById('modal-pdf-viewer').classList.add('hidden'); }
 
         function exportToExcel() {
