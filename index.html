@@ -78,7 +78,6 @@
                     <p class="text-xs text-slate-600 font-medium">Belum punya akun? <a href="#" onclick="openRegisterModal(); return false;" class="text-emerald-600 font-bold hover:underline">Daftar Akun Baru</a></p>
                 </div>
             </div>
-
             <div class="w-full bg-white/95 backdrop-blur-sm rounded-xl py-2 px-3 shadow-md border flex items-center justify-around text-slate-700 text-[9px] font-bold">
                 <div class="flex items-center space-x-1"><i class="fa-solid fa-building-columns text-sky-700 text-xs"></i><span>KOTA DEPOK</span></div>
                 <div class="flex items-center space-x-1 border-l pl-2"><i class="fa-solid fa-building text-emerald-600 text-xs"></i><span>KECAMATAN CINERE</span></div>
@@ -263,11 +262,11 @@
                         <span id="user-display-badge" class="font-bold text-slate-200 text-[10px] sm:text-xs">PEJABAT</span>
                     </div>
 
-                    <!-- Tombol Sinkron Manual (Tersedia untuk Admin maupun opsi darurat gagal sinkron) -->
+                    <!-- Tombol Sinkron Manual -->
                     <button id="d-btn-manual-sync" onclick="manualSyncDatabase()" class="hidden bg-amber-600 hover:bg-amber-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition" title="Sinkronisasi Manual Database & Spreadsheet">
                         <i class="fa-solid fa-rotate text-xs"></i><span class="hidden md:inline">Sinkron Data</span>
                     </button>
-                    <!-- Tombol Surat Masuk (Hanya untuk Admin) -->
+                    <!-- Tombol Surat Masuk -->
                     <button id="d-btn-surat-masuk" onclick="openSuratMasukModal()" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white px-2.5 py-1.5 rounded-xl text-xs font-extrabold shadow items-center space-x-1 transition">
                         <i class="fa-solid fa-book-open text-xs"></i><span class="hidden md:inline">Surat Masuk</span>
                     </button>
@@ -275,7 +274,7 @@
                     <button onclick="openLogoutModal()" id="btn-logout-portal" title="Keluar" class="bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white w-8 h-8 sm:w-auto sm:px-3 sm:py-1.5 rounded-xl text-xs font-bold border border-rose-500/30 transition flex items-center justify-center space-x-1 cursor-pointer z-50">
                         <i class="fa-solid fa-power-off text-xs pointer-events-none"></i><span class="hidden md:inline pointer-events-none">Keluar</span>
                     </button>
-                    <!-- Tombol Tambah Agenda (Hanya untuk Admin) -->
+                    <!-- Tombol Tambah Agenda -->
                     <button id="d-btn-add-agenda" onclick="openFormModal()" class="hidden bg-sky-500 hover:bg-sky-400 text-white font-extrabold text-xs px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl shadow-md items-center space-x-1 transition">
                         <i class="fa-solid fa-plus text-xs"></i><span class="hidden sm:inline">Tambah Agenda</span>
                     </button>
@@ -331,7 +330,7 @@
                 </div>
             </div>
 
-            <!-- Kalender (Nama bulan & tahun saja) -->
+            <!-- Kalender -->
             <div class="pt-2 border-t space-y-2">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-2">
@@ -361,14 +360,12 @@
                     <button onclick="closeSuratMasukModal()" class="w-8 h-8 rounded-full bg-slate-100 font-bold hover:bg-slate-200">&times;</button>
                 </div>
             </div>
-            <!-- PENCARIAN & FILTER SURAT MASUK -->
             <div class="flex flex-col sm:flex-row justify-between items-center gap-2 bg-indigo-50 p-3 rounded-2xl border border-indigo-200 text-xs text-indigo-950">
                 <div class="flex items-center space-x-2 w-full sm:w-auto">
                     <i class="fa-solid fa-magnifying-glass text-indigo-600"></i>
                     <input type="text" id="sm-search-input" onkeyup="handleSuratMasukSearch(this.value)" placeholder="Cari nomor, perihal, atau instansi..." class="w-full sm:w-64 px-3 py-1.5 bg-white border border-indigo-200 rounded-xl font-semibold text-xs focus:outline-none focus:ring-2 focus:ring-indigo-600">
                 </div>
                 <div class="flex items-center space-x-2 w-full sm:w-auto justify-end">
-                    <!-- Tombol Sinkron Khusus Tabel Surat Masuk Apabila Gagal -->
                     <button onclick="manualSyncDatabase()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow flex items-center space-x-1" title="Sinkronkan data ke Database">
                         <i class="fa-solid fa-rotate"></i><span>Sinkron Data</span>
                     </button>
@@ -395,7 +392,6 @@
                     <tbody id="surat-masuk-table-body" class="divide-y font-medium"></tbody>
                 </table>
             </div>
-            <!-- PAGINASI SURAT MASUK -->
             <div class="flex justify-between items-center pt-2 border-t text-xs font-bold text-slate-600">
                 <span id="sm-pagination-info">Menampilkan 0 dari 0 data</span>
                 <div class="flex space-x-1">
@@ -433,7 +429,6 @@
                     <label class="block font-bold text-slate-700 mb-1">Nama Acara / Perihal Kegiatan / Surat</label>
                     <input type="text" id="f-judul" required placeholder="Masukkan Nama Kegiatan / Surat" class="w-full p-2.5 bg-slate-50 border rounded-xl font-semibold">
                 </div>
-                <!-- Tanggal & Waktu Dinamis -->
                 <div id="f-tanggal-waktu-container" class="space-y-2">
                     <div class="grid grid-cols-2 gap-2 tanggal-waktu-row">
                         <div>
@@ -544,8 +539,8 @@
                             <span class="font-extrabold text-sky-900 text-xs flex items-center"><i class="fa-solid fa-file-pdf text-rose-500 mr-1.5"></i>Dokumen Surat (PDF/JPG):</span>
                             <span id="mdetail-pdf-filename" class="text-[10px] text-sky-700 font-bold truncate max-w-[150px]">Dokumen.pdf</span>
                         </div>
-                        <button onclick="previewPDFInModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1">
-                            <i class="fa-solid fa-eye"></i><span>Buka / Unduh Dokumen (PDF/JPG)</span>
+                        <button type="button" onclick="previewPDFInModal()" class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center space-x-1 cursor-pointer">
+                            <i class="fa-solid fa-eye pointer-events-none"></i><span class="pointer-events-none">Buka / Unduh Dokumen (PDF/JPG)</span>
                         </button>
                         <div class="pt-1 admin-only-field">
                             <label class="block font-bold text-slate-700 mb-1 text-[11px]">Unggah Ulang File ke Google Drive (Khusus Admin):</label>
@@ -1166,7 +1161,7 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', null, nomorSurat);
+                saveMultiAgendas(tipe, judul, tempat, email, pakaian, kontak, pejabat, sector, tEls, wEls, 'Dokumen.pdf', '', nomorSurat);
             }
         }
 
@@ -1428,8 +1423,13 @@
             const item = agendas.find(a => a.id === selectedAgendaId);
             if(!item) return;
             const iframe = document.getElementById('pdf-iframe');
-            if(item.pdfData) iframe.src = item.pdfData;
-            else iframe.src = 'about:blank';
+            if(item.pdfData) {
+                iframe.src = item.pdfData;
+            } else {
+                alert("Dokumen PDF/JPG untuk agenda ini belum tersedia atau belum tersimpan.");
+                iframe.src = 'about:blank';
+                return;
+            }
             document.getElementById('modal-pdf-viewer').classList.remove('hidden');
         }
         function closePdfViewerModal() { document.getElementById('modal-pdf-viewer').classList.add('hidden'); }
