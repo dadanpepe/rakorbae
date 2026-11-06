@@ -1317,7 +1317,16 @@
             if(!item) return;
             const iframe = document.getElementById('pdf-iframe');
             
-            if (item.pdfData && item.pdfData.includes("base64,")) {
+            // Jika ada URL Google Drive yang tersimpan, gunakan itu langsung (aman dari refresh/login ulang)
+            if (item.pdfUrl && item.pdfUrl.startsWith('http')) {
+                let viewerUrl = item.pdfUrl;
+                if (viewerUrl.includes('/view')) {
+                    viewerUrl = viewerUrl.replace('/view?usp=drivesdk', '/preview').replace('/view', '/preview');
+                } else if (!viewerUrl.includes('/preview')) {
+                    viewerUrl += (viewerUrl.includes('?') ? '&' : '?') + 'usp=sharing';
+                }
+                iframe.src = viewerUrl;
+            } else if (item.pdfData && item.pdfData.includes("base64,")) {
                 try {
                     const parts = item.pdfData.split(',');
                     const contentType = parts[0].split(';')[0].replace('data:', '') || 'application/pdf';
@@ -1327,8 +1336,7 @@
                         arr[i] = raw.charCodeAt(i);
                     }
                     const blob = new Blob([arr], { type: contentType });
-                    const blobUrl = URL.createObjectURL(blob);
-                    iframe.src = blobUrl;
+                    iframe.src = URL.createObjectURL(blob);
                 } catch (err) {
                     iframe.src = item.pdfData;
                 }
